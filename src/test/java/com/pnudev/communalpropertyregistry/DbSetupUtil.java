@@ -45,6 +45,7 @@ class DbSetupUtil {
         categoryByPurposeRepository.save(categoryByPurpose);
 
         Property property = Property.builder()
+                .imageUrl("imageUrl")
                 .address("address")
                 .propertyLocation(Property.PropertyLocation.builder()
                         .lat(33.30)

@@ -18,6 +18,8 @@ public class Property {
     @Id
     private Long id;
 
+    private String imageUrl;
+
     private String address;
 
     @Embedded.Nullable
