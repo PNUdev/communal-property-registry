@@ -70,8 +70,8 @@ public class Property {
 
         NON_RENT("Вільне"),
         RENT("Орендоване"),
-        FIRST_OR_SECOND_TYPE_LIST("В переліку Першого або Другого типів"),
-        PRIVATIZED("Приватизовані"),
+        FIRST_OR_SECOND_TYPE_LIST("В переліку Першого або Другого типу"),
+        PRIVATIZED("Приватизоване"),
         USED_BY_CITY_COUNCIL("У використанні органами міської ради");
 
         private String ukrainian_representation;
