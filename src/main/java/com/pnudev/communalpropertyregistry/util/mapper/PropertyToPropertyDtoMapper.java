@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class PropertyToPropertyDtoMapper {
 
+    // TODO: 22.02.21 Replace with services
     private final AttachmentRepository attachmentRepository;
     private final AttachmentCategoryRepository attachmentCategoryRepository;
 

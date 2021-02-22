@@ -38,13 +38,13 @@ public class PropertyController {
 
         model.addAttribute("propertyDtos", partialPropertyDtos);
 
-        return "";
+        return "property/multiPropertyPartial";
     }
 
     @GetMapping("/{id}/partial")
     public String getPartialById(@PathVariable Long id, Model model) {
 
         model.addAttribute("property", propertyService.findById(id));
-        return "";
+        return "property/singlePropertyPartial";
     }
 }
