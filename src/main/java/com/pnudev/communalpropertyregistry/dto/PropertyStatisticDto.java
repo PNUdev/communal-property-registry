@@ -13,16 +13,16 @@ public class PropertyStatisticDto {
 
     private String category;
 
-    private int totalNumber;
+    private Long totalNumber;
 
-    private int numberOfNonRented;
+    private Long numberOfNonRented;
 
-    private int numberOfRented;
+    private Long numberOfRented;
 
-    private int numberOfPrivatized;
+    private Long numberOfPrivatized;
 
-    private int numberOfListed;
+    private Long numberOfListed;
 
-    private int numberOfUsedByCityCouncil;
+    private Long numberOfUsedByCityCouncil;
 
 }
