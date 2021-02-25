@@ -1,11 +1,24 @@
 package com.pnudev.communalpropertyregistry.repository;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
+import com.pnudev.communalpropertyregistry.dto.PropertyStatisticDto;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
 
 public interface PropertyRepository extends CrudRepository<Property, Long> {
 
-    Long countPropertiesByCategoryByPurposeIdEqualsAndPropertyStatusEquals(Long categoryByPurposeId,
-                                                                           Property.PropertyStatus propertyStatus);
-
+    @Query("SELECT " +
+            "cbp.name as category, " +
+            "count(p.property_status) as total_number, " +
+            "count(case when p.property_status='RENT' then 1 end) as number_of_rented ," +
+            "count(case when p.property_status='NON_RENT' then 1 end) as number_of_non_rented, " +
+            "count(case when p.property_status='FIRST_OR_SECOND_TYPE_LIST' then 1 end) as number_of_listed, " +
+            "count(case when p.property_status='PRIVATIZED' then 1 end) as number_of_privatized, " +
+            "count(case when p.property_status='USED_BY_CITY_COUNCIL' then 1 end) as  number_of_used_by_city_council " +
+            "FROM category_by_purpose as cbp, property as p " +
+            "WHERE p.category_by_purpose_id = cbp.id " +
+            "GROUP BY cbp.name ")
+    List<PropertyStatisticDto> getListOfStatistic();
 }
