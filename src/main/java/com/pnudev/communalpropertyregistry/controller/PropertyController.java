@@ -20,7 +20,7 @@ public class PropertyController {
 
     @GetMapping
     public PropertyStatisticResponseDto getStatistic(){
-        return statisticService.getStatistic();
+        return statisticService.getStatistics();
     }
 
 }

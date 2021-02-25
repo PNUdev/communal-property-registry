@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PropertyStatisticResponseDto {
 
-    List<PropertyStatisticDto> propertyStatistics;
+    private List<PropertyStatisticDto> propertyStatistics;
 
 }

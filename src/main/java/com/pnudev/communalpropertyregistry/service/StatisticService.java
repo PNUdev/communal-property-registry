@@ -4,6 +4,6 @@ import com.pnudev.communalpropertyregistry.dto.PropertyStatisticResponseDto;
 
 public interface StatisticService {
 
-    PropertyStatisticResponseDto getStatistic();
+    PropertyStatisticResponseDto getStatistics();
 
 }

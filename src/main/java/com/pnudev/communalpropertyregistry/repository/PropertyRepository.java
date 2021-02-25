@@ -20,5 +20,5 @@ public interface PropertyRepository extends CrudRepository<Property, Long> {
             "FROM category_by_purpose as cbp, property as p " +
             "WHERE p.category_by_purpose_id = cbp.id " +
             "GROUP BY cbp.name ")
-    List<PropertyStatisticDto> getListOfStatistic();
+    List<PropertyStatisticDto> getListOfStatistics();
 }
