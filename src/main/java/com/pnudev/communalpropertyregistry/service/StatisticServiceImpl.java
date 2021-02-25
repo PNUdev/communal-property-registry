@@ -20,7 +20,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public PropertyStatisticResponseDto getStatistics() {
 
-        log.debug("Statistics requested");
+        log.debug("Property statistics collection has started!");
 
         return new PropertyStatisticResponseDto(propertyRepository.getListOfStatistics());
     }
