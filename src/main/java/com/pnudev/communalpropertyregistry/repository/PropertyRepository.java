@@ -17,8 +17,8 @@ public interface PropertyRepository extends CrudRepository<Property, Long> {
             "count(case when p.property_status='FIRST_OR_SECOND_TYPE_LIST' then 1 end) as number_of_first_or_second_type, " +
             "count(case when p.property_status='PRIVATIZED' then 1 end) as number_of_privatized, " +
             "count(case when p.property_status='USED_BY_CITY_COUNCIL' then 1 end) as  number_of_used_by_city_council " +
-            "FROM category_by_purpose as cbp, property as p " +
-            "WHERE p.category_by_purpose_id = cbp.id " +
+            "FROM category_by_purpose as cbp JOIN property as p " +
+            "ON cbp.id = p.category_by_purpose_id " +
             "GROUP BY cbp.name ")
     List<PropertyStatisticsDto> getListOfStatistics();
 }
