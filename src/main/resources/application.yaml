@@ -13,3 +13,8 @@ spring:
     password: ${ADMIN_PASSWORD:admin}
   data:
     web.pageable.one-indexed-parameters: true
+
+application:
+  tomtom:
+    api:
+      key: ${TOMTOM_KEY:DITn9MLp6x2XRadsi2cp2h8RPKW6lExD}
