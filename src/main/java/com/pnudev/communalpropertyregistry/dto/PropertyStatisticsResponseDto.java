@@ -1,18 +1,16 @@
 package com.pnudev.communalpropertyregistry.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PropertyStatisticResponseDto {
+public class PropertyStatisticsResponseDto {
 
-    private List<PropertyStatisticDto> propertyStatistics;
+    private List<PropertyStatisticsDto> propertyStatistics;
 
 }

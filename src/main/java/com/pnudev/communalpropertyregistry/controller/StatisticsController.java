@@ -1,7 +1,7 @@
 package com.pnudev.communalpropertyregistry.controller;
 
-import com.pnudev.communalpropertyregistry.dto.PropertyStatisticResponseDto;
-import com.pnudev.communalpropertyregistry.service.StatisticService;
+import com.pnudev.communalpropertyregistry.dto.PropertyStatisticsResponseDto;
+import com.pnudev.communalpropertyregistry.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/statistics")
-public class PropertyController {
+public class StatisticsController {
 
-    public StatisticService statisticService;
+    private StatisticsService statisticService;
 
     @Autowired
-    public PropertyController(StatisticService statisticService) {
+    public StatisticsController(StatisticsService statisticService) {
         this.statisticService = statisticService;
     }
 
     @GetMapping
-    public PropertyStatisticResponseDto getStatistic(){
+    public PropertyStatisticsResponseDto getStatistics(){
         return statisticService.getStatistics();
     }
 

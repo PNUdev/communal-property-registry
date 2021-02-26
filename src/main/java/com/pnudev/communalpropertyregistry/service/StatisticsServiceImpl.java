@@ -1,6 +1,6 @@
 package com.pnudev.communalpropertyregistry.service;
 
-import com.pnudev.communalpropertyregistry.dto.PropertyStatisticResponseDto;
+import com.pnudev.communalpropertyregistry.dto.PropertyStatisticsResponseDto;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,21 +8,21 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class StatisticServiceImpl implements StatisticService {
+public class StatisticsServiceImpl implements StatisticsService {
 
     private final PropertyRepository propertyRepository;
 
     @Autowired
-    public StatisticServiceImpl(PropertyRepository propertyRepository) {
+    public StatisticsServiceImpl(PropertyRepository propertyRepository) {
         this.propertyRepository = propertyRepository;
     }
 
     @Override
-    public PropertyStatisticResponseDto getStatistics() {
+    public PropertyStatisticsResponseDto getStatistics() {
 
-        log.debug("Property statistics collection has started!");
+        log.info("Get property statistics request");
 
-        return new PropertyStatisticResponseDto(propertyRepository.getListOfStatistics());
+        return new PropertyStatisticsResponseDto(propertyRepository.getListOfStatistics());
     }
 
 }

@@ -1,15 +1,13 @@
 package com.pnudev.communalpropertyregistry.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PropertyStatisticDto {
+public class PropertyStatisticsDto {
 
     private String category;
 
@@ -21,7 +19,7 @@ public class PropertyStatisticDto {
 
     private Long numberOfPrivatized;
 
-    private Long numberOfListed;
+    private Long numberOfFirstOrSecondType;
 
     private Long numberOfUsedByCityCouncil;
 
