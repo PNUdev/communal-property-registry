@@ -156,7 +156,7 @@ const APP_STATS = new Vue({
     },
 
     mounted() {
-        // this.getStatistics();
+        this.getStatistics();
     },
 
     methods: {
