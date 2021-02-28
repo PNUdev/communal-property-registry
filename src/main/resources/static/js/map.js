@@ -1,11 +1,10 @@
+//init map
 let map = L.map('map').setView([49.25589, 24.90972], 7)
 
-//init map
 L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FLZjrggiEUkOsMhDShR0', {
     attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>
                   <a href="https://www.openstreetmap.org/copyright" target="_blank" >&copy; OpenStreetMap contributors</a> `
 }).addTo(map);
-
 
 //Marker color depending on its status
 const STATUS_COLORS = {
@@ -13,7 +12,7 @@ const STATUS_COLORS = {
     RENT: "rgb(227,98,98)",
     FIRST_OR_SECOND_TYPE_LIST: "rgb(99,167,233)",
     PRIVATIZED: "rgb(227,149,84)",
-    USER_BY_COUNCIL: "rgb(174,152,229)"
+    USED_BY_COUNCIL: "rgb(174,152,229)"
 }
 
 //marker icon
@@ -38,36 +37,10 @@ class Icon {
     }
 }
 
-
-//ToDo: remove static markers when server data will arrive
-//represents json data from server !!!
-
-// ONLY FOR DEMO
-let markers = [
-    {
-        id: '1',
-        coords: { lat: 48.9215, lng: 24.70972 },
-        status: "NON_RENT"
-    },
-
-    {
-        id: '2',
-        coords: { lat: 49.55589, lng: 25.60556 },
-        status: "USER_BY_COUNCIL"
-    },
-
-    {
-        id: '3',
-        coords: { lat: 49.06254, lng: 25.38798 },
-        status: "PRIVATIZED"
-    }
-]
-//END DEMO
-
+//ToDo uncomment getMarkers() on release
 
 let markerLayers = [];
 // getMarkers();
-markers.forEach(p => addMarker(p))
 
 //update markers, remove old, add new
 function updateMarkers(){
@@ -110,19 +83,21 @@ function handleMarkerClick(e) {
     map.setView(e.target.getLatLng(), 7)
 }
 
+//Highlight marker on property hover
 let oldPosition;
 function handlePropertyHoverIn(propertyId) {
     let markerStyles;
 
     try {
         markerStyles = markerLayers
-            .find(m => m.id === propertyId + '')
+            .find(m => m.id === propertyId+'')
             ._icon.style;
 
     }  catch(e){ console.error("APPROPRIATE MARKER WAS NOT FOUND"); return}
 
     oldPosition = markerStyles.transform;
 
+    //When marker scales it shifts from the initial point, so this case handles here
     let newPosition = oldPosition
         .substring(12, oldPosition.length - 1)
         .split(",")

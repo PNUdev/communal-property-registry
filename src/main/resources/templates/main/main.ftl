@@ -6,7 +6,7 @@
 
         <transition v-cloak name="fade">
             <div v-if="showModal" @click="showModal=false" class="img-modal">
-                <img-modal :src="imgUrl"></img-modal>
+                <img :src="imgUrl" alt="NOT FOUND">
             </div>
         </transition>
 
@@ -62,38 +62,10 @@
         </div>
 
         <div class="property-items">
-
-            <div class="property" onmouseenter="handlePropertyHoverIn(1)"
-                                  onmouseleave="handlePropertyHoverOut(1)">
-                <img src="https://www.prostir.ua/wp-content/uploads/2018/03/%D0%9F%D0%9D%D0%A3.jpg"
-                     @click="showImageInModal" onerror=this.src="/images/default_img.png">
-
-
-                <div class="property-data">
-                    <h3 class="property__title">ДВНЗ "ПНУ"</h3>
-                    <p class="property__area_transferred">3м<sup>2</sup></p>
-                    <p class="property__area">1500м<sup>2</sup></p>
-                    <p class="property__address">м.Коломия, вул. Миколайчука, 15</p>
-                    <p :style="{background:getStatusLabelColor('NON_RENT')}" class="property__status">Неорендовано</p>
-
-                    <ul class="property-description">
-                        <li ><span>Власник: </span>ФОП Іванов І.І</li>
-                        <li ><span>Балансоутримувач: </span>КНДР</li>
-                        <li class="property__endDate"><span>Угода дійсна до: </span>20.01.2025</li>
-                    </ul>
-
-                    <button class="property__attachments" href="#" @click="showAttachmentsModal">
-                        Переглянути прикріплення 	&#129034;
-                    </button>
-                    <p class="property__amount">40₴</p>
-                </div>
-            </div>
-
             <div class="property" v-model="properties" v-for="prop in properties"
                         @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
-
-                <img title="Open in fullscreen" :src="prop.imageUrl" @click="showImageInModal"
+                <img title="Open in fullscreen" :src="prop.imageUrl" @click="showImageInModal(prop.imageUrl)"
                      onerror=this.src="/images/default_img.png">
 
                 <div class="property-data">
@@ -107,28 +79,28 @@
                     </p>
 
                     <ul class="property-description">
-                        <li ><span>Власник: </span>{{prop.owner}}</li>
-                        <li ><span>Балансоутримувач: </span>{{prop.balanceHolder}}</li>
+                        <li><span>Власник: </span>{{prop.owner}}</li>
+                        <li><span>Балансоутримувач: </span>{{prop.balanceHolder}}</li>
                         <li class="property__endDate"><span>Угода дійсна до: </span>{{prop.leaseAgreementEndDate}}</li>
                     </ul>
 
-                    <button class="property__attachments" @click="showAttachmentsModal(prop.id)">
-                        Переглянути прикріплення 	&#129034;
+                    <button v-bind:class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
+                            @click="showAttachmentsModal(prop.attachments)">
+
+                        Переглянути прикріплення &#129034;
                     </button>
+
                     <p class="property__amount">{{prop.amountOfRent}}₴</p>
                 </div>
             </div>
 
-            <!-- get from server -->
         </div>
-
     </div>
 
     <section class="map-section">
         <div id="map"></div>
 
         <div id="app_stats" class="stats">
-
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
@@ -142,52 +114,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">Школа</th>
-                    <td>15</td> <td>3</td> <td>4</td>
-                    <td>5</td> <td>1</td> <td>2</td>
-                </tr>
-                <tr>
-                    <th scope="row">Школа</th>
-                    <td>15</td> <td>3</td> <td>4</td>
-                    <td>5</td> <td>1</td> <td>2</td>
-                </tr>
-                <tr>
-                    <th scope="row">Школа</th>
-                    <td>15</td> <td>3</td> <td>4</td>
-                    <td>5</td> <td>1</td> <td>2</td>
-                </tr>
-                <tr>
-                    <th scope="row">Школа</th>
-                    <td>15</td> <td>3</td> <td>4</td>
-                    <td>5</td> <td>1</td> <td>2</td>
-                </tr>
-                <tr>
-                    <th scope="row">Школа</th>
-                    <td>15</td> <td>3</td> <td>4</td>
-                    <td>5</td> <td>1</td> <td>2</td>
-                </tr>
-
-                <tr>
-                    <th scope="row">Школа</th>
-                    <td>15</td> <td>3</td> <td>4</td>
-                    <td>5</td> <td>1</td> <td>2</td>
-                </tr>
-
-                <tr class="stats__item" v-for="stat in stats" v-cloak>
-                    <th scope="row">{{stat.category}}</th>
-                    <td>{{stat.totalNumber}}</td>
-                    <td>{{stat.numberOfRented}}</td>
-                    <td>{{stat.numberOfNonRented}}</td>
-                    <td>{{stat.numberOfListed}}</td>
-                    <td>{{stat.numberOfPrivatized}}</td>
-                    <td>{{stat.numberOfUsedByCityCouncil}}</td>
-                </tr>
-
+                    <tr class="stats__item" v-for="stat in stats" v-cloak>
+                        <th scope="row">{{stat.category}}</th>
+                        <td>{{stat.totalNumber}}</td>
+                        <td>{{stat.numberOfRented}}</td>
+                        <td>{{stat.numberOfNonRented}}</td>
+                        <td>{{stat.numberOfListed}}</td>
+                        <td>{{stat.numberOfPrivatized}}</td>
+                        <td>{{stat.numberOfUsedByCityCouncil}}</td>
+                    </tr>
                 </tbody>
             </table>
-
         </div>
+
     </section>
 
 </main>

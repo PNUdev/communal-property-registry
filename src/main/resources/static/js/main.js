@@ -1,8 +1,3 @@
-Vue.component('img-modal', {
-    props: ['imgUrl'],
-    template: '<img :src="imgUrl" alt="NOT FOUND">'
-})
-
 const APP_PROPERTIES = new Vue({
     el: '#app_properties',
     data: {
@@ -16,7 +11,6 @@ const APP_PROPERTIES = new Vue({
         showAttachModal: false,
         hasNext: true,
         hasPrev: false,
-        color: "red",
         imgUrl: '',
         attachments: [],
         properties: [],
@@ -28,18 +22,19 @@ const APP_PROPERTIES = new Vue({
         this.setParamIfExists("status")
         this.setParamIfExists("category")
 
+        this.setUrl();
         this.updatePaginationBtnVisibility();
     },
 
     methods: {
-        //ToDo: uncomment getStatistics() and getProperties() on release
+        //ToDo: uncomment updateProperties() and getProperties() on release
 
         async getProperties() {
             axios.get('/api/property/partial')
                 .then(resp => {
                     this.properties = [resp.data];
-                    this.totalPages = resp["totalPages"]-1;
-
+                    this.totalPages = resp["totalPages"];
+                    this.page = resp["number"];
                 })
                 .catch(error => console.error(error))
         },
@@ -67,6 +62,7 @@ const APP_PROPERTIES = new Vue({
                 this.page++;
             }
 
+            this.setUrl();
             this.updatePaginationBtnVisibility();
         },
 
@@ -92,7 +88,7 @@ const APP_PROPERTIES = new Vue({
                 case "NON_RENT": return "Неорендовано";
                 case "FIRST_OR_SECOND_TYPE_LIST": return "I-II типу";
                 case "PRIVATIZED": return "Приватизовано";
-                case "USER_BY_COUNCIL": return "Вик. міськвладою"
+                case "USED_BY_COUNCIL": return "Вик. міськвладою"
             }
         },
 
@@ -123,18 +119,17 @@ const APP_PROPERTIES = new Vue({
             if(paramValue) this[param] = paramValue;
         },
 
-        showAttachmentsModal(id){
-            let property = this.properties.find(el => el.id === id);
-            this.attachments = property.attachments;
+        showAttachmentsModal(attachments){
+            this.attachments = attachments;
 
-            if(this.attachments.length>0){
+            if(this.attachments?.length > 0){
                 this.showAttachModal = true;
             }
         },
 
-        showImageInModal(e){
-            if(!e.target.src.includes("/images/default_img.png")) {
-                this.imgUrl = e.target.src;
+        showImageInModal(imgUrl){
+            if(imgUrl.trim() !== "") {
+                this.imgUrl = imgUrl;
                 this.showModal = true;
             }
         },
@@ -142,8 +137,6 @@ const APP_PROPERTIES = new Vue({
         updatePaginationBtnVisibility(){
             this.hasPrev = this.page > 0;
             this.hasNext = this.page < this.totalPages;
-
-            this.setUrl();
         },
 
     }

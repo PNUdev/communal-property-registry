@@ -247,7 +247,7 @@ header > img{
     font-weight: 600;
 }
 
-.property__attachments{
+.property__attach{
     color: #253951;
     font-size: 14px;
     padding: .1em 1em;
@@ -255,6 +255,10 @@ header > img{
     text-decoration: none;
     border: 1px solid #6689b3;
     border-radius: .8em;
+}
+
+.property__attach_disabled{
+    background-color: lightgrey;
 }
 
 .property__status{
