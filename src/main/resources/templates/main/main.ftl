@@ -65,8 +65,8 @@
             <div class="property" v-model="properties" v-for="prop in properties"
                         @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
-                <img title="Open in fullscreen" :src="prop.imageUrl" @click="showImageInModal(prop.imageUrl)"
-                     onerror=this.src="/images/default_img.png">
+                <img title="Open in fullscreen" @click="showImageInModal(prop.imageUrl)"
+                     :src= "prop.imageUrl ? prop.imageUrl : '/images/default_img.png'">
 
                 <div class="property-data">
                     <h3 class="property__title">{{prop.name}}</h3>
@@ -84,7 +84,7 @@
                         <li class="property__endDate"><span>Угода дійсна до: </span>{{prop.leaseAgreementEndDate}}</li>
                     </ul>
 
-                    <button v-bind:class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
+                    <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
                             @click="showAttachmentsModal(prop.attachments)">
 
                         Переглянути прикріплення &#129034;
@@ -93,8 +93,8 @@
                     <p class="property__amount">{{prop.amountOfRent}}₴</p>
                 </div>
             </div>
-
         </div>
+
     </div>
 
     <section class="map-section">
@@ -126,7 +126,6 @@
                 </tbody>
             </table>
         </div>
-
     </section>
 
 </main>

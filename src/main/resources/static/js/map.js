@@ -97,7 +97,7 @@ function handlePropertyHoverIn(propertyId) {
 
     oldPosition = markerStyles.transform;
 
-    //When marker scales it shifts from the initial point, so this case handles here
+    //When marker scales it shifts from the initial point, so this case is handled here
     let newPosition = oldPosition
         .substring(12, oldPosition.length - 1)
         .split(",")
@@ -106,6 +106,7 @@ function handlePropertyHoverIn(propertyId) {
     newPosition[0] -= 3; newPosition[1] -= 6
     newPosition = newPosition.map(p => p + "px").join(", ")
 
+    console.log(newPosition)
     markerStyles.transition = ".2s linear";
     markerStyles.filter = "brightness(1.1) drop-shadow(0 0 20px grey)";
     markerStyles.transform = `translate3d(${newPosition}) scale(1.2)`;

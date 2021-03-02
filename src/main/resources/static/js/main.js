@@ -11,7 +11,7 @@ const APP_PROPERTIES = new Vue({
         showAttachModal: false,
         hasNext: true,
         hasPrev: false,
-        imgUrl: '',
+        imgUrl: null,
         attachments: [],
         properties: [],
     },
@@ -40,7 +40,7 @@ const APP_PROPERTIES = new Vue({
         },
 
         async getPropertyOnMarkerClick(id){
-            this.page=0;
+            this.page = 0;
             this.totalPages = 0;
             this.updatePaginationBtnVisibility();
 
@@ -128,7 +128,7 @@ const APP_PROPERTIES = new Vue({
         },
 
         showImageInModal(imgUrl){
-            if(imgUrl.trim() !== "") {
+            if(imgUrl) {
                 this.imgUrl = imgUrl;
                 this.showModal = true;
             }
