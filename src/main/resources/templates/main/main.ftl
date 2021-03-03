@@ -119,7 +119,7 @@
                         <td>{{stat.totalNumber}}</td>
                         <td>{{stat.numberOfRented}}</td>
                         <td>{{stat.numberOfNonRented}}</td>
-                        <td>{{stat.numberOfListed}}</td>
+                        <td>{{stat.numberOfFirstOrSecondType}}</td>
                         <td>{{stat.numberOfPrivatized}}</td>
                         <td>{{stat.numberOfUsedByCityCouncil}}</td>
                     </tr>

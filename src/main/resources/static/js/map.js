@@ -62,7 +62,9 @@ function getMarkers(){
                 })
             })
         })
-        .catch(error => console.error(error))
+        .catch(error => {
+           console.error( "MARKER LOCATIONS FAILED TO LOAD\n" + error)
+        })
 }
 
 //Create new marker
@@ -106,7 +108,6 @@ function handlePropertyHoverIn(propertyId) {
     newPosition[0] -= 3; newPosition[1] -= 6
     newPosition = newPosition.map(p => p + "px").join(", ")
 
-    console.log(newPosition)
     markerStyles.transition = ".2s linear";
     markerStyles.filter = "brightness(1.1) drop-shadow(0 0 20px grey)";
     markerStyles.transform = `translate3d(${newPosition}) scale(1.2)`;

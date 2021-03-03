@@ -36,7 +36,9 @@ const APP_PROPERTIES = new Vue({
                     this.totalPages = resp["totalPages"];
                     this.page = resp["number"];
                 })
-                .catch(error => console.error(error))
+                .catch(error => {
+                    console.error("PROPERTIES FAILED TO LOAD\n" + error)
+                })
         },
 
         async getPropertyOnMarkerClick(id){
@@ -46,7 +48,9 @@ const APP_PROPERTIES = new Vue({
 
             axios.get(`/api/property/${id}`)
                 .then(resp => this.properties = [resp.data])
-                .then(error => console.error(error))
+                .catch(error => {
+                    console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`)
+                })
         },
 
         changeFilters(){
@@ -156,7 +160,9 @@ const APP_STATS = new Vue({
         async getStatistics() {
             axios.get('/api/statistics')
                 .then(resp => this.stats = [resp.data])
-                .catch(error => console.error(error))
+                .catch(error => {
+                    console.error("STATISTICS FAILED TO LOAD\n" + error)
+                })
         },
     }
 })
