@@ -51,7 +51,7 @@ function updateMarkers(){
 }
 
 //get all markers
-function getMarkers(){
+async function getMarkers(){
     axios.get('/api/property/map-locations')
         .then(resp => {
             resp.data.forEach(d=>{
@@ -63,7 +63,7 @@ function getMarkers(){
             })
         })
         .catch(error => {
-           console.error( "MARKER LOCATIONS FAILED TO LOAD\n" + error)
+           console.error( "MARKER LOCATIONS FAILED TO LOAD\n" + error);
         })
 }
 

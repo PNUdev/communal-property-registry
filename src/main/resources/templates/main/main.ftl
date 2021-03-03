@@ -47,8 +47,11 @@
 
                 <select id="category__filter" v-model="category" @change="changeFilters">
                     <option value="all">Будь-яка категорія</option>
-                    <option value="school">Школа</option>
-                    <option value="kindergarten">Дитсадок</option>
+
+                    <option v-for="cat in categories" :value="cat.name" v-model="categories">
+                        {{cat.name}}
+                    </option>
+
                 </select>
 
                 <p class="drop-filters-btn" @click="dropFilters">&#128473;</p>

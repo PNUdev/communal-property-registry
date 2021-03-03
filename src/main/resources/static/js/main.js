@@ -12,8 +12,10 @@ const APP_PROPERTIES = new Vue({
         hasNext: true,
         hasPrev: false,
         imgUrl: null,
+
         attachments: [],
         properties: [],
+        categories: []
     },
 
     mounted() {
@@ -24,20 +26,30 @@ const APP_PROPERTIES = new Vue({
 
         this.setUrl();
         this.updatePaginationBtnVisibility();
+        this.getCategories();
+
     },
 
     methods: {
         //ToDo: uncomment updateProperties() and getProperties() on release
 
+        async getCategories(){
+            axios.get('/api/category-by-purpose')
+                .then(resp => this.categories = resp.data)
+                .catch(error => {
+                    console.error("CATEGORIES-BY-PURPOSE FAILED TO LOAD\n" + error);
+                })
+        },
+
         async getProperties() {
             axios.get('/api/property/partial')
                 .then(resp => {
-                    this.properties = [resp.data];
+                    this.properties = resp.data;
                     this.totalPages = resp["totalPages"];
                     this.page = resp["number"];
                 })
                 .catch(error => {
-                    console.error("PROPERTIES FAILED TO LOAD\n" + error)
+                    console.error("PROPERTIES FAILED TO LOAD\n" + error);
                 })
         },
 
@@ -47,9 +59,9 @@ const APP_PROPERTIES = new Vue({
             this.updatePaginationBtnVisibility();
 
             axios.get(`/api/property/${id}`)
-                .then(resp => this.properties = [resp.data])
+                .then(resp => this.properties = resp.data)
                 .catch(error => {
-                    console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`)
+                    console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`);
                 })
         },
 
@@ -159,9 +171,9 @@ const APP_STATS = new Vue({
     methods: {
         async getStatistics() {
             axios.get('/api/statistics')
-                .then(resp => this.stats = [resp.data])
+                .then(resp => this.stats = resp.data)
                 .catch(error => {
-                    console.error("STATISTICS FAILED TO LOAD\n" + error)
+                    console.error("STATISTICS FAILED TO LOAD\n" + error);
                 })
         },
     }
