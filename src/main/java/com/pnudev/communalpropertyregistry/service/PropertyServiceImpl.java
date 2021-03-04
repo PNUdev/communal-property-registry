@@ -47,7 +47,8 @@ public class PropertyServiceImpl implements PropertyService {
         }
 
         if (nonNull(propertyStatus)) {
-            predicates.add(property.propertyStatus.contains(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus))));
+            predicates.add(property.propertyStatus
+                    .contains(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
         }
 
         return propertyDslRepository.findAll(pageable, predicates.toArray(Predicate[]::new));
