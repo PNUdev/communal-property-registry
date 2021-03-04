@@ -58,10 +58,49 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql-spring</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-maven-plugin</artifactId>
+                <version>4.4.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>export</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jdbcDriver>com.mysql.cj.jdbc.Driver</jdbcDriver>
+                    <jdbcUrl>jdbc:mysql://localhost:3306/communal_property_registry</jdbcUrl>
+                    <jdbcUser>root</jdbcUser>
+                    <jdbcPassword>300295</jdbcPassword>
+                    <packageName>com.pnudev.communalpropertyregistry.domain</packageName>
+                    <sourceFolder>${project.basedir}/target/generated-sources</sourceFolder>
+                    <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.23</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
