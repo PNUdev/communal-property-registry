@@ -6,12 +6,13 @@ const APP_PROPERTIES = new Vue({
         status: 'all',
         category: 'all',
 
-        totalPages: 3,
+        totalPages: 0,
         showModal: false,
         showAttachModal: false,
         hasNext: true,
         hasPrev: false,
         imgUrl: null,
+        url: '/',
 
         attachments: [],
         properties: [],
@@ -27,14 +28,13 @@ const APP_PROPERTIES = new Vue({
         this.setUrl();
         this.updatePaginationBtnVisibility();
         this.getCategories();
-
     },
 
     methods: {
         //ToDo: uncomment updateProperties() and getProperties() on release
 
         async getCategories(){
-            axios.get('/api/category-by-purpose')
+            axios.get('/api/categories-by-purpose')
                 .then(resp => this.categories = resp.data)
                 .catch(error => {
                     console.error("CATEGORIES-BY-PURPOSE FAILED TO LOAD\n" + error);
@@ -42,7 +42,7 @@ const APP_PROPERTIES = new Vue({
         },
 
         async getProperties() {
-            axios.get('/api/property/partial')
+            axios.get(`/api/properties${this.url}`)
                 .then(resp => {
                     this.properties = resp.data;
                     this.totalPages = resp["totalPages"];
@@ -58,7 +58,7 @@ const APP_PROPERTIES = new Vue({
             this.totalPages = 0;
             this.updatePaginationBtnVisibility();
 
-            axios.get(`/api/property/${id}`)
+            axios.get(`/api/properties/${id}`)
                 .then(resp => this.properties = resp.data)
                 .catch(error => {
                     console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`);
@@ -122,8 +122,9 @@ const APP_PROPERTIES = new Vue({
             url += this.category !== "all" ? `&category=${this.category}` : "";
 
             url = url.length > 1 ? "?" + url.substring(2) : url;
+            this.url = url;
 
-            history.pushState({}, "", url);
+            history.pushState({}, "", this.url);
 
             // this.getProperties();
         },

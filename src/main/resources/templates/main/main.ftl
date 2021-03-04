@@ -12,7 +12,9 @@
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
-                <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto" v-for="attach in attachments">
+                <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
+                     v-for="attach in attachments" v-if="attach != null">
+
                     <h5 class="card-header">{{attach.categoryName}}</h5>
                     <div class="card-body">
                         <p class="card-text">{{attach.note}}</p>
@@ -32,7 +34,9 @@
                     <input class="search-btn" type="submit" value="&#9906;">
                 </form>
 
-                <a class="properties-report-btn" href="/api/property/report" download>Завантажити звіт</a>
+                <a class="properties-report-btn" :href="'/api/properties/report' + url" download>
+                    Завантажити звіт
+                </a>
             </div>
 
             <div class="properties__management">
@@ -48,7 +52,7 @@
                 <select id="category__filter" v-model="category" @change="changeFilters">
                     <option value="all">Будь-яка категорія</option>
 
-                    <option v-for="cat in categories" :value="cat.name" v-model="categories">
+                    <option v-for="cat in categories" :value="cat.id" v-model="categories">
                         {{cat.name}}
                     </option>
 
@@ -73,7 +77,11 @@
 
                 <div class="property-data">
                     <h3 class="property__title">{{prop.name}}</h3>
-                    <p class="property__area_transferred">{{prop.areaTransferred}}м<sup>2</sup></p>
+
+                    <p class="property__area_transferred" v-if="prop.areaTransferred">
+                        {{prop.areaTransferred}}м<sup>2</sup>
+                    </p>
+
                     <p class="property__area">{{prop.area}}м<sup>2</sup></p>
                     <p class="property__address">{{prop.address}}</p>
 
@@ -82,9 +90,15 @@
                     </p>
 
                     <ul class="property-description">
-                        <li><span>Власник: </span>{{prop.owner}}</li>
-                        <li><span>Балансоутримувач: </span>{{prop.balanceHolder}}</li>
-                        <li class="property__endDate"><span>Угода дійсна до: </span>{{prop.leaseAgreementEndDate}}</li>
+                        <li v-if="prop.owner"><span>Власник: </span>{{prop.owner}}</li>
+
+                        <li v-if="prop.balanceHolder">
+                            <span>Балансоутримувач: </span>{{prop.balanceHolder}}
+                        </li>
+
+                        <li v-if="prop.leaseAgreementEndDate" class="property__endDate">
+                            <span>Угода дійсна до: </span>{{prop.leaseAgreementEndDate}}
+                        </li>
                     </ul>
 
                     <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
@@ -93,7 +107,7 @@
                         Переглянути прикріплення &#129034;
                     </button>
 
-                    <p class="property__amount">{{prop.amountOfRent}}₴</p>
+                    <p v-if="prop.amountOfRent" class="property__amount">{{prop.amountOfRent}}₴</p>
                 </div>
             </div>
         </div>

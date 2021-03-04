@@ -52,7 +52,7 @@ function updateMarkers(){
 
 //get all markers
 async function getMarkers(){
-    axios.get('/api/property/map-locations')
+    axios.get(`/api/properties/map-locations` + APP_PROPERTIES.url)
         .then(resp => {
             resp.data.forEach(d=>{
                 addMarker({

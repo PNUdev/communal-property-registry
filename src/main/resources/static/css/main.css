@@ -251,6 +251,9 @@ header > img{
     color: #253951;
     font-size: 14px;
     padding: .1em 1em;
+    position: absolute;
+    bottom: .8em;
+
     background-color: #c6dcf5;
     text-decoration: none;
     border: 1px solid #6689b3;
@@ -265,10 +268,11 @@ header > img{
     position: absolute;
     top: 0;
     right: 0;
-    min-width: 5em;
+    max-width: 9em;
+    width: 100%;
     font-size: 15px;
     border-radius:0 .8em 0 .3em;
-    padding: .2em .4em;
+    padding: .2em 0;
     text-align: center;
 }
 

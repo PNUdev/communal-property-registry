@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/category-by-purpose")
+@RequestMapping("/api/categories-by-purpose")
 public class CategoryByPurposeController {
 
     private CategoryByPurposeService categoryByPurposeService;
