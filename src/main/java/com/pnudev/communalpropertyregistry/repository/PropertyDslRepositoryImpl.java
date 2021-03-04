@@ -59,9 +59,10 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
     private Property mapTupleToProperty(Tuple tuple) {
 
-        Property.PropertyLocation propertyLocation = new Property.PropertyLocation();
-        propertyLocation.setLat(tuple.get(property.lat));
-        propertyLocation.setLon(tuple.get(property.lon));
+        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
+                .lat(tuple.get(property.lat))
+                .lon(tuple.get(property.lon))
+                .build();
 
         return Property.builder()
                 .id(tuple.get(property.id))

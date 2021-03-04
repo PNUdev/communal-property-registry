@@ -63,12 +63,6 @@
             <artifactId>querydsl-sql-spring</artifactId>
             <version>4.4.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -86,9 +80,9 @@
                 </executions>
                 <configuration>
                     <jdbcDriver>com.mysql.cj.jdbc.Driver</jdbcDriver>
-                    <jdbcUrl>jdbc:mysql://localhost:3306/communal_property_registry</jdbcUrl>
-                    <jdbcUser>root</jdbcUser>
-                    <jdbcPassword>300295</jdbcPassword>
+                    <jdbcUrl>${env.DB_URL}</jdbcUrl>
+                    <jdbcUser>${env.DB_USERNAME}</jdbcUser>
+                    <jdbcPassword>${env.DB_PASSWORD}</jdbcPassword>
                     <packageName>com.pnudev.communalpropertyregistry.domain</packageName>
                     <sourceFolder>${project.basedir}/target/generated-sources</sourceFolder>
                     <targetFolder>${project.basedir}/target/generated-sources/java</targetFolder>
