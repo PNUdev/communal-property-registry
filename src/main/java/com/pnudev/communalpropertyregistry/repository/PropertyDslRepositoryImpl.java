@@ -6,14 +6,12 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.sql.mysql.MySQLQuery;
+import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,35 +20,31 @@ import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 @Repository
 public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
-    private final DataSource dataSource;
+    private final SQLQueryFactory queryFactory;
 
-    public PropertyDslRepositoryImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public PropertyDslRepositoryImpl(SQLQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
     }
 
     @Override
     public Page<Property> findAll(Pageable pageable, Predicate... where) {
-        try {
-            List<Tuple> tuples = new MySQLQuery<>(dataSource.getConnection())
-                    .select(property.all())
-                    .from(property)
-                    .where(where)
-                    .orderBy(getOrderSpecifiers(pageable, Property.class))
-                    .limit(pageable.getPageSize())
-                    .offset(pageable.getOffset())
-                    .fetch();
 
-            long total = new MySQLQuery<>(dataSource.getConnection())
-                    .from(property)
-                    .where(where)
-                    .fetchCount();
+        List<Tuple> tuples = queryFactory
+                .select(property.all())
+                .from(property)
+                .where(where)
+                .orderBy(getOrderSpecifiers(pageable, Property.class))
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
 
-            return new PageImpl<>(mapTupleOfPropertiesToList(tuples), pageable, total);
+        long total = queryFactory
+                .query()
+                .from(property)
+                .where(where)
+                .fetchCount();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Catch SQLException");
-        }
+        return new PageImpl<>(mapTupleOfPropertiesToList(tuples), pageable, total);
     }
 
     private List<Property> mapTupleOfPropertiesToList(List<Tuple> properties) {
