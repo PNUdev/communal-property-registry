@@ -7,6 +7,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.sql.SQLQueryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
     private final SQLQueryFactory queryFactory;
 
+    @Autowired
     public PropertyDslRepositoryImpl(SQLQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
