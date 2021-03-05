@@ -4,6 +4,7 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
 import com.querydsl.core.types.Predicate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final PropertyDslRepository propertyDslRepository;
 
+    @Autowired
     public PropertyServiceImpl(Environment environment, PropertyDslRepository propertyDslRepository) {
 
         this.environment = environment;

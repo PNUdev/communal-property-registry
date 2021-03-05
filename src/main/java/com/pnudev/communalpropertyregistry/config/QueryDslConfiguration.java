@@ -4,6 +4,7 @@ import com.querydsl.sql.MySQLTemplates;
 import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 import javax.sql.DataSource;
 
@@ -12,7 +13,8 @@ public class QueryDslConfiguration {
 
     @Bean
     public SQLQueryFactory queryFactory(DataSource dataSource) {
-        return new SQLQueryFactory(new com.querydsl.sql.Configuration(new MySQLTemplates()), dataSource);
+        return new SQLQueryFactory(new com.querydsl.sql.Configuration(new MySQLTemplates()),
+                new TransactionAwareDataSourceProxy(dataSource));
     }
 
 }

@@ -12,25 +12,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/property/admin")
-public class PropertyController {
+@RequestMapping("/admin/properties")
+public class PropertyAdminController {
 
     private final PropertyService propertyService;
 
-    public PropertyController(PropertyService propertyService) {
+    @Autowired
+    public PropertyAdminController(PropertyService propertyService) {
         this.propertyService = propertyService;
     }
 
-    @GetMapping("/index")
-    public String index(@RequestParam(required = false) String q,
-                        @RequestParam(required = false) Long categoryByPurposeId,
-                        @RequestParam(required = false) String propertyStatus,
-                        @PageableDefault(sort = "name") Pageable pageable,
-                        Model model) {
+    @GetMapping
+    public String findAll(@Nullable @RequestParam(name = "q") String q,
+                          @Nullable @RequestParam(name = "category") Long categoryByPurposeId,
+                          @Nullable @RequestParam(name = "status") String propertyStatus,
+                          @PageableDefault(sort = "name") Pageable pageable,
+                          Model model) {
 
-        Page<Property> propertyPage = propertyService.findAll(q, categoryByPurposeId, propertyStatus, pageable);
+        Page<Property> propertiesPage = propertyService.findAll(q, categoryByPurposeId, propertyStatus, pageable);
 
-        model.addAttribute("propertyPage", propertyPage);
+        model.addAttribute("propertiesPage", propertiesPage);
 
         return "admin/common/index";
     }

@@ -17,4 +17,4 @@ spring:
 application:
   tomtom:
     api:
-      key: ${TOMTOM_KEY:DITn9MLp6x2XRadsi2cp2h8RPKW6lExD}
+      key: ${TOMTOM_KEY}
