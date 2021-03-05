@@ -63,6 +63,7 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
         return Property.builder()
                 .id(tuple.get(property.id))
                 .imageUrl(tuple.get(property.imageUrl))
+                .address(tuple.get(property.address))
                 .propertyLocation(propertyLocation)
                 .name(tuple.get(property.name))
                 .categoryByPurposeId(tuple.get(property.categoryByPurposeId))
