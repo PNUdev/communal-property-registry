@@ -9,11 +9,12 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import javax.sql.DataSource;
 
 @Configuration
-public class QuerydslConfig {
+public class QueryDslConfig {
 
     @Bean
     public SQLQueryFactory sqlQueryFactory(DataSource dataSource) {
-        return new SQLQueryFactory(new com.querydsl.sql.Configuration(new MySQLTemplates()),
+        return new SQLQueryFactory(
+                new com.querydsl.sql.Configuration(new MySQLTemplates()),
                 new TransactionAwareDataSourceProxy(dataSource));
     }
 

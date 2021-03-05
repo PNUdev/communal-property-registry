@@ -21,11 +21,11 @@ public class LocationController {
     }
 
     @GetMapping
-    public PropertyLocationResponseDto getLocation(@Nullable @RequestParam(name = "q") String q,
+    public PropertyLocationResponseDto getLocation(@Nullable @RequestParam(name = "q") String searchQuery,
                                                    @Nullable @RequestParam(name = "status") String propertyStatus,
                                                    @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
 
-        return locationService.getLocation(q, propertyStatus, categoryByPurposeId);
+        return locationService.getLocation(searchQuery, propertyStatus, categoryByPurposeId);
     }
 
 }

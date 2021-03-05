@@ -4,6 +4,7 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyLocationResponseDto;
 import com.pnudev.communalpropertyregistry.repository.PropertyLocationDslRepository;
 import com.querydsl.core.types.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 import static java.util.Objects.nonNull;
 
+@Slf4j
 @Service
 public class LocationServiceImpl implements LocationService{
 
@@ -26,6 +28,8 @@ public class LocationServiceImpl implements LocationService{
     @Override
     public PropertyLocationResponseDto getLocation(String searchQuery, String propertyStatus, Long categoryByPurposeId) {
 
+        log.info("Get property location request");
+
         List<Predicate> predicates = new ArrayList<>();
 
         if (nonNull(searchQuery)) {
@@ -38,7 +42,7 @@ public class LocationServiceImpl implements LocationService{
 
         if (nonNull(propertyStatus)) {
             predicates.add(property.propertyStatus
-                    .contains(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
+                    .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
         }
 
         return propertyLocationDslRepository.findAll(predicates.toArray(Predicate[]::new));
