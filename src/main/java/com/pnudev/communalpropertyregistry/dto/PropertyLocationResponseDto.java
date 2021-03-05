@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PropertyLocationResponseDto {
 
-    List<PropertyLocationDto> mapLocations;
+    private List<PropertyLocationDto> mapLocations;
 
 }

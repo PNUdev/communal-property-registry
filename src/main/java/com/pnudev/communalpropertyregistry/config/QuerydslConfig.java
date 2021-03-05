@@ -16,4 +16,5 @@ public class QuerydslConfig {
         return new SQLQueryFactory(new com.querydsl.sql.Configuration(new MySQLTemplates()),
                 new TransactionAwareDataSourceProxy(dataSource));
     }
+
 }
