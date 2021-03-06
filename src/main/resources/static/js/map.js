@@ -47,6 +47,7 @@ function updateMarkers(){
     while(markerLayers.length > 0) {
         map.removeLayer(markerLayers.pop());
     }
+
     getMarkers();
 }
 
@@ -54,11 +55,16 @@ function updateMarkers(){
 async function getMarkers(){
     axios.get(`/api/properties/map-locations` + APP_PROPERTIES.url)
         .then(resp => {
-            resp.data.forEach(d=>{
+            resp.data.forEach(propertyLocationData => {
                 addMarker({
-                    id: d.id,
-                    coords: {lat: d.lat, lng: d.lon},
-                    status: d.propertyStatus
+                    id: propertyLocationData.id,
+
+                    coords: {
+                        lat: propertyLocationData.lat,
+                        lng: propertyLocationData.lon
+                    },
+
+                    status: propertyLocationData.propertyStatus
                 })
             })
         })
@@ -92,10 +98,13 @@ function handlePropertyHoverIn(propertyId) {
 
     try {
         markerStyles = markerLayers
-            .find(m => m.id === propertyId+'')
+            .find(marker => marker.id === propertyId + '')
             ._icon.style;
 
-    }  catch(e){ console.error("APPROPRIATE MARKER WAS NOT FOUND"); return}
+    } catch(error){
+        console.error("APPROPRIATE MARKER WAS NOT FOUND\n" + error);
+        return;
+    }
 
     oldPosition = markerStyles.transform;
 
@@ -103,10 +112,10 @@ function handlePropertyHoverIn(propertyId) {
     let newPosition = oldPosition
         .substring(12, oldPosition.length - 1)
         .split(",")
-        .map(p => parseInt(p));
+        .map(point => parseInt(point));
 
-    newPosition[0] -= 3; newPosition[1] -= 6
-    newPosition = newPosition.map(p => p + "px").join(", ")
+    newPosition[0] -= 3; newPosition[1] -= 6;
+    newPosition = newPosition.map(point => point + "px").join(", ")
 
     markerStyles.transition = ".2s linear";
     markerStyles.filter = "brightness(1.1) drop-shadow(0 0 20px grey)";
@@ -118,10 +127,13 @@ function handlePropertyHoverOut(propertyId) {
 
     try{
         markerStyles = markerLayers
-            .find(m => m.id === propertyId+'')
+            .find(marker => marker.id === propertyId + '')
             ._icon.style;
 
-    } catch(e){ console.error("APPROPRIATE MARKER WAS NOT FOUND"); return}
+    } catch(error){
+        console.error("APPROPRIATE MARKER WAS NOT FOUND\n" + error);
+        return;
+    }
 
     markerStyles.filter = "brightness(1)";
     markerStyles.transform = oldPosition;
