@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
-import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
+import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
