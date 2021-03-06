@@ -40,13 +40,15 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
                 .offset(pageable.getOffset())
                 .fetch();
 
-        long total = queryFactory
+        return new PageImpl<>(mapTupleOfPropertiesToList(tuples), pageable, countAll(where));
+    }
+
+    private long countAll(Predicate... where) {
+        return queryFactory
                 .query()
                 .from(property)
                 .where(where)
                 .fetchCount();
-
-        return new PageImpl<>(mapTupleOfPropertiesToList(tuples), pageable, total);
     }
 
     private List<Property> mapTupleOfPropertiesToList(List<Tuple> properties) {
