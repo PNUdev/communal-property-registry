@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.repository;
+package com.pnudev.communalpropertyregistry.repository.dsl;
 
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;

@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.controller;
+package com.pnudev.communalpropertyregistry.controller.api;
 
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.service.PropertyService;
