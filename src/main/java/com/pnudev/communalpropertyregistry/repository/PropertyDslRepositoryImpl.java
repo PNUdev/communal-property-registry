@@ -1,6 +1,6 @@
 package com.pnudev.communalpropertyregistry.repository;
 
-import com.pnudev.communalpropertyregistry.dto.PropertyLocationResponseDto;
+import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
@@ -13,19 +13,19 @@ import java.util.stream.Collectors;
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 
 @Repository
-public class PropertyLocationDslRepositoryImpl implements PropertyLocationDslRepository {
+public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
     private final SQLQueryFactory queryFactory;
     private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyLocationDslRepositoryImpl(SQLQueryFactory queryFactory, PropertyMapper propertyMapper) {
+    public PropertyDslRepositoryImpl(SQLQueryFactory queryFactory, PropertyMapper propertyMapper) {
         this.queryFactory = queryFactory;
         this.propertyMapper = propertyMapper;
     }
 
     @Override
-    public PropertyLocationResponseDto findAll(Predicate... where) {
+    public PropertiesLocationsResponseDto findAllMapLocations(Predicate... where) {
 
          List<Tuple> properties = queryFactory
                 .select(property.id, property.propertyStatus, property.lon, property.lat)
@@ -33,7 +33,7 @@ public class PropertyLocationDslRepositoryImpl implements PropertyLocationDslRep
                 .where(where)
                 .fetch();
 
-        return new PropertyLocationResponseDto(properties.stream()
+        return new PropertiesLocationsResponseDto(properties.stream()
                 .map(propertyMapper::mapToPropertyLocationDto).collect(Collectors.toList()));
     }
 

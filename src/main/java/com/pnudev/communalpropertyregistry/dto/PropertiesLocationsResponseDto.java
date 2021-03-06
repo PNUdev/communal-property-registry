@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PropertyLocationResponseDto {
+public class PropertiesLocationsResponseDto {
 
     private List<PropertyLocationDto> mapLocations;
 

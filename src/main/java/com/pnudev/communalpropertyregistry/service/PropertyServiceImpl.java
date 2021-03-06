@@ -1,8 +1,8 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
-import com.pnudev.communalpropertyregistry.dto.PropertyLocationResponseDto;
-import com.pnudev.communalpropertyregistry.repository.PropertyLocationDslRepository;
+import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
+import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +16,17 @@ import static java.util.Objects.nonNull;
 
 @Slf4j
 @Service
-public class LocationServiceImpl implements LocationService{
+public class PropertyServiceImpl implements PropertyService {
 
-    private final PropertyLocationDslRepository propertyLocationDslRepository;
+    private final PropertyDslRepository propertyLocationDslRepository;
 
     @Autowired
-    public LocationServiceImpl(PropertyLocationDslRepository propertyLocationDslRepository) {
+    public PropertyServiceImpl(PropertyDslRepository propertyLocationDslRepository) {
         this.propertyLocationDslRepository = propertyLocationDslRepository;
     }
 
     @Override
-    public PropertyLocationResponseDto getLocation(String searchQuery, String propertyStatus, Long categoryByPurposeId) {
+    public PropertiesLocationsResponseDto getMapLocations(String searchQuery, String propertyStatus, Long categoryByPurposeId) {
 
         log.info("Get property location request");
 
@@ -45,7 +45,7 @@ public class LocationServiceImpl implements LocationService{
                     .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
         }
 
-        return propertyLocationDslRepository.findAll(predicates.toArray(Predicate[]::new));
+        return propertyLocationDslRepository.findAllMapLocations(predicates.toArray(Predicate[]::new));
 
     }
 
