@@ -1,9 +1,12 @@
 package com.pnudev.communalpropertyregistry.util.mapper;
 
+<<<<<<< HEAD
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
+import com.pnudev.communalpropertyregistry.dto.PropertyLocationDto;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
+import com.querydsl.core.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 
 @Component
 public class PropertyMapper {
@@ -68,6 +73,16 @@ public class PropertyMapper {
                 .filter(c -> c.getId().equals(id)).findAny();
 
         return categoryByPurpose.orElseThrow(() -> new RuntimeException("Не знайдено категорії за призначенням!"));
+    }
+
+    public PropertyLocationDto mapToPropertyLocationDto(Tuple tuple) {
+
+        return PropertyLocationDto.builder()
+                .propertyId(tuple.get(property.id))
+                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
+                .lat(tuple.get(property.lat))
+                .lon(tuple.get(property.lon))
+                .build();
     }
 
 }

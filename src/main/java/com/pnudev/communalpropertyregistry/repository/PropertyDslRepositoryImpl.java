@@ -1,9 +1,9 @@
 package com.pnudev.communalpropertyregistry.repository;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
+import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.sql.SQLQueryFactory;
@@ -23,9 +23,25 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
     private final SQLQueryFactory queryFactory;
 
+    private final PropertyMapper propertyMapper;
+
     @Autowired
-    public PropertyDslRepositoryImpl(SQLQueryFactory queryFactory) {
+    public PropertyDslRepositoryImpl(SQLQueryFactory queryFactory, PropertyMapper propertyMapper) {
         this.queryFactory = queryFactory;
+        this.propertyMapper = propertyMapper;
+    }
+
+    @Override
+    public PropertiesLocationsResponseDto findAllMapLocations(Predicate... where) {
+
+        List<Tuple> properties = queryFactory
+                .select(property.id, property.propertyStatus, property.lon, property.lat)
+                .from(property)
+                .where(where)
+                .fetch();
+
+        return new PropertiesLocationsResponseDto(properties.stream()
+                .map(propertyMapper::mapToPropertyLocationDto).collect(Collectors.toList()));
     }
 
     @Override
@@ -35,12 +51,11 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
                 .select(property.all())
                 .from(property)
                 .where(where)
-                .orderBy(getOrderSpecifiers(pageable, Property.class))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
 
-        return new PageImpl<>(mapTupleOfPropertiesToList(tuples), pageable, countAll(where));
+        return new PageImpl<>(propertyMapper.mapToProperties(tuples), pageable, countAll(where));
     }
 
     private long countAll(Predicate... where) {
@@ -49,53 +64,6 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
                 .from(property)
                 .where(where)
                 .fetchCount();
-    }
-
-    private List<Property> mapTupleOfPropertiesToList(List<Tuple> properties) {
-        return properties.stream().map(this::mapTupleToProperty).collect(Collectors.toList());
-    }
-
-    private Property mapTupleToProperty(Tuple tuple) {
-
-        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
-                .lat(tuple.get(property.lat))
-                .lon(tuple.get(property.lon))
-                .build();
-
-        return Property.builder()
-                .id(tuple.get(property.id))
-                .imageUrl(tuple.get(property.imageUrl))
-                .address(tuple.get(property.address))
-                .propertyLocation(propertyLocation)
-                .name(tuple.get(property.name))
-                .categoryByPurposeId(tuple.get(property.categoryByPurposeId))
-                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
-                .area(tuple.get(property.area))
-                .areaTransferred(tuple.get(property.areaTransferred))
-                .balanceHolder(tuple.get(property.balanceHolder))
-                .owner(tuple.get(property.owner))
-                .leaseAgreementEndDate(tuple.get(property.leaseAgreementEndDate).toLocalDate())
-                .amountOfRent(tuple.get(property.amountOfRent))
-                .isAreaTransferredPubliclyViewable(tuple.get(property.isAreaTransferredPubliclyViewable))
-                .isBalanceHolderPubliclyViewable(tuple.get(property.isBalanceHolderPubliclyViewable))
-                .isOwnerPubliclyViewable(tuple.get(property.isOwnerPubliclyViewable))
-                .isLeaseAgreementEndDatePubliclyViewable(tuple.get(property.isLeaseAgreementEndDatePubliclyViewable))
-                .isAmountOfRentPubliclyViewable(tuple.get(property.isAmountOfRentPubliclyViewable))
-                .build();
-    }
-
-    private OrderSpecifier[] getOrderSpecifiers(Pageable pageable, Class<?> aClass) {
-
-        String className = aClass.getSimpleName();
-
-        final String orderVariable = String.valueOf(Character.toLowerCase(className.charAt(0))).concat(className.substring(1));
-
-        return pageable.getSort().stream()
-                .map(order -> new OrderSpecifier(
-                        Order.valueOf(order.getDirection().toString()),
-                        new PathBuilder(aClass, orderVariable).get(order.getProperty()))
-                )
-                .toArray(OrderSpecifier[]::new);
     }
 
 }
