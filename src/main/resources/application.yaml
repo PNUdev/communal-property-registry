@@ -1,6 +1,4 @@
 spring:
-  flyway:
-    out-of-order: true
   freemarker:
     template-loader-path: "classpath:/templates"
     suffix: ".ftl"
