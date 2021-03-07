@@ -12,17 +12,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryByPurposePaginationDto {
+public class CategoryByPurposePageDto {
 
     private List<CategoryByPurpose> content;
 
     private Integer page;
 
     private Integer totalPages;
-
-    private Integer firstVisiblePage;
-
-    private Integer lastVisiblePage;
 
     private Boolean isFirstPage;
 
