@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.controller;
+package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
@@ -41,7 +40,7 @@ public class PropertyAdminController {
     }
 
     @GetMapping
-    public String findAll(@Nullable @RequestParam(name = "q") String q,
+    public String findAll(@Nullable @RequestParam(name = "q") String searchQuery,
                           @Nullable @RequestParam(name = "category") Long categoryByPurposeId,
                           @Nullable @RequestParam(name = "status") String propertyStatus,
                           @PageableDefault(sort = "name") Pageable pageable,
@@ -49,13 +48,22 @@ public class PropertyAdminController {
 
         List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
         Page<PropertyAdminDto> propertiesAdminPage = propertyAdminService.findAll(
-                !Objects.equals(q, "") ? q : null,
-                nonNull(categoryByPurposeId) && categoryByPurposeId != -1 ? categoryByPurposeId : null,
-                !Objects.equals(propertyStatus, "all") ? propertyStatus : null,
-                pageable);
+                searchQuery, categoryByPurposeId, propertyStatus, pageable);
 
         model.addAttribute("categoriesByPurpose", categoriesByPurpose);
         model.addAttribute("propertiesPage", propertiesAdminPage);
+
+        if (nonNull(searchQuery)) {
+            model.addAttribute("searchQuery", searchQuery);
+        }
+
+        if (nonNull(searchQuery)) {
+            model.addAttribute("searchCategoryByPurposeId", categoryByPurposeId);
+        }
+
+        if (nonNull(searchQuery)) {
+            model.addAttribute("searchPropertyStatus", propertyStatus);
+        }
 
         return "admin/common/index";
     }
