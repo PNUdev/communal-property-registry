@@ -1,6 +1,5 @@
 package com.pnudev.communalpropertyregistry.service;
 
-import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,7 @@ public interface PropertyService {
     Page<PropertyResponseDto> findPropertiesBySearchQuery(String searchQuery, String propertyStatus,
                                                           Long categoryByPurposeId, Pageable pageable);
 
-    Property findById(Long id);
+    PropertyResponseDto findById(Long id);
 
     void deleteById(Long id);
 

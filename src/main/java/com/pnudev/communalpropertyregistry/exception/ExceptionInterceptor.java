@@ -19,7 +19,7 @@ public class ExceptionInterceptor {
 
         log.error("ServiceException was thrown, httpServletRequest: {}", request, serviceException);
 
-        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE, serviceException.getMessage());
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceException.getMessage());
 
         return "redirect:/";
     }

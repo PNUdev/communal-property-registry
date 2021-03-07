@@ -8,7 +8,7 @@ import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyLocationDslRepository;
-import com.pnudev.communalpropertyregistry.util.mapper.PropertyToPropertyResponseDtoMapper;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import java.util.List;
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 import static java.util.Objects.nonNull;
 
+
 @Slf4j
 @Service
 public class PropertyServiceImpl implements PropertyService {
@@ -35,21 +36,20 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final PropertyDslRepository propertyDslRepository;
 
-    private final PropertyToPropertyResponseDtoMapper propertyResponseDtoMapper;
-
+    private final PropertyMapper propertyMapper;
 
     @Autowired
     public PropertyServiceImpl(PropertyLocationDslRepository propertyLocationDslRepository,
                                PropertyRepository propertyRepository,
                                CategoryByPurposeService categoryByPurposeService,
-                               PropertyDslRepository propertyDslRepository,
-                               PropertyToPropertyResponseDtoMapper propertyResponseDtoMapper) {
+                               PropertyMapper propertyMapper,
+                               PropertyDslRepository propertyDslRepository) {
 
         this.propertyLocationDslRepository = propertyLocationDslRepository;
         this.propertyRepository = propertyRepository;
         this.categoryByPurposeService = categoryByPurposeService;
+        this.propertyMapper = propertyMapper;
         this.propertyDslRepository = propertyDslRepository;
-        this.propertyResponseDtoMapper = propertyResponseDtoMapper;
     }
 
     @Override
@@ -116,13 +116,15 @@ public class PropertyServiceImpl implements PropertyService {
 
         Page<Property> properties = propertyDslRepository.findAll(pageable, predicate);
 
-        return properties.map(propertyResponseDtoMapper::map);
+        return properties.map(propertyMapper::mapToPropertyResponseDto);
     }
 
     @Override
-    public Property findById(Long id) {
-        return propertyRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Приміщення не знайдено"));
+    public PropertyResponseDto findById(Long id) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("Приміщення не знайдене"));
+
+        return propertyMapper.mapToPropertyResponseDto(property);
     }
 
     @Override
