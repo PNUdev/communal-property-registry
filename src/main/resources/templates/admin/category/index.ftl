@@ -34,7 +34,7 @@
 
             <ul class="pagination">
                 <#if !pagination.isFirstPage >
-                    <li class="page-item"><a class="page-link" href="/admin/categories?page=${pagination.page - 1}">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="/admin/categories?page=0">First</a></li>
                 </#if>
 
                 <#list pagination.firstVisiblePage..pagination.lastVisiblePage as page>
@@ -44,7 +44,8 @@
                 </#list>
 
                 <#if !pagination.isLastPage >
-                    <li class="page-item"><a class="page-link" href="/admin/categories?page=${pagination.page + 1}">Next</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="/admin/categories?page=${pagination.totalPages - 1}">Last</a></li>
                 </#if>
 
             </ul>

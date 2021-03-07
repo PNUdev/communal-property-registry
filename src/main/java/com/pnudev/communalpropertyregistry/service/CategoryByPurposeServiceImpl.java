@@ -1,6 +1,7 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePaginationDto;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,25 +26,35 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public PagingCategoryByPurposeDto findAll(Pageable pageable) {
+    public CategoryByPurposePaginationDto findAll(Pageable pageable) {
 
         Page<CategoryByPurpose> pagination = categoryByPurposeRepository
                 .findAll(pageable);
 
-        int firstPage = (pagination.getNumber() < 5) ? 0 : pagination.getNumber() - 4;
+        boolean isFirst = false;
+        boolean isLast = false;
 
-        int lastPage = (pagination.getTotalPages() - pagination.getNumber() < 5)
-                ? pagination.getTotalPages() - 1
-                : pagination.getNumber() + 4;
+        int firstPage = pagination.getNumber() - 5;
+        int lastPage = pagination.getNumber() + 5;
 
-        return PagingCategoryByPurposeDto.builder()
+        if (firstPage - 1 < 0) {
+            firstPage = 0;
+            isFirst = true;
+        }
+
+        if (lastPage > pagination.getTotalPages() - 2) {
+            lastPage = pagination.getTotalPages() - 1;
+            isLast = true;
+        }
+
+        return CategoryByPurposePaginationDto.builder()
                 .content(pagination.getContent())
                 .page(pagination.getNumber())
                 .totalPages(pagination.getTotalPages())
                 .firstVisiblePage(firstPage)
                 .lastVisiblePage(lastPage)
-                .isFirstPage(pagination.getNumber() == 0)
-                .isLastPage(pagination.getNumber() == pagination.getTotalPages() - 1)
+                .isFirstPage(isFirst)
+                .isLastPage(isLast)
                 .build();
     }
 
@@ -54,7 +65,7 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public void create(CategoryByPurposeCreateDto categoryCreateDto) {
+    public void create(CategoryByPurposeDto categoryCreateDto) {
 
         if (categoryByPurposeRepository.existsByName(categoryCreateDto.getName())) {
             throw new ServiceException("Category with such name already exists");
@@ -68,23 +79,21 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public Long update(CategoryByPurposeUpdateDto categoryByPurposeUpdateDto) {
+    public void update(CategoryByPurposeDto categoryByPurposeDto, Long categoryId) {
 
         CategoryByPurpose category = categoryByPurposeRepository
-                .findById(categoryByPurposeUpdateDto.getId())
+                .findById(categoryId)
                 .orElseThrow(() -> new ServiceException("Category by id not found"));
 
-        if (categoryByPurposeRepository.existsByName(categoryByPurposeUpdateDto.getName())) {
+        if (categoryByPurposeRepository.existsByName(categoryByPurposeDto.getName())) {
             throw new ServiceException("Category with such name already exists");
         }
 
         CategoryByPurpose updatedCategory = category.toBuilder()
-                .name(categoryByPurposeUpdateDto.getName())
+                .name(categoryByPurposeDto.getName())
                 .build();
 
         categoryByPurposeRepository.save(updatedCategory);
-
-        return updatedCategory.getId();
     }
 
     @Override
