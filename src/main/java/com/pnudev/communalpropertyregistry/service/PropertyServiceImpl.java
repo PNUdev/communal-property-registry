@@ -5,7 +5,7 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
-import com.pnudev.communalpropertyregistry.repository.QueryDslRepository;
+import com.pnudev.communalpropertyregistry.repository.dsl.QueryDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyLocationDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;

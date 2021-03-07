@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.repository;
+package com.pnudev.communalpropertyregistry.repository.dsl;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
