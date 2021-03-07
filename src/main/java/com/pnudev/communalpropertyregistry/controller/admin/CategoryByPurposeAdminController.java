@@ -76,7 +76,7 @@ public class CategoryByPurposeAdminController {
         return "redirect:/admin/categories/new";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/edit/{id}")
     public String getUpdatePage(@PathVariable("id") Long id, Model model) {
 
         CategoryByPurpose category = categoryByPurposeService.findById(id);
