@@ -10,7 +10,7 @@
 
         <div class="category__container">
 
-            <form action="/admin/categories/update" method="POST">
+            <form action="/admin/categories/update/${category.id}" method="POST">
 
                 <div class="form-group">
 

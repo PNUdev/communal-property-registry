@@ -13,7 +13,7 @@
         <div class="d-flex flex-row">
 
             <div class="category__function">
-                <a class="btn btn-info" href="/admin/categories/${category.id}/edit">Edit</a>
+                <a class="btn btn-info" href="/admin/categories/edit/${category.id}">Edit</a>
             </div>
 
             <div class="category__function">
