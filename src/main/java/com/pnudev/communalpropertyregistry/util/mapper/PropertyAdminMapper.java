@@ -46,7 +46,7 @@ public class PropertyAdminMapper {
                 .imageUrl(property.getImageUrl())
                 .address(property.getAddress())
                 .name(property.getName())
-                .categoryByPurposeName(findById(categoriesByPurpose, property.getId()).getName())
+                .categoryByPurposeName(findById(categoriesByPurpose, property.getCategoryByPurposeId()).getName())
                 .propertyStatus(property.getPropertyStatus())
                 .area(property.getArea())
                 .areaTransferred(property.getAreaTransferred())
