@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/property", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/property")
 public class PropertyController {
 
     @Value("${rest.pagination.size}")
@@ -38,10 +37,10 @@ public class PropertyController {
 
     @GetMapping
     public Page<PropertyResponseDto> getPropertiesBySearch(
-            @Nullable @RequestParam(name = "p") Integer page,
+            @Nullable @RequestParam(name = "page") Integer page,
             @Nullable @RequestParam(name = "q") String searchQuery,
             @Nullable @RequestParam(name = "status") String propertyStatus,
-            @Nullable @RequestParam(name = "category") String categoryName) {
+            @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
 
         page = Optional.ofNullable(page).orElse(0);
 
@@ -51,7 +50,7 @@ public class PropertyController {
 
         return propertyService.findPropertiesBySearchQuery(
                 searchQuery, propertyStatus,
-                categoryName,
+                categoryByPurposeId,
                 PageRequest.of(page, pageSize));
     }
 

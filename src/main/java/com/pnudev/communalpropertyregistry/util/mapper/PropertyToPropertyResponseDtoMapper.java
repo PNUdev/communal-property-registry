@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -69,6 +70,7 @@ public class PropertyToPropertyResponseDtoMapper {
                 .attachments(categories.stream()
                         .filter(AttachmentCategory::isPubliclyViewable)
                         .map((c) -> createAttachmentResponseWithCategory(attachments, c))
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList()))
                 .build();
     }

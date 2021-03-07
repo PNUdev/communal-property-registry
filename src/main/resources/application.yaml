@@ -12,5 +12,4 @@ spring:
   data:
     web.pageable.one-indexed-parameters: true
 
-rest.pagination:
-    size: 5
+rest.pagination.size: 5

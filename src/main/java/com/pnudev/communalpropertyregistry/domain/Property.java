@@ -65,15 +65,13 @@ public class Property {
 
     }
 
-    @AllArgsConstructor
     public enum PropertyStatus {
 
-        NON_RENT("Вільне"),
-        RENT("Орендоване"),
-        FIRST_OR_SECOND_TYPE_LIST("В переліку Першого або Другого типу"),
-        PRIVATIZED("Приватизоване"),
-        USED_BY_CITY_COUNCIL("У використанні органами міської ради");
+        NON_RENT,
+        RENT,
+        FIRST_OR_SECOND_TYPE_LIST,
+        PRIVATIZED,
+        USED_BY_CITY_COUNCIL
 
-        private String ukrainian_representation;
     }
 }

@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 
 @Repository
-public class PropertyDslRepositoryImpl implements PropertyDslRepository {
+public class PropertyLocationDslRepositoryImpl implements PropertyLocationDslRepository {
 
     private final SQLQueryFactory queryFactory;
     private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyDslRepositoryImpl(SQLQueryFactory queryFactory, PropertyMapper propertyMapper) {
+    public PropertyLocationDslRepositoryImpl(SQLQueryFactory queryFactory, PropertyMapper propertyMapper) {
         this.queryFactory = queryFactory;
         this.propertyMapper = propertyMapper;
     }
