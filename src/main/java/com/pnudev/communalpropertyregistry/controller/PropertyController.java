@@ -1,50 +1,51 @@
 package com.pnudev.communalpropertyregistry.controller;
 
-import com.pnudev.communalpropertyregistry.dto.PropertyDto;
+import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.service.PropertyService;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyToPropertyResponseDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/property")
+@RestController
+@RequestMapping(value = "/api/property", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PropertyController {
 
     private final PropertyService propertyService;
+    private final PropertyToPropertyResponseDtoMapper propertyResponseDtoMapper;
 
     @Autowired
-    public PropertyController(PropertyService propertyService) {
+    public PropertyController(PropertyService propertyService,
+                              PropertyToPropertyResponseDtoMapper propertyResponseDtoMapper) {
+
         this.propertyService = propertyService;
+        this.propertyResponseDtoMapper = propertyResponseDtoMapper;
     }
 
-    @GetMapping("/partial")
-    public String getPartialProperties(@PageableDefault(size = 5, sort = "name") Pageable pageable,
-//                                       @RequestParam(name = "p", defaultValue = "0") Integer page,
-                                       @RequestParam(name = "q") String searchQuery,
-                                       @RequestParam(name = "status") String propertyStatus,
-                                       @RequestParam(name = "category") String categoryName,
-                                       Model model) {
+    @GetMapping
+    public Page<PropertyResponseDto> getPropertiesBySearch(
+            @PageableDefault(size = 5, sort = "name") Pageable pageable,
+            @RequestParam(name = "q") String searchQuery,
+            @RequestParam(name = "status") String propertyStatus,
+            @Nullable @RequestParam(name = "category") String categoryName) {
 
-        Page<PropertyDto> partialPropertyDtos = propertyService.findPropertiesBySearchQuery(
+        return propertyService.findPropertiesBySearchQuery(
                 searchQuery, propertyStatus,
                 categoryName, pageable);
-
-        model.addAttribute("propertyDtos", partialPropertyDtos);
-
-        return "property/multiPropertyPartial";
     }
 
-    @GetMapping("/{id}/partial")
-    public String getPartialById(@PathVariable Long id, Model model) {
+    @GetMapping("/{id}")
+    public PropertyResponseDto getPropertyById(@PathVariable Long id) {
 
-        model.addAttribute("property", propertyService.findById(id));
-        return "property/singlePropertyPartial";
+        return propertyResponseDtoMapper
+                .map(propertyService.findById(id));
     }
 }

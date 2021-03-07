@@ -2,32 +2,41 @@ package com.pnudev.communalpropertyregistry.util.mapper;
 
 import com.pnudev.communalpropertyregistry.domain.Attachment;
 import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
+import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
-import com.pnudev.communalpropertyregistry.dto.PropertyDto;
+import com.pnudev.communalpropertyregistry.dto.response.AttachmentResponseDto;
+import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
+import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.AttachmentCategoryRepository;
 import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
+import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 @Component
-public class PropertyToPropertyDtoMapper {
+public class PropertyToPropertyResponseDtoMapper {
 
     // TODO: 22.02.21 Replace with services
     private final AttachmentRepository attachmentRepository;
     private final AttachmentCategoryRepository attachmentCategoryRepository;
+    private final CategoryByPurposeRepository categoryByPurposeRepository;
 
     @Autowired
-    public PropertyToPropertyDtoMapper(AttachmentRepository attachmentRepository,
-                                       AttachmentCategoryRepository attachmentCategoryRepository) {
+    public PropertyToPropertyResponseDtoMapper(AttachmentRepository attachmentRepository,
+                                               AttachmentCategoryRepository attachmentCategoryRepository,
+                                               CategoryByPurposeRepository categoryByPurposeRepository) {
 
         this.attachmentRepository = attachmentRepository;
         this.attachmentCategoryRepository = attachmentCategoryRepository;
+        this.categoryByPurposeRepository = categoryByPurposeRepository;
     }
 
-    public PropertyDto map(Property property) {
+    public PropertyResponseDto map(Property property) {
 
         List<AttachmentCategory> categories = (List<AttachmentCategory>)
                 attachmentCategoryRepository.findAll();
@@ -35,32 +44,61 @@ public class PropertyToPropertyDtoMapper {
         List<Attachment> attachments = attachmentRepository
                 .findAttachmentsByPropertyIdEquals(property.getId());
 
-        return PropertyDto.builder()
-                .categorizedAttachments(
-                        categories.stream()
-                                .filter(AttachmentCategory::isPubliclyViewable)
-                                .map((c) ->
-                                        new PropertyDto.CategorizedAttachment(
-                                                c, getAttachmentWithCategoryId(attachments, c.getId())
-                                        )
-                                )
-                                .collect(Collectors.toList()))
-                .property(property)
+        CategoryByPurpose categoryByPurpose = categoryByPurposeRepository
+                .findById(property.getCategoryByPurposeId())
+                .orElseThrow(() -> new ServiceException("Category with such id doesn't exist"));
+
+        return PropertyResponseDto.builder()
+                .id(property.getId())
+                .area(property.getArea())
+                .name(property.getName())
+                .address(property.getAddress())
+                .imageUrl(property.getImageUrl())
+                .propertyStatus(property.getPropertyStatus())
+                .propertyLocation(property.getPropertyLocation())
+                .owner(property.isOwnerPubliclyViewable() ? property.getOwner() : null)
+                .amountOfRent(property.isAmountOfRentPubliclyViewable() ?
+                        property.getAmountOfRent() : null)
+                .balanceHolder(property.isBalanceHolderPubliclyViewable() ?
+                        property.getBalanceHolder() : null)
+                .areaTransferred(property.isAreaTransferredPubliclyViewable() ?
+                        property.getAreaTransferred() : null)
+                .leaseAgreementEndDate(property.isLeaseAgreementEndDatePubliclyViewable()
+                        ? property.getLeaseAgreementEndDate() : null)
+                .categoryByPurposeName(categoryByPurpose.getName())
+                .attachments(categories.stream()
+                        .filter(AttachmentCategory::isPubliclyViewable)
+                        .map((c) -> createAttachmentResponseWithCategory(attachments, c))
+                        .collect(Collectors.toList()))
                 .build();
     }
 
-    public List<PropertyDto> map(List<Property> properties) {
+    public List<PropertyResponseDto> map(List<Property> properties) {
 
         return properties.stream()
-                .map(this::map)
-                .collect(Collectors.toList());
+                    .map(this::map)
+                    .collect(Collectors.toList());
     }
 
-    private Attachment getAttachmentWithCategoryId(List<Attachment> attachments, Long id) {
+    private AttachmentResponseDto createAttachmentResponseWithCategory(List<Attachment> attachments,
+                                                                       AttachmentCategory attachmentCategory) {
 
-        return attachments.stream()
-                .filter((a) -> a.getAttachmentCategoryId().equals(id) && a.isPubliclyViewable())
+        AttachmentResponseDto attachmentResponseDto = null;
+
+        Attachment attachment = attachments.stream()
+                .filter((a) -> a.getAttachmentCategoryId().equals(attachmentCategory.getId())
+                        && a.isPubliclyViewable())
                 .findFirst()
                 .orElse(null);
+
+        if (nonNull(attachment)) {
+            attachmentResponseDto = AttachmentResponseDto.builder()
+                    .categoryName(attachmentCategory.getName())
+                    .link(attachment.getLink())
+                    .note(attachment.getNote())
+                    .build();
+        }
+
+        return attachmentResponseDto;
     }
 }

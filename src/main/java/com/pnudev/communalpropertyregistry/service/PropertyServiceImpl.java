@@ -6,7 +6,6 @@ import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
-import com.pnudev.communalpropertyregistry.util.mapper.PropertyToPropertyDtoMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +28,15 @@ public class PropertyServiceImpl implements PropertyService {
     // TODO: 21.02.21 Replace repository with service, when second will be implemented
     private final CategoryByPurposeRepository categoryByPurposeRepository;
 
-    private final PropertyToPropertyDtoMapper propertyToPropertyDtoMapper;
 
     @Autowired
     public PropertyServiceImpl(PropertyDslRepository propertyLocationDslRepository,
                                PropertyRepository propertyRepository,
-                               CategoryByPurposeRepository categoryByPurposeRepository,
-                               PropertyToPropertyDtoMapper propertyToPropertyDtoMapper) {
+                               CategoryByPurposeRepository categoryByPurposeRepository) {
 
         this.propertyLocationDslRepository = propertyLocationDslRepository;
         this.propertyRepository = propertyRepository;
         this.categoryByPurposeRepository = categoryByPurposeRepository;
-        this.propertyToPropertyDtoMapper = propertyToPropertyDtoMapper;
     }
 
 
