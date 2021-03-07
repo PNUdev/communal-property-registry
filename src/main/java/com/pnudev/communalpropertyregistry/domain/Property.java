@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Embedded;
 import java.time.LocalDate;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Property {
@@ -65,10 +65,15 @@ public class Property {
 
     }
 
+    @AllArgsConstructor
     public enum PropertyStatus {
 
-        NON_RENT, RENT, FIRST_OR_SECOND_TYPE_LIST, PRIVATIZED, USED_BY_CITY_COUNCIL
+        NON_RENT("Вільне"),
+        RENT("Орендоване"),
+        FIRST_OR_SECOND_TYPE_LIST("В переліку Першого або Другого типів"),
+        PRIVATIZED("Приватизовані"),
+        USED_BY_CITY_COUNCIL("У використанні органами міської ради");
 
+        private String ukrainian_representation;
     }
-
 }

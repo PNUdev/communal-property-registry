@@ -4,4 +4,7 @@ import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CategoryByPurposeRepository extends CrudRepository<CategoryByPurpose, Long> {
+
+    CategoryByPurpose findByName(String name);
+
 }
