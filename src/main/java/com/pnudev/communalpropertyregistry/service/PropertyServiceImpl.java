@@ -28,7 +28,6 @@ public class PropertyServiceImpl implements PropertyService {
     // TODO: 21.02.21 Replace repository with service, when second will be implemented
     private final CategoryByPurposeRepository categoryByPurposeRepository;
 
-
     @Autowired
     public PropertyServiceImpl(PropertyDslRepository propertyLocationDslRepository,
                                PropertyRepository propertyRepository,
@@ -38,7 +37,6 @@ public class PropertyServiceImpl implements PropertyService {
         this.propertyRepository = propertyRepository;
         this.categoryByPurposeRepository = categoryByPurposeRepository;
     }
-
 
     @Override
     public PropertiesLocationsResponseDto getMapLocations(String searchQuery,

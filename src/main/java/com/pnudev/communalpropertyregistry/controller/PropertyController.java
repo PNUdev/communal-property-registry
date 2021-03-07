@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
+import static java.util.Objects.*;
+
 @RestController
 @RequestMapping(value = "/api/property", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PropertyController {
@@ -33,8 +37,9 @@ public class PropertyController {
     @GetMapping
     public Page<PropertyResponseDto> getPropertiesBySearch(
             @PageableDefault(size = 5, sort = "name") Pageable pageable,
-            @RequestParam(name = "q") String searchQuery,
-            @RequestParam(name = "status") String propertyStatus,
+            @Nullable @RequestParam(name = "p") Integer page,
+            @Nullable @RequestParam(name = "q") String searchQuery,
+            @Nullable @RequestParam(name = "status") String propertyStatus,
             @Nullable @RequestParam(name = "category") String categoryName) {
 
         return propertyService.findPropertiesBySearchQuery(
