@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryByPurposeCreateDto {
+public class CategoryByPurposeDto {
 
     private String name;
 
