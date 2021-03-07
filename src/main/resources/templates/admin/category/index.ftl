@@ -32,20 +32,42 @@
 
         <div class="m-5">
 
-            <ul class="pagination">
+            <ul class="pagination mx-auto">
+
                 <#if !pagination.isFirstPage >
-                    <li class="page-item"><a class="page-link" href="/admin/categories?page=0">First</a></li>
+                    <form action="/admin/categories" method="GET">
+                        <li class="page-item">
+                            <button type="submit"
+                                    class="page-link">
+                                First
+                            </button>
+                        </li>
+                        <input type="hidden" name="page" value="0">
+                    </form>
                 </#if>
 
-                <#list pagination.firstVisiblePage..pagination.lastVisiblePage as page>
-                    <li class="page-item <#if page == pagination.page>active</#if>">
-                        <a class="page-link" href="/admin/categories?page=${page}">${page + 1}</a>
-                    </li>
+                <#list 1..pagination.totalPages as pageNumber>
+                    <form action="/admin/categories" method="GET">
+                        <li class="page-item <#if pageNumber - 1 == pagination.page>active</#if>">
+                            <button type="submit"
+                                    class="page-link">
+                                ${pageNumber}
+                            </button>
+                        </li>
+                        <input type="hidden" name="page" value="${pageNumber - 1}">
+                    </form>
                 </#list>
 
                 <#if !pagination.isLastPage >
-                    <li class="page-item"><a class="page-link"
-                                             href="/admin/categories?page=${pagination.totalPages - 1}">Last</a></li>
+                    <form action="/admin/categories" method="GET">
+                        <li class="page-item">
+                            <button type="submit"
+                                    class="page-link">
+                                Last
+                            </button>
+                        </li>
+                        <input type="hidden" name="page" value="${pagination.totalPages - 1}">
+                    </form>
                 </#if>
 
             </ul>

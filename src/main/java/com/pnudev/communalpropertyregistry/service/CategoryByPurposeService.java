@@ -2,13 +2,13 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeDto;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePaginationDto;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePageDto;
 import org.springframework.data.domain.Pageable;
 
 
 public interface CategoryByPurposeService {
 
-    CategoryByPurposePaginationDto findAll(Pageable pageable);
+    CategoryByPurposePageDto findAll(Pageable pageable);
 
     CategoryByPurpose findById(Long id);
 
