@@ -60,8 +60,13 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping("/new")
-    public String getCreatePage() {
-        return "admin/category/new";
+    public String getCreatePage(Model model) {
+
+        model.addAttribute("actionType", "Create");
+        model.addAttribute("returnBackUrl", "/admin/categories");
+        model.addAttribute("postUrl", "/admin/categories/create");
+
+        return "admin/category/form";
     }
 
     @PostMapping("/create")
@@ -80,9 +85,14 @@ public class CategoryByPurposeAdminController {
     public String getUpdatePage(@PathVariable("id") Long id, Model model) {
 
         CategoryByPurpose category = categoryByPurposeService.findById(id);
+
+        model.addAttribute("actionType", "Update");
+        model.addAttribute("returnBackUrl", "/admin/categories/" + id);
+        model.addAttribute("postUrl", "/admin/categories/update/" + id);
+
         model.addAttribute("category", category);
 
-        return "admin/category/edit";
+        return "admin/category/form";
     }
 
     @PostMapping("/update/{id}")
