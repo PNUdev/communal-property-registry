@@ -10,20 +10,17 @@ import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyLocationDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyToPropertyResponseDtoMapper;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
-
-import com.querydsl.core.types.dsl.BooleanExpression;
-import org.springframework.data.domain.Page;
-
 import static java.util.Objects.nonNull;
 
 @Slf4j
@@ -89,6 +86,7 @@ public class PropertyServiceImpl implements PropertyService {
         // Following query predicate will return all records
 
         BooleanExpression predicate = property.id.isNotNull();
+
         if (nonNull(searchQuery)) {
 
             predicate = predicate.andAnyOf(
@@ -98,11 +96,14 @@ public class PropertyServiceImpl implements PropertyService {
 
         if (nonNull(propertyStatus)) {
 
-            Property.PropertyStatus status = Optional.of(
-                    Property.PropertyStatus.valueOf(propertyStatus))
-                        .orElseThrow(() -> new ServiceException("Вказаної категорії не існує"));
+            try {
 
-            predicate = predicate.and(property.propertyStatus.eq(status.name()));
+                Property.PropertyStatus status = Property.PropertyStatus.valueOf(propertyStatus);
+                predicate = predicate.and(property.propertyStatus.eq(status.name()));
+
+            } catch (IllegalArgumentException e) {
+                throw new ServiceException("Вказаної категорії не існує");
+            }
         }
 
         if (nonNull(categoryByPurposeId)) {
@@ -119,7 +120,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Property findById(Long id){
+    public Property findById(Long id) {
         return propertyRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("Приміщення не знайдено"));
     }

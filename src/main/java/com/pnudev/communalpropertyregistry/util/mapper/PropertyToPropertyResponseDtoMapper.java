@@ -6,10 +6,9 @@ import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.response.AttachmentResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
-import com.pnudev.communalpropertyregistry.exception.ServiceException;
-import com.pnudev.communalpropertyregistry.repository.AttachmentCategoryRepository;
-import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
-import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
+import com.pnudev.communalpropertyregistry.service.AttachmentCategoryService;
+import com.pnudev.communalpropertyregistry.service.AttachmentService;
+import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,32 +21,29 @@ import static java.util.Objects.nonNull;
 @Component
 public class PropertyToPropertyResponseDtoMapper {
 
-    // TODO: 22.02.21 Replace with services
-    private final AttachmentRepository attachmentRepository;
-    private final AttachmentCategoryRepository attachmentCategoryRepository;
-    private final CategoryByPurposeRepository categoryByPurposeRepository;
+    private final AttachmentService attachmentService;
+    private final AttachmentCategoryService attachmentCategoryService;
+    private final CategoryByPurposeService categoryByPurposeService;
 
     @Autowired
-    public PropertyToPropertyResponseDtoMapper(AttachmentRepository attachmentRepository,
-                                               AttachmentCategoryRepository attachmentCategoryRepository,
-                                               CategoryByPurposeRepository categoryByPurposeRepository) {
+    public PropertyToPropertyResponseDtoMapper(AttachmentService attachmentService,
+                                               AttachmentCategoryService attachmentCategoryService,
+                                               CategoryByPurposeService categoryByPurposeService) {
 
-        this.attachmentRepository = attachmentRepository;
-        this.attachmentCategoryRepository = attachmentCategoryRepository;
-        this.categoryByPurposeRepository = categoryByPurposeRepository;
+        this.attachmentService = attachmentService;
+        this.attachmentCategoryService = attachmentCategoryService;
+        this.categoryByPurposeService = categoryByPurposeService;
     }
 
     public PropertyResponseDto map(Property property) {
 
-        List<AttachmentCategory> categories = (List<AttachmentCategory>)
-                attachmentCategoryRepository.findAll();
+        List<AttachmentCategory> categories = attachmentCategoryService.findAll();
 
-        List<Attachment> attachments = attachmentRepository
-                .findAttachmentsByPropertyIdEquals(property.getId());
+        List<Attachment> attachments = attachmentService
+                .findByPropertyId(property.getId());
 
-        CategoryByPurpose categoryByPurpose = categoryByPurposeRepository
-                .findById(property.getCategoryByPurposeId())
-                .orElseThrow(() -> new ServiceException("Category with such id doesn't exist"));
+        CategoryByPurpose categoryByPurpose = categoryByPurposeService
+                .findById(property.getCategoryByPurposeId());
 
         return PropertyResponseDto.builder()
                 .id(property.getId())
