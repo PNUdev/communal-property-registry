@@ -1,18 +1,16 @@
-package com.pnudev.communalpropertyregistry.domain;
+package com.pnudev.communalpropertyregistry.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Data
-@Builder(toBuilder = true)
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class CategoryByPurpose {
+@NoArgsConstructor
+public class CategoryByPurposeUpdateDto {
 
-    @Id
     private Long id;
 
     private String name;
