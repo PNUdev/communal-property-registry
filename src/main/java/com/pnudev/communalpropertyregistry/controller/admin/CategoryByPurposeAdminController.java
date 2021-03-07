@@ -1,9 +1,8 @@
 package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeCreateDto;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeUpdateDto;
-import com.pnudev.communalpropertyregistry.dto.PagingCategoryByPurposeDto;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeDto;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePaginationDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import com.pnudev.communalpropertyregistry.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class CategoryByPurposeAdminController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             Model model) {
 
-        PagingCategoryByPurposeDto pagination = categoryByPurposeService
+        CategoryByPurposePaginationDto pagination = categoryByPurposeService
                 .findAll(PageRequest.of(abs(page), pageSize));
 
         model.addAttribute("pagination", pagination);
@@ -66,7 +65,7 @@ public class CategoryByPurposeAdminController {
     }
 
     @PostMapping("/create")
-    public String create(@Validated CategoryByPurposeCreateDto categoryByPurposeCreateDto,
+    public String create(@Validated CategoryByPurposeDto categoryByPurposeCreateDto,
                          RedirectAttributes redirectAttributes) {
 
         categoryByPurposeService.create(categoryByPurposeCreateDto);
@@ -86,11 +85,12 @@ public class CategoryByPurposeAdminController {
         return "admin/category/edit";
     }
 
-    @PostMapping("/update")
-    public String update(@Validated CategoryByPurposeUpdateDto categoryByPurposeUpdateDto,
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable("id") Long categoryId,
+                         @Validated CategoryByPurposeDto categoryByPurposeDto,
                          RedirectAttributes redirectAttributes) {
 
-        Long categoryId = categoryByPurposeService.update(categoryByPurposeUpdateDto);
+        categoryByPurposeService.update(categoryByPurposeDto, categoryId);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
                 "Category was successfully updated");
 
