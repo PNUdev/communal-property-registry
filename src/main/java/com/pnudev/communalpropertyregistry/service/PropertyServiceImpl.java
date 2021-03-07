@@ -7,7 +7,6 @@ import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.dsl.QueryDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
-import com.pnudev.communalpropertyregistry.repository.dsl.PropertyLocationDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 import static java.util.Objects.nonNull;
@@ -27,8 +27,6 @@ import static java.util.Objects.nonNull;
 @Slf4j
 @Service
 public class PropertyServiceImpl implements PropertyService {
-
-    private final PropertyLocationDslRepository propertyLocationDslRepository;
 
     private final PropertyRepository propertyRepository;
 
@@ -39,13 +37,11 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyServiceImpl(PropertyLocationDslRepository propertyLocationDslRepository,
-                               CategoryByPurposeService categoryByPurposeService,
+    public PropertyServiceImpl(CategoryByPurposeService categoryByPurposeService,
                                QueryDslRepository<Property> propertyDslRepository,
                                PropertyRepository propertyRepository,
                                PropertyMapper propertyMapper) {
 
-        this.propertyLocationDslRepository = propertyLocationDslRepository;
         this.categoryByPurposeService = categoryByPurposeService;
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
@@ -74,8 +70,14 @@ public class PropertyServiceImpl implements PropertyService {
                     .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
         }
 
-        return propertyLocationDslRepository.findAllMapLocations(predicates.toArray(Predicate[]::new));
+        List<Property> properties = propertyDslRepository
+                .findAll(predicates.toArray(Predicate[]::new));
 
+        return PropertiesLocationsResponseDto.builder()
+                .mapLocations(properties.stream()
+                                .map(propertyMapper::mapToPropertyLocationDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
     @Override

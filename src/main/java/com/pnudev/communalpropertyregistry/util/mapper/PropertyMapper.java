@@ -2,7 +2,6 @@ package com.pnudev.communalpropertyregistry.util.mapper;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyLocationDto;
-import com.querydsl.core.Tuple;
 import org.springframework.stereotype.Component;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
@@ -84,13 +83,13 @@ public class PropertyMapper {
                 .collect(Collectors.toList());
     }
 
-    public PropertyLocationDto mapToPropertyLocationDto(Tuple tuple) {
+    public PropertyLocationDto mapToPropertyLocationDto(Property property) {
 
         return PropertyLocationDto.builder()
-                .propertyId(tuple.get(property.id))
-                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
-                .lat(tuple.get(property.lat))
-                .lon(tuple.get(property.lon))
+                .propertyId(property.getId())
+                .propertyStatus(property.getPropertyStatus())
+                .lat(property.getPropertyLocation().getLat())
+                .lon(property.getPropertyLocation().getLon())
                 .build();
     }
 

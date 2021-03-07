@@ -43,10 +43,24 @@ public class PropertyDslRepositoryImpl implements QueryDslRepository<Property> {
                 .where(where)
                 .fetchCount();
 
-        return new PageImpl<>(mapTupleOfPropertiesToList(tuples), pageable, total);
+        return new PageImpl<>(mapTupleToProperty(tuples), pageable, total);
     }
 
-    private List<Property> mapTupleOfPropertiesToList(List<Tuple> properties) {
+    @Override
+    public List<Property> findAll(Predicate... where) {
+
+        List<Tuple> properties = queryFactory
+                .select(property.all())
+                .from(property)
+                .where(where)
+                .fetch();
+
+        return properties.stream()
+                .map(this::mapTupleToProperty)
+                .collect(Collectors.toList());
+    }
+
+    private List<Property> mapTupleToProperty(List<Tuple> properties) {
         return properties.stream().map(this::mapTupleToProperty).collect(Collectors.toList());
     }
 
