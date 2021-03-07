@@ -42,11 +42,11 @@
             <div class="properties__management">
                 <select id="status__filter" v-model="status" @change="changeFilters">
                     <option value="all">Будь-який статус</option>
-                    <option value="non_rent">Неорендовані</option>
-                    <option value="rent">Орендовані</option>
-                    <option value="first_or_second_type_list">I-II типу</option>
-                    <option value="privatized">Приватизовані</option>
-                    <option value="used_by_council">Вик. міськвладою</option>
+                    <option value="NON_RENT">Неорендовані</option>
+                    <option value="RENT">Орендовані</option>
+                    <option value="FIRST_OR_SECOND_TYPE_LIST">I-II типу</option>
+                    <option value="PRIVATIZED">Приватизовані</option>
+                    <option value="USED_BY_COUNCIL">Вик. міськвладою</option>
                 </select>
 
                 <select id="category__filter" v-model="category" @change="changeFilters">

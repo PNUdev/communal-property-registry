@@ -37,10 +37,8 @@ class Icon {
     }
 }
 
-//ToDo uncomment getMarkers() on release
-
 let markerLayers = [];
-// getMarkers();
+getMarkers();
 
 //update markers, remove old, add new
 function updateMarkers(){
@@ -53,11 +51,11 @@ function updateMarkers(){
 
 //get all markers
 async function getMarkers(){
-    axios.get(`/api/properties/map-locations` + APP_PROPERTIES.url)
+    axios.get(`/api/properties/map-locations` + location.search)
         .then(resp => {
             resp.data.forEach(propertyLocationData => {
                 addMarker({
-                    id: propertyLocationData.id,
+                    id: propertyLocationData.propertyId,
 
                     coords: {
                         lat: propertyLocationData.lat,

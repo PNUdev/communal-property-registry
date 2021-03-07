@@ -31,7 +31,6 @@ const APP_PROPERTIES = new Vue({
     },
 
     methods: {
-        //ToDo: uncomment updateProperties() and getProperties() on release
 
         async getCategories(){
             axios.get('/api/categories-by-purpose')
@@ -59,7 +58,9 @@ const APP_PROPERTIES = new Vue({
             this.updatePaginationBtnVisibility();
 
             axios.get(`/api/properties/${id}`)
-                .then(resp => this.properties = resp.data)
+                .then(resp =>{
+                    this.properties = [resp.data];
+                })
                 .catch(error => {
                     console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`);
                 })
@@ -67,7 +68,7 @@ const APP_PROPERTIES = new Vue({
 
         changeFilters(){
             this.setUrl();
-            // updateMarkers();
+            updateMarkers();
         },
 
         changePage(e){
@@ -91,7 +92,7 @@ const APP_PROPERTIES = new Vue({
             this.hasNext = true;
 
             this.setUrl();
-            // updateMarkers();
+            updateMarkers();
         },
 
         getStatusLabelColor(status){
@@ -110,7 +111,7 @@ const APP_PROPERTIES = new Vue({
 
         searchProperties(){
             this.setUrl();
-            // updateMarkers();
+            updateMarkers();
         },
 
         setUrl(){
@@ -126,7 +127,7 @@ const APP_PROPERTIES = new Vue({
 
             history.pushState({}, "", this.url);
 
-            // this.getProperties();
+            this.getProperties();
         },
 
         setParamIfExists(param){
@@ -161,6 +162,7 @@ const APP_PROPERTIES = new Vue({
 
 const APP_STATS = new Vue({
     el: "#app_stats",
+
     data: {
         stats: []
     },
