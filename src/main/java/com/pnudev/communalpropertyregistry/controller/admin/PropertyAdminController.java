@@ -57,11 +57,11 @@ public class PropertyAdminController {
             model.addAttribute("searchQuery", searchQuery);
         }
 
-        if (nonNull(searchQuery)) {
+        if (nonNull(categoryByPurposeId)) {
             model.addAttribute("searchCategoryByPurposeId", categoryByPurposeId);
         }
 
-        if (nonNull(searchQuery)) {
+        if (nonNull(propertyStatus)) {
             model.addAttribute("searchPropertyStatus", propertyStatus);
         }
 
