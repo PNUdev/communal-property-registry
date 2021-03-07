@@ -5,7 +5,7 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
-import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
+import com.pnudev.communalpropertyregistry.repository.QueryDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyLocationDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
@@ -34,22 +34,22 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final CategoryByPurposeService categoryByPurposeService;
 
-    private final PropertyDslRepository propertyDslRepository;
+    private final QueryDslRepository<Property> propertyDslRepository;
 
     private final PropertyMapper propertyMapper;
 
     @Autowired
     public PropertyServiceImpl(PropertyLocationDslRepository propertyLocationDslRepository,
-                               PropertyRepository propertyRepository,
                                CategoryByPurposeService categoryByPurposeService,
-                               PropertyMapper propertyMapper,
-                               PropertyDslRepository propertyDslRepository) {
+                               QueryDslRepository<Property> propertyDslRepository,
+                               PropertyRepository propertyRepository,
+                               PropertyMapper propertyMapper) {
 
         this.propertyLocationDslRepository = propertyLocationDslRepository;
-        this.propertyRepository = propertyRepository;
         this.categoryByPurposeService = categoryByPurposeService;
-        this.propertyMapper = propertyMapper;
         this.propertyDslRepository = propertyDslRepository;
+        this.propertyRepository = propertyRepository;
+        this.propertyMapper = propertyMapper;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class PropertyServiceImpl implements PropertyService {
 
             try {
 
-                Property.PropertyStatus status = Property.PropertyStatus.valueOf(propertyStatus);
+                Property.PropertyStatus status = Property.PropertyStatus.valueOf(propertyStatus.toUpperCase());
                 predicate = predicate.and(property.propertyStatus.eq(status.name()));
 
             } catch (IllegalArgumentException e) {

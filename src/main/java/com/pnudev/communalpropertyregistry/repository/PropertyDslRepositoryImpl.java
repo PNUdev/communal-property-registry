@@ -2,10 +2,7 @@ package com.pnudev.communalpropertyregistry.repository;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +16,7 @@ import java.util.stream.Collectors;
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 
 @Repository
-public class PropertyDslRepositoryImpl implements PropertyDslRepository {
+public class PropertyDslRepositoryImpl implements QueryDslRepository<Property> {
 
     private final SQLQueryFactory queryFactory;
 
@@ -79,20 +76,6 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
                 .isLeaseAgreementEndDatePubliclyViewable(tuple.get(property.isLeaseAgreementEndDatePubliclyViewable))
                 .isAmountOfRentPubliclyViewable(tuple.get(property.isAmountOfRentPubliclyViewable))
                 .build();
-    }
-
-    private OrderSpecifier[] getOrderSpecifiers(Pageable pageable, Class<?> aClass) {
-
-        String className = aClass.getSimpleName();
-
-        final String orderVariable = String.valueOf(Character.toLowerCase(className.charAt(0))).concat(className.substring(1));
-
-        return pageable.getSort().stream()
-                .map(order -> new OrderSpecifier(
-                        Order.valueOf(order.getDirection().toString()),
-                        new PathBuilder(aClass, orderVariable).get(order.getProperty()))
-                )
-                .toArray(OrderSpecifier[]::new);
     }
 
 }
