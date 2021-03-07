@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeDto;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePaginationDto;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePageDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
@@ -28,53 +28,33 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public CategoryByPurposePaginationDto findAll(Pageable pageable) {
+    public CategoryByPurposePageDto findAll(Pageable pageable) {
 
         Page<CategoryByPurpose> pagination = categoryByPurposeRepository
                 .findAll(pageable);
 
-        boolean isFirst = false;
-        boolean isLast = false;
-
-        int firstPage = pagination.getNumber() - 5;
-        int lastPage = pagination.getNumber() + 5;
-
-        if (firstPage - 1 < 0) {
-            firstPage = 0;
-            isFirst = true;
-        }
-
-        if (lastPage > pagination.getTotalPages() - 2) {
-            lastPage = pagination.getTotalPages() - 1;
-            isLast = true;
-        }
-
-        return CategoryByPurposePaginationDto.builder()
+        return CategoryByPurposePageDto.builder()
                 .content(pagination.getContent())
                 .page(pagination.getNumber())
                 .totalPages(pagination.getTotalPages())
-                .firstVisiblePage(firstPage)
-                .lastVisiblePage(lastPage)
-                .isFirstPage(isFirst)
-                .isLastPage(isLast)
+                .isFirstPage(pagination.isFirst())
+                .isLastPage(pagination.isLast())
                 .build();
     }
 
     @Override
     public CategoryByPurpose findById(Long id) {
         return categoryByPurposeRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Category by id not found"));
+                .orElseThrow(() -> new ServiceException("Категорію не знайдено"));
     }
 
     @Override
-    public void create(CategoryByPurposeDto categoryCreateDto) {
+    public void create(CategoryByPurposeDto categoryByPurposeDto) {
 
-        if (categoryByPurposeRepository.existsByName(categoryCreateDto.getName())) {
-            throw new ServiceException("Category with such name already exists");
-        }
+        validateCategoryName(categoryByPurposeDto.getName());
 
         CategoryByPurpose categoryByPurpose = CategoryByPurpose.builder()
-                .name(categoryCreateDto.getName())
+                .name(categoryByPurposeDto.getName())
                 .build();
 
         categoryByPurposeRepository.save(categoryByPurpose);
@@ -83,13 +63,9 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     @Override
     public void update(CategoryByPurposeDto categoryByPurposeDto, Long categoryId) {
 
-        CategoryByPurpose category = categoryByPurposeRepository
-                .findById(categoryId)
-                .orElseThrow(() -> new ServiceException("Category by id not found"));
+        CategoryByPurpose category = findById(categoryId);
 
-        if (categoryByPurposeRepository.existsByName(categoryByPurposeDto.getName())) {
-            throw new ServiceException("Category with such name already exists");
-        }
+        validateCategoryName(categoryByPurposeDto.getName());
 
         CategoryByPurpose updatedCategory = category.toBuilder()
                 .name(categoryByPurposeDto.getName())
@@ -107,6 +83,13 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
 
         categoryByPurposeRepository.deleteById(id);
         log.info("Category with id {} was deleted", id);
+    }
+
+    private void validateCategoryName(String name) {
+
+        if (categoryByPurposeRepository.existsByName(name)) {
+            throw new ServiceException("Категорія з даною назвою уже існує");
+        }
     }
 
 }

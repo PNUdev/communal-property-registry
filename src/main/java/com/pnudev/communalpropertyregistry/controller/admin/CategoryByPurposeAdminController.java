@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeDto;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePaginationDto;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePageDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import com.pnudev.communalpropertyregistry.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 import static java.lang.Math.abs;
+import static java.util.Objects.nonNull;
 
 @Controller
 @RequestMapping("/admin/categories")
@@ -38,11 +38,11 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping
-    public String getAllCategories(
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            Model model) {
+    public String getAllCategories(Integer page, Model model) {
 
-        CategoryByPurposePaginationDto pagination = categoryByPurposeService
+        page = (nonNull(page)) ? page : 0;
+
+        CategoryByPurposePageDto pagination = categoryByPurposeService
                 .findAll(PageRequest.of(abs(page), pageSize));
 
         model.addAttribute("pagination", pagination);
@@ -51,7 +51,7 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping("/{id}")
-    public String getCategoryPage(@PathVariable("id") Long id, Model model) {
+    public String getCategoryById(@PathVariable("id") Long id, Model model) {
 
         CategoryByPurpose category = categoryByPurposeService.findById(id);
         model.addAttribute("category", category);
@@ -71,7 +71,7 @@ public class CategoryByPurposeAdminController {
         categoryByPurposeService.create(categoryByPurposeCreateDto);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
-                "Category was successfully created");
+                "Категорія була успішно створена");
 
         return "redirect:/admin/categories/new";
     }
@@ -92,7 +92,7 @@ public class CategoryByPurposeAdminController {
 
         categoryByPurposeService.update(categoryByPurposeDto, categoryId);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
-                "Category was successfully updated");
+                "Категорія була успішно оновлена");
 
         return "redirect:/admin/categories/" + categoryId;
     }
@@ -113,7 +113,7 @@ public class CategoryByPurposeAdminController {
         categoryByPurposeService.delete(id);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
-                "Category was successfully deleted");
+                "Категорія була успішно видалена");
 
         return "redirect:/admin/categories/";
     }
