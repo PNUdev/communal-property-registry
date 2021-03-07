@@ -21,4 +21,5 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
         return categoryByPurposeRepository.findById(id)
                 .orElseThrow(() -> new ServiceException("Category with such id doesn't exist"));
     }
+
 }

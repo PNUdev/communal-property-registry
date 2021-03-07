@@ -25,6 +25,7 @@ public class PropertyController {
     private Integer pageSize;
 
     private final PropertyService propertyService;
+
     private final PropertyToPropertyResponseDtoMapper propertyResponseDtoMapper;
 
     @Autowired
@@ -60,4 +61,5 @@ public class PropertyController {
         return propertyResponseDtoMapper
                 .map(propertyService.findById(id));
     }
+
 }

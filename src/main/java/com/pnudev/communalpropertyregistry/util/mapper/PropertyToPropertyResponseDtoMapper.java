@@ -22,7 +22,9 @@ import static java.util.Objects.nonNull;
 public class PropertyToPropertyResponseDtoMapper {
 
     private final AttachmentService attachmentService;
+
     private final AttachmentCategoryService attachmentCategoryService;
+
     private final CategoryByPurposeService categoryByPurposeService;
 
     @Autowired
@@ -74,8 +76,8 @@ public class PropertyToPropertyResponseDtoMapper {
     public List<PropertyResponseDto> map(List<Property> properties) {
 
         return properties.stream()
-                    .map(this::map)
-                    .collect(Collectors.toList());
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     private AttachmentResponseDto createAttachmentResponseWithCategory(List<Attachment> attachments,
@@ -99,4 +101,5 @@ public class PropertyToPropertyResponseDtoMapper {
 
         return attachmentResponseDto;
     }
+
 }

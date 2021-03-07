@@ -1,6 +1,5 @@
 package com.pnudev.communalpropertyregistry.exception;
 
-import com.pnudev.communalpropertyregistry.util.FlashMessageConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,11 +21,6 @@ public class ExceptionInterceptor {
 
         redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE, serviceException.getMessage());
 
-        return getRedirectUrl(request);
-    }
-
-    private String getRedirectUrl(HttpServletRequest request) {
         return "redirect:/";
     }
-
 }

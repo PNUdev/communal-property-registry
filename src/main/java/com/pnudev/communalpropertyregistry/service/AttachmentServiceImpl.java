@@ -22,7 +22,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public List<Attachment> findByPropertyId(Long id) {
         return Optional.ofNullable(
-                        attachmentRepository.findAttachmentsByPropertyIdEquals(id))
+                attachmentRepository.findAttachmentsByPropertyIdEquals(id))
                 .orElseThrow(() -> new ServiceException("Attachment with such id doesn't exist"));
     }
 
