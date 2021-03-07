@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <#include "../../include/coreDependencies.ftl" >
     <title>Admin panel</title>
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <nav class="navbar navbar-dark bg-primary">

@@ -1,0 +1,13 @@
+
+.category__container {
+    margin: 5%;
+    width: 60%;
+}
+
+.category__name {
+    margin-bottom: 15px;
+}
+
+.category__function {
+    margin-right: 10px;
+}

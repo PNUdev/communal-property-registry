@@ -1,4 +1,6 @@
 spring:
+  flyway:
+    out-of-order: true
   freemarker:
     template-loader-path: "classpath:/templates"
     suffix: ".ftl"
@@ -11,5 +13,3 @@ spring:
     password: ${ADMIN_PASSWORD:admin}
   data:
     web.pageable.one-indexed-parameters: true
-
-rest.properties.pagination.size: 5

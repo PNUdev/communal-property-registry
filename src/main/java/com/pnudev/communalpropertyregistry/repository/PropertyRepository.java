@@ -4,12 +4,10 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyStatisticsDto;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface PropertyRepository extends CrudRepository<Property, Long>,
-                                            PagingAndSortingRepository<Property, Long> {
+public interface PropertyRepository extends CrudRepository<Property, Long> {
 
     @Query("SELECT " +
             "cbp.name as category, " +
@@ -23,5 +21,7 @@ public interface PropertyRepository extends CrudRepository<Property, Long>,
             "ON cbp.id = p.category_by_purpose_id " +
             "GROUP BY cbp.name ")
     List<PropertyStatisticsDto> getListOfStatistics();
+
+    Boolean existsByCategoryByPurposeId(Long categoryByPurposeId);
 
 }
