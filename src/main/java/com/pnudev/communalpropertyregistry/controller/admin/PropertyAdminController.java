@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -82,20 +81,20 @@ public class PropertyAdminController {
     public String update(@PathVariable(name = "id") Long id, Model model) {
 
         PropertyAdminDto propertyAdminDto = propertyAdminService.findById(id);
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
         model.addAttribute("propertyAdminDto", propertyAdminDto);
+        model.addAttribute("categoriesByPurpose", categoriesByPurpose);
 
         return "admin/common/form";
     }
 
     @PostMapping("/save")
-    public String save(PropertyAdminFormDto propertyAdminFormDto, RedirectAttributes redirectAttributes) {
+    public String save(PropertyAdminFormDto propertyAdminFormDto) {
 
         propertyAdminService.save(propertyAdminFormDto);
 
-//        redirectAttributes.addFlashAttribute("");
-
-        return "admin/common/index";
+        return "redirect:/admin/properties";
     }
 
 }
