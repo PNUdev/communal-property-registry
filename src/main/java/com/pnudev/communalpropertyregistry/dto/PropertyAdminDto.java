@@ -1,6 +1,5 @@
 package com.pnudev.communalpropertyregistry.dto;
 
-import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
