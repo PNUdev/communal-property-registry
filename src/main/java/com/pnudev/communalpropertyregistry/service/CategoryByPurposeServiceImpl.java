@@ -30,15 +30,15 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     @Override
     public CategoryByPurposePageDto findAll(Pageable pageable) {
 
-        Page<CategoryByPurpose> pagination = categoryByPurposeRepository
+        Page<CategoryByPurpose> categoriesPage = categoryByPurposeRepository
                 .findAll(pageable);
 
         return CategoryByPurposePageDto.builder()
-                .content(pagination.getContent())
-                .page(pagination.getNumber())
-                .totalPages(pagination.getTotalPages())
-                .isFirstPage(pagination.isFirst())
-                .isLastPage(pagination.isLast())
+                .content(categoriesPage.getContent())
+                .page(categoriesPage.getNumber())
+                .totalPages(categoriesPage.getTotalPages())
+                .isFirstPage(categoriesPage.isFirst())
+                .isLastPage(categoriesPage.isLast())
                 .build();
     }
 
@@ -63,9 +63,9 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     @Override
     public void update(CategoryByPurposeDto categoryByPurposeDto, Long categoryId) {
 
-        CategoryByPurpose category = findById(categoryId);
-
         validateCategoryName(categoryByPurposeDto.getName());
+
+        CategoryByPurpose category = findById(categoryId);
 
         CategoryByPurpose updatedCategory = category.toBuilder()
                 .name(categoryByPurposeDto.getName())

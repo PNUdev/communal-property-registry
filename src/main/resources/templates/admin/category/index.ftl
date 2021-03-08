@@ -17,7 +17,7 @@
             </thead>
             <tbody>
 
-            <#list pagination.content as category>
+            <#list categoriesPage.content as category>
                     <tr>
                         <th scope="row">${category.id}</th>
                         <td>${category.name}</td>
@@ -34,7 +34,7 @@
 
             <ul class="pagination mx-auto">
 
-                <#if !pagination.isFirstPage >
+                <#if !categoriesPage.isFirstPage >
                     <form action="/admin/categories" method="GET">
                         <li class="page-item">
                             <button type="submit"
@@ -46,9 +46,9 @@
                     </form>
                 </#if>
 
-                <#list 1..pagination.totalPages as pageNumber>
+                <#list 1..categoriesPage.totalPages as pageNumber>
                     <form action="/admin/categories" method="GET">
-                        <li class="page-item <#if pageNumber - 1 == pagination.page>active</#if>">
+                        <li class="page-item <#if pageNumber - 1 == categoriesPage.page>active</#if>">
                             <button type="submit"
                                     class="page-link">
                                 ${pageNumber}
@@ -58,7 +58,7 @@
                     </form>
                 </#list>
 
-                <#if !pagination.isLastPage >
+                <#if !categoriesPage.isLastPage >
                     <form action="/admin/categories" method="GET">
                         <li class="page-item">
                             <button type="submit"
@@ -66,7 +66,7 @@
                                 Last
                             </button>
                         </li>
-                        <input type="hidden" name="page" value="${pagination.totalPages - 1}">
+                        <input type="hidden" name="page" value="${categoriesPage.totalPages - 1}">
                     </form>
                 </#if>
 

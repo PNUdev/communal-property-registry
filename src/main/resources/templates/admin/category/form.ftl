@@ -21,10 +21,6 @@
 
                 </div>
 
-                <#if category?? >
-                    <input type="hidden" name="id" value="${category.id}">
-                </#if>
-
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
                 <button class="mt-2 btn btn-primary" type="submit">${actionType}</button>
