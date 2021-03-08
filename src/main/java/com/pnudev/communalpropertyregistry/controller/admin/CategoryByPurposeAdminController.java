@@ -42,10 +42,10 @@ public class CategoryByPurposeAdminController {
 
         page = (nonNull(page)) ? page : 0;
 
-        CategoryByPurposePageDto pagination = categoryByPurposeService
+        CategoryByPurposePageDto categoriesPage = categoryByPurposeService
                 .findAll(PageRequest.of(abs(page), pageSize));
 
-        model.addAttribute("pagination", pagination);
+        model.addAttribute("categoriesPage", categoriesPage);
 
         return "admin/category/index";
     }
