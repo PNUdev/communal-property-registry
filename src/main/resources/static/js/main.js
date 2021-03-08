@@ -12,7 +12,7 @@ const APP_PROPERTIES = new Vue({
         hasNext: true,
         hasPrev: false,
         imgUrl: null,
-        url: '/',
+        url: "",
 
         attachments: [],
         properties: [],
@@ -115,17 +115,20 @@ const APP_PROPERTIES = new Vue({
         },
 
         setUrl(){
-            let url = "/";
+            let url = "";
 
             url += this.page !== 0 ? `?page=${this.page}` : "";
             url += this.q ? `&q=${this.q}` : "";
             url += this.status !== "all" ? `&status=${this.status}` : "";
             url += this.category !== "all" ? `&category=${this.category}` : "";
 
-            url = url.length > 1 ? "?" + url.substring(2) : url;
+            url = url.length > 1 ? "?" + url.substring(1) : url;
             this.url = url;
 
-            history.pushState({}, "", this.url);
+            if(url === ""){
+                history.pushState({}, "", window.location.pathname);
+            }
+            else  history.pushState({}, "", this.url);
 
             this.getProperties();
         },
