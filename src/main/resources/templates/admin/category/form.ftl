@@ -3,10 +3,10 @@
     <div class="category__container">
 
         <div class="mb-3">
-            <a class="btn btn-outline-primary" href="${returnBackUrl}">Back</a>
+            <a class="btn btn-outline-primary" href="${returnBackUrl}">Повернутися назад</a>
         </div>
 
-        <h1>Category ${actionType} Page</h1>
+        <h1 class="user-select-none" >${actionType} категорію</h1>
 
         <div class="category__container">
 
@@ -14,9 +14,9 @@
 
                 <div class="form-group">
 
-                    <label for="category-name">Category name</label>
+                    <label class="mb-3 h3 user-select-none" for="category-name">Назва категорії</label>
                     <input type="text" class="form-control" name="name"
-                           id="category-name" placeholder="Enter category name"
+                           id="category-name" placeholder="Введіть назву категорії"
                            <#if category?? >value="${category.name}"</#if> autofocus>
 
                 </div>
