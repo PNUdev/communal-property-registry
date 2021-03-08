@@ -12,11 +12,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/css/main.css", "/js/**").permitAll()
+                .antMatchers("main/main", "/api/statistics", "/api/properties/**",
+                        "/css/main.css", "/js/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/admin/admin", true)
                 .permitAll()
                 .and()
                 .logout()
