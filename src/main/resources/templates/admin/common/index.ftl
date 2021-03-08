@@ -83,7 +83,7 @@
                         </div>
 
                         <div>
-                            площа: ${property.area}
+                            Площа: ${property.area}
                         </div>
 
                         <div class="<#if property.areaTransferredPubliclyViewable>text-success<#else>text-danger</#if>">
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="<#if property.amountOfRentPubliclyViewable>text-success<#else>text-danger</#if>">
-                            сума за оренду: #{property.amountOfRent; m2}
+                            Сума за оренду: #{property.amountOfRent; m2}
                         </div>
                     </div>
 
@@ -130,7 +130,7 @@
                         </div>
 
                         <div>
-                            категорія за призначенням: ${property.categoryByPurposeName}
+                            Категорія за призначенням: ${property.categoryByPurposeName}
                         </div>
 
                         <a href="/admin/attachments/property/${property.id}" class="pt-3">
