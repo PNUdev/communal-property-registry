@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
-import com.pnudev.communalpropertyregistry.dto.PropertyAdminFormDto;
+import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import com.pnudev.communalpropertyregistry.service.PropertyAdminService;
 import org.springframework.beans.factory.annotation.Autowired;

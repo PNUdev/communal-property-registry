@@ -1,7 +1,7 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
-import com.pnudev.communalpropertyregistry.dto.PropertyAdminFormDto;
+import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;

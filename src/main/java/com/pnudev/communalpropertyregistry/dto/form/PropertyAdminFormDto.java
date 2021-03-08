@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.dto;
+package com.pnudev.communalpropertyregistry.dto.form;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
 import lombok.AllArgsConstructor;

@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
-import com.pnudev.communalpropertyregistry.dto.PropertyAdminFormDto;
+import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
