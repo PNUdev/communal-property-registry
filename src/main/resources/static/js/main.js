@@ -105,7 +105,7 @@ const APP_PROPERTIES = new Vue({
                 case "NON_RENT": return "Неорендовано";
                 case "FIRST_OR_SECOND_TYPE_LIST": return "I-II типу";
                 case "PRIVATIZED": return "Приватизовано";
-                case "USED_BY_COUNCIL": return "Вик. міськвладою"
+                case "USED_BY_CITY_COUNCIL": return "Вик. міськвладою"
             }
         },
 

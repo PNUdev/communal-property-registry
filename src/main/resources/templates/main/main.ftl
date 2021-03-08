@@ -46,7 +46,7 @@
                     <option value="RENT">Орендовані</option>
                     <option value="FIRST_OR_SECOND_TYPE_LIST">I-II типу</option>
                     <option value="PRIVATIZED">Приватизовані</option>
-                    <option value="USED_BY_COUNCIL">Вик. міськвладою</option>
+                    <option value="USED_BY_CITY_COUNCIL">Вик. міськвладою</option>
                 </select>
 
                 <select id="category__filter" v-model="category" @change="changeFilters">

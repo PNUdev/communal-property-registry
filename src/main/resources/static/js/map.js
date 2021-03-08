@@ -12,7 +12,7 @@ const STATUS_COLORS = {
     RENT: "rgb(227,98,98)",
     FIRST_OR_SECOND_TYPE_LIST: "rgb(99,167,233)",
     PRIVATIZED: "rgb(227,149,84)",
-    USED_BY_COUNCIL: "rgb(174,152,229)"
+    USED_BY_CITY_COUNCIL: "rgb(174,152,229)"
 }
 
 //marker icon
