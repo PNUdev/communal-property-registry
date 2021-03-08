@@ -4,14 +4,14 @@
 <div class="categories-container">
 
         <div class="category__new">
-            <a class="m-2 btn btn-secondary" href="/admin/categories/new">New category</a>
+            <a class="m-2 btn btn-secondary" href="/admin/categories/new">Створити категорію</a>
         </div>
 
         <table class="table table-stripped">
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Назва</th>
                     <th scope="col">&nbsp;</th>
                 </tr>
             </thead>
@@ -22,7 +22,7 @@
                         <th scope="row">${category.id}</th>
                         <td>${category.name}</td>
                         <td>
-                            <a class=" btn btn-sm btn-primary" href="/admin/categories/${category.id}">Show</a>
+                            <a class=" btn btn-sm btn-primary" href="/admin/categories/${category.id}">Детальніше</a>
                         </td>
                     </tr>
             </#list>
@@ -39,7 +39,7 @@
                         <li class="page-item">
                             <button type="submit"
                                     class="page-link">
-                                First
+                                Перша
                             </button>
                         </li>
                         <input type="hidden" name="page" value="0">
@@ -63,7 +63,7 @@
                         <li class="page-item">
                             <button type="submit"
                                     class="page-link">
-                                Last
+                                Остання
                             </button>
                         </li>
                         <input type="hidden" name="page" value="${categoriesPage.totalPages - 1}">

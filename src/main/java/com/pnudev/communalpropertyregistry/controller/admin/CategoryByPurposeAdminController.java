@@ -62,7 +62,7 @@ public class CategoryByPurposeAdminController {
     @GetMapping("/new")
     public String getCreatePage(Model model) {
 
-        model.addAttribute("actionType", "Create");
+        model.addAttribute("actionType", "Створити");
         model.addAttribute("returnBackUrl", "/admin/categories");
         model.addAttribute("postUrl", "/admin/categories/create");
 
@@ -86,7 +86,7 @@ public class CategoryByPurposeAdminController {
 
         CategoryByPurpose category = categoryByPurposeService.findById(id);
 
-        model.addAttribute("actionType", "Update");
+        model.addAttribute("actionType", "Оновити");
         model.addAttribute("returnBackUrl", "/admin/categories/" + id);
         model.addAttribute("postUrl", "/admin/categories/update/" + id);
 
