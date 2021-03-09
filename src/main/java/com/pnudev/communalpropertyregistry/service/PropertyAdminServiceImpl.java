@@ -35,18 +35,18 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     private final PropertyRepository propertyRepository;
 
-    private final PropertyAdminMapper propertyAdminMapper;
+    private final PropertyMapper propertyMapper;
 
     @Autowired
     public PropertyAdminServiceImpl(Environment environment,
                                     PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
-                                    PropertyAdminMapper propertyAdminMapper) {
+                                    PropertyMapper propertyMapper) {
 
         this.environment = environment;
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
-        this.propertyAdminMapper = propertyAdminMapper;
+        this.propertyMapper = propertyMapper;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
         Page<Property> propertiesPage = propertyDslRepository.findAll(pageable, predicates.toArray(Predicate[]::new));
 
-        return new PageImpl<>(propertyAdminMapper.mapToPropertyAdminDto(propertiesPage.getContent()),
+        return new PageImpl<>(propertyMapper.mapToPropertyAdminDto(propertiesPage.getContent()),
                 pageable, propertiesPage.getTotalElements());
     }
 
@@ -77,9 +77,9 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     public PropertyAdminDto findById(Long id) {
 
         Property property = propertyRepository.findById(id).orElseThrow(
-                () -> new ServiceException("Didn't find property by id"));
+                () -> new ServiceException("Майно не знайдено!"));
 
-        return propertyAdminMapper.mapToPropertyAdminDto(property);
+        return propertyMapper.mapToPropertyAdminDto(property);
     }
 
     @Override

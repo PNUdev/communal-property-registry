@@ -13,12 +13,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class PropertyAdminMapper {
+public class PropertyMapper {
 
     private final CategoryByPurposeRepository categoryByPurposeRepository;
 
     @Autowired
-    public PropertyAdminMapper(CategoryByPurposeRepository categoryByPurposeRepository) {
+    public PropertyMapper(CategoryByPurposeRepository categoryByPurposeRepository) {
         this.categoryByPurposeRepository = categoryByPurposeRepository;
     }
 
@@ -36,7 +36,7 @@ public class PropertyAdminMapper {
         Optional<CategoryByPurpose> categoryByPurpose = categoryByPurposeRepository.findById(property.getCategoryByPurposeId());
 
         return this.mapToPropertyAdminDto(property, Collections.singletonList(categoryByPurpose.orElseThrow(
-                () -> new RuntimeException("Didn't find categoryByPurpose by id!"))));
+                () -> new RuntimeException("Не знайдено категорії за призначенням!"))));
     }
 
     private PropertyAdminDto mapToPropertyAdminDto(Property property, List<CategoryByPurpose> categoriesByPurpose) {
@@ -67,7 +67,7 @@ public class PropertyAdminMapper {
         Optional<CategoryByPurpose> categoryByPurpose = categoriesByPurposes.stream()
                 .filter(c -> c.getId().equals(id)).findAny();
 
-        return categoryByPurpose.orElseThrow(() -> new RuntimeException("Didn't find categoryByPurpose by id!"));
+        return categoryByPurpose.orElseThrow(() -> new RuntimeException("Не знайдено категорії за призначенням!"));
     }
 
 }
