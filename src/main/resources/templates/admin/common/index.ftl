@@ -158,21 +158,21 @@
                 <ul class="pagination justify-content-center mt-3">
 
                     <li class="page-item <#if propertiesPage.number == 0 >disabled</#if>">
-                        <a class="page-link" href="?page=${propertiesPage.number - 1}${searchUrl}">
+                        <a class="page-link" href="?page=${propertiesPage.number}${searchUrl}">
                             Попередня сторінка
                         </a>
                     </li>
 
                     <#list 1..propertiesPage.totalPages as pageNumber>
                         <li class="page-item <#if propertiesPage.number == pageNumber - 1>active</#if>">
-                            <a class="page-link" href="?page=${pageNumber - 1}${searchUrl}">
+                            <a class="page-link" href="?page=${pageNumber}${searchUrl}">
                                 ${pageNumber}
                             </a>
                         </li>
                     </#list>
 
                     <li class="page-item <#if propertiesPage.number == propertiesPage.totalPages - 1 >disabled</#if>">
-                        <a class="page-link" href="?page=${propertiesPage.number + 1}${searchUrl}">
+                        <a class="page-link" href="?page=${propertiesPage.number + 2}${searchUrl}">
                             Наступна сторінка
                         </a>
                     </li>
