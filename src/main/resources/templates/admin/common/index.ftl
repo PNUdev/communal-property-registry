@@ -163,14 +163,52 @@
                         </a>
                     </li>
 
-                    <#list 1..propertiesPage.totalPages as pageNumber>
-                        <li class="page-item <#if propertiesPage.number == pageNumber - 1>active</#if>">
-                            <a class="page-link" href="?page=${pageNumber}${searchUrl}">
-                                ${pageNumber}
+                    <#function max x y>
+                        <#if (x<y)><#return y><#else><#return x></#if>
+                    </#function>
+                    <#function min x y>
+                        <#if (x<y)><#return x><#else><#return y></#if>
+                    </#function>
+                    <#assign p = propertiesPage.number + 1/>
+                    <#assign size = propertiesPage.totalPages/>
+                    <#if (p<=4)>
+                        <#assign interval = 1..(min(5,size))>
+                    <#elseif ((size-p)<4)>
+                        <#assign interval = (max(1,(size-4)))..size >
+                    <#else>
+                        <#assign interval = (p-2)..(p+2)>
+                    </#if>
+                    <#if !(interval?seq_contains(1))>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=0${searchUrl}">
+                                1
+                            </a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a class="page-link">
+                                ...
+                            </a>
+                        </li>
+                    </#if>
+                    <#list interval as page>
+                        <li class="page-item <#if page = p>active</#if>">
+                            <a class="page-link" href="?page=${page}${searchUrl}">
+                                ${page}
                             </a>
                         </li>
                     </#list>
-
+                    <#if !(interval?seq_contains(size))>
+                        <li class="page-item disabled">
+                            <a class="page-link">
+                                ...
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=${size}${searchUrl}">
+                                ${size}
+                            </a>
+                        </li>
+                    </#if>
                     <li class="page-item <#if propertiesPage.number == propertiesPage.totalPages - 1 >disabled</#if>">
                         <a class="page-link" href="?page=${propertiesPage.number + 2}${searchUrl}">
                             Наступна сторінка
