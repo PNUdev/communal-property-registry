@@ -6,6 +6,20 @@
 
 <div class="container">
 
+    <#if SUCCESS_FLASH_MESSAGE?? || ERROR_FLASH_MESSAGE??>
+        <div class="alert mt-4 <#if SUCCESS_FLASH_MESSAGE??>alert-success<#else>alert-danger</#if>" id="popup" role="alert">
+            ${(SUCCESS_FLASH_MESSAGE)!}${(ERROR_FLASH_MESSAGE)!}
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let modal = document.getElementById("popup");
+                setTimeout(function () {
+                    modal.hidden = true;
+                }, 5000);
+            });
+        </script>
+    </#if>
+
     <#if propertiesPage.number lt 0 || (propertiesPage.totalPages !=0 && propertiesPage.number gt propertiesPage.totalPages - 1)>
         <h1 class="text-center">Неіснуючий номер сторінки</h1>
         <a href="/admin/properties">
