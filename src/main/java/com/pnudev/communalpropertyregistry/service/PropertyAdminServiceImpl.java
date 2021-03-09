@@ -3,17 +3,20 @@ package com.pnudev.communalpropertyregistry.service;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
+import com.pnudev.communalpropertyregistry.exception.IllegalAddressException;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
-import com.pnudev.communalpropertyregistry.util.mapper.PropertyAdminMapper;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -22,8 +25,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+@Slf4j
 @Service
 public class PropertyAdminServiceImpl implements PropertyAdminService {
 
@@ -85,11 +90,18 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     @Override
     public void save(PropertyAdminFormDto propertyAdminFormDto) {
 
+        log.info("Start convert from address to lat lon!");
+
+        Property.PropertyLocation propertyLocation = convertAddressToPropertyLocation(
+                propertyAdminFormDto.getAddress());
+
+        log.info("Finish convert address successful!");
+
         Property property = Property.builder()
                 .id(propertyAdminFormDto.getId())
                 .imageUrl(propertyAdminFormDto.getImageUrl())
                 .address(propertyAdminFormDto.getAddress())
-                .propertyLocation(convertAddressToPropertyLocation(propertyAdminFormDto.getAddress()))
+                .propertyLocation(propertyLocation)
                 .name(propertyAdminFormDto.getName())
                 .categoryByPurposeId(propertyAdminFormDto.getCategoryByPurposeId())
                 .propertyStatus(propertyAdminFormDto.getPropertyStatus())
@@ -109,6 +121,11 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         propertyRepository.save(property);
     }
 
+    @Override
+    public void delete(Long id) {
+        propertyRepository.deleteById(id);
+    }
+
     private Property.PropertyLocation convertAddressToPropertyLocation(String address) {
 
         final String url = String.format("https://api.tomtom.com/search/2/geocode/%s.json?" +
@@ -116,12 +133,22 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
                 address, environment.getProperty("application.tomtom.api.key")
         );
 
-        String response = new RestTemplate().getForObject(url, String.class);
+        String response = null;
+        Matcher matcher = null;
 
-        Matcher matcher = pattern.matcher(response);
+        try {
+            response = new RestTemplate().getForObject(url, String.class);
+        } catch (RestClientException e) {
+            log.error("RestClientException was thrown, failed to convert address to lat lon!");
+            throw new ServiceException("Перевірка адреси перестала працювати, попробуйте ще раз або перевірте API ключ!");
+        }
 
-        if (!matcher.matches()) {
-            throw new ServiceException("Illegal address!");
+        if (nonNull(response)) {
+            matcher = pattern.matcher(response);
+        }
+
+        if (isNull(matcher) || !matcher.matches()) {
+            throw new IllegalAddressException("Невірно вказаний адрес, ми не можемо знайти де це!");
         }
 
         return Property.PropertyLocation.builder()
