@@ -14,4 +14,6 @@ public interface PropertyAdminService {
 
     void save(PropertyAdminFormDto propertyAdminFormDto);
 
+    void delete(Long id);
+
 }

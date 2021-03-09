@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 import static java.util.Objects.nonNull;
 
 @Controller
@@ -89,10 +91,32 @@ public class PropertyAdminController {
         return "admin/common/form";
     }
 
+
+    @GetMapping("/delete/{id}")
+    public String deleteConfirmation(@PathVariable(name = "id") Long id, Model model) {
+
+        model.addAttribute("message", "Ви впевнені що хочете видалити майно?");
+        model.addAttribute("returnBackUrl", "/admin/properties/update/" + id);
+
+        return "admin/common/deleteConfirmation";
+    }
+
     @PostMapping("/save")
-    public String save(PropertyAdminFormDto propertyAdminFormDto) {
+    public String save(PropertyAdminFormDto propertyAdminFormDto, RedirectAttributes redirectAttributes) {
 
         propertyAdminService.save(propertyAdminFormDto);
+
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно було створено(оновлено)!");
+
+        return "redirect:/admin/properties";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+
+        propertyAdminService.delete(id);
+
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно було видаено!");
 
         return "redirect:/admin/properties";
     }

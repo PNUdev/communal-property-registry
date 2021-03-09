@@ -69,7 +69,8 @@
 
             <div>
                 <label for="area" class="form-label">Площа</label>
-                <input name="area" type="number" class="form-control" id="area" value="<#if propertyAdminDto??>#{propertyAdminDto.area}</#if>"
+                <input name="area" type="number" class="form-control" id="area"
+                       value="<#if propertyAdminDto??>#{propertyAdminDto.area}</#if>"
                        required>
             </div>
 
@@ -156,10 +157,14 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mt-3">
-                <input name="id" value="${(propertyAdminDto.id)!}" hidden <#if !propertyAdminDto??>disabled</#if>/>
+            <div class="d-flex justify-content-evenly mt-3">
+                <input type="hidden" name="id" value="${(propertyAdminDto.id)!}"
+                       <#if !propertyAdminDto??>disabled</#if>/>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <button type="submit" class="btn btn-outline-primary">Зберегти</button>
+                <#if propertyAdminDto??>
+                    <a href="/admin/properties/delete/#{propertyAdminDto.id}" class="link-danger">Видалити</a>
+                </#if>
             </div>
         </form>
     </div>
