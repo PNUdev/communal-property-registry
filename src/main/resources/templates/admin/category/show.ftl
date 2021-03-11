@@ -1,5 +1,9 @@
 <#include '../include/header.ftl'>
 
+<div class="return-back-button">
+    <a class="btn btn-outline-primary" href="/admin/categories">&#8592;</a>
+</div>
+
 <div class="category__container">
 
     <div class="category__name">
@@ -16,10 +20,6 @@
             <a class="btn btn-danger" href="/admin/categories/delete/${category.id}">Видалити</a>
         </div>
 
-    </div>
-
-    <div class="return-back-button">
-        <a class="btn btn-outline-primary" href="/admin/categories">&#8592;</a>
     </div>
 
 </div>
