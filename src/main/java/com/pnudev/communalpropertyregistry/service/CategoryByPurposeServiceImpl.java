@@ -6,6 +6,8 @@ import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
 
@@ -19,6 +21,11 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     @Override
     public CategoryByPurposeResponseDto findAll() {
         return new CategoryByPurposeResponseDto(categoryByPurposeRepository.findAll());
+    }
+
+    @Override
+    public List<CategoryByPurpose> finAllCategories() {
+        return categoryByPurposeRepository.findAll();
     }
 
     public CategoryByPurpose findById(Long id) {

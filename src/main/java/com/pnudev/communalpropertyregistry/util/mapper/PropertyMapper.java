@@ -7,9 +7,9 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyLocationDto;
 import com.pnudev.communalpropertyregistry.dto.response.AttachmentResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
-import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.service.AttachmentCategoryService;
 import com.pnudev.communalpropertyregistry.service.AttachmentService;
+import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import com.querydsl.core.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,39 +28,56 @@ public class PropertyMapper {
 
     private final AttachmentCategoryService attachmentCategoryService;
 
-    private final CategoryByPurposeRepository categoryByPurposeRepository;
+    private final CategoryByPurposeService categoryByPurposeService;
 
     @Autowired
     public PropertyMapper(AttachmentService attachmentService,
                           AttachmentCategoryService attachmentCategoryService,
-                          CategoryByPurposeRepository categoryByPurposeRepository) {
+                          CategoryByPurposeService categoryByPurposeService) {
 
         this.attachmentService = attachmentService;
         this.attachmentCategoryService = attachmentCategoryService;
-        this.categoryByPurposeRepository = categoryByPurposeRepository;
+        this.categoryByPurposeService = categoryByPurposeService;
     }
 
     public PropertyResponseDto mapToPropertyResponseDto(Property property) {
 
         List<Attachment> attachments = attachmentService.findByPropertyId(property.getId());
         List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeRepository.findAll();
+        CategoryByPurpose categoryByPurpose = categoryByPurposeService
+                .findById(property.getCategoryByPurposeId());
 
-        return mapToPropertyResponseDto(property,
-                attachments,
-                attachmentCategories,
-                categoriesByPurpose);
+        return PropertyResponseDto.builder()
+                .id(property.getId())
+                .area(property.getArea())
+                .name(property.getName())
+                .address(property.getAddress())
+                .imageUrl(property.getImageUrl())
+                .propertyStatus(property.getPropertyStatus())
+                .propertyLocation(property.getPropertyLocation())
+                .owner(property.isOwnerPubliclyViewable() ? property.getOwner() : null)
+                .amountOfRent(property.isAmountOfRentPubliclyViewable() ?
+                        property.getAmountOfRent() : null)
+                .balanceHolder(property.isBalanceHolderPubliclyViewable() ?
+                        property.getBalanceHolder() : null)
+                .areaTransferred(property.isAreaTransferredPubliclyViewable() ?
+                        property.getAreaTransferred() : null)
+                .leaseAgreementEndDate(property.isLeaseAgreementEndDatePubliclyViewable()
+                        ? property.getLeaseAgreementEndDate() : null)
+                .categoryByPurposeName(categoryByPurpose.getName())
+                .attachments(createAttachmentResponseDto(property.getId(), attachments, attachmentCategories))
+                .build();
     }
 
-    public List<PropertyResponseDto> mapToPropertyResponseDto(List<Property> properties) {
+    public List<PropertyResponseDto> mapToPropertyResponseDto(List<Tuple> properties) {
 
         List<Attachment> attachments = attachmentService
                 .findByPropertyIdIn(properties.stream()
-                        .map(Property::getId)
+                        .map(prop -> prop.get(property.id))
                         .collect(Collectors.toList()));
 
         List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeRepository.findAll();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.finAllCategories();
 
         return properties.stream()
                 .map((property) -> mapToPropertyResponseDto(
@@ -130,12 +147,12 @@ public class PropertyMapper {
         return null;
     }
 
-    private List<AttachmentResponseDto> createAttachmentResponseDto(Property property,
+    private List<AttachmentResponseDto> createAttachmentResponseDto(Long propertyId,
                                                                     List<Attachment> attachments,
                                                                     List<AttachmentCategory> attachmentCategories) {
 
         List<Attachment> filteredAttachments = attachments.stream()
-                .filter(attachment -> attachment.getPropertyId().equals(property.getId()))
+                .filter(attachment -> attachment.getPropertyId().equals(propertyId))
                 .collect(Collectors.toList());
 
         return attachmentCategories.stream()
@@ -145,36 +162,48 @@ public class PropertyMapper {
                 .collect(Collectors.toList());
     }
 
-    private PropertyResponseDto mapToPropertyResponseDto(Property property,
+    private PropertyResponseDto mapToPropertyResponseDto(Tuple propertyTuple,
                                                          List<Attachment> attachments,
                                                          List<AttachmentCategory> attachmentCategories,
                                                          List<CategoryByPurpose> categoriesByPurpose) {
 
-        String categoryByPurposeName = categoriesByPurpose.stream()
-                .filter(category -> category.getId().equals(property.getCategoryByPurposeId()))
+        CategoryByPurpose categoryByPurpose = categoriesByPurpose.stream()
+                .filter(category -> category.getId()
+                        .equals(propertyTuple.get(property.id)))
                 .findFirst()
-                .get()
-                .getName();
+                .orElseThrow(() -> new RuntimeException("Категорія не знайдена!"));
+
+        Property.PropertyStatus propertyStatus = Property.PropertyStatus
+                .fromName(propertyTuple.get(property.propertyStatus))
+                .orElseThrow(() -> new RuntimeException("Статус не існує!"));
+
+        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
+                .lat(propertyTuple.get(property.lat))
+                .lon(propertyTuple.get(property.lon))
+                .build();
 
         return PropertyResponseDto.builder()
-                .id(property.getId())
-                .area(property.getArea())
-                .name(property.getName())
-                .address(property.getAddress())
-                .imageUrl(property.getImageUrl())
-                .propertyStatus(property.getPropertyStatus())
-                .propertyLocation(property.getPropertyLocation())
-                .owner(property.isOwnerPubliclyViewable() ? property.getOwner() : null)
-                .amountOfRent(property.isAmountOfRentPubliclyViewable() ?
-                        property.getAmountOfRent() : null)
-                .balanceHolder(property.isBalanceHolderPubliclyViewable() ?
-                        property.getBalanceHolder() : null)
-                .areaTransferred(property.isAreaTransferredPubliclyViewable() ?
-                        property.getAreaTransferred() : null)
-                .leaseAgreementEndDate(property.isLeaseAgreementEndDatePubliclyViewable()
-                        ? property.getLeaseAgreementEndDate() : null)
-                .categoryByPurposeName(categoryByPurposeName)
-                .attachments(createAttachmentResponseDto(property, attachments, attachmentCategories))
+                .id(propertyTuple.get(property.id))
+                .area(propertyTuple.get(property.area))
+                .name(propertyTuple.get(property.name))
+                .address(propertyTuple.get(property.address))
+                .imageUrl(propertyTuple.get(property.imageUrl))
+                .propertyStatus(propertyStatus)
+                .propertyLocation(propertyLocation)
+                .owner(propertyTuple.get(property.isOwnerPubliclyViewable) ?
+                        propertyTuple.get(property.owner) : null)
+                .amountOfRent(propertyTuple.get(property.isAmountOfRentPubliclyViewable) ?
+                        propertyTuple.get(property.amountOfRent) : null)
+                .balanceHolder(propertyTuple.get(property.isBalanceHolderPubliclyViewable) ?
+                        propertyTuple.get(property.balanceHolder) : null)
+                .areaTransferred(propertyTuple.get(property.isAreaTransferredPubliclyViewable) ?
+                        propertyTuple.get(property.areaTransferred) : null)
+                .leaseAgreementEndDate(propertyTuple.get(property.isLeaseAgreementEndDatePubliclyViewable)
+                        ? propertyTuple.get(property.leaseAgreementEndDate).toLocalDate() : null)
+                .categoryByPurposeName(categoryByPurpose.getName())
+                .attachments(
+                        createAttachmentResponseDto(
+                                propertyTuple.get(property.id), attachments, attachmentCategories))
                 .build();
     }
 

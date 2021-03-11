@@ -5,14 +5,13 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
-import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
+import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -104,12 +103,8 @@ public class PropertyServiceImpl implements PropertyService {
             predicates.add(property.categoryByPurposeId.eq(category.getId()));
         }
 
-        Page<Property> properties = propertyDslRepository
+        return propertyDslRepository
                 .findAll(pageable, predicates.toArray(Predicate[]::new));
-
-        return new PageImpl<>(propertyMapper.mapToPropertyResponseDto(properties.getContent()),
-                pageable,
-                properties.getTotalElements());
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.pnudev.communalpropertyregistry.repository.dsl;
 
-import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
+import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
     }
 
     @Override
-    public Page<Property> findAll(Pageable pageable, Predicate... where) {
+    public Page<PropertyResponseDto> findAll(Pageable pageable, Predicate... where) {
 
         List<Tuple> properties = queryFactory
                 .select(property.all())
@@ -57,9 +58,7 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
                 .where(where)
                 .fetchCount();
 
-        List<Property> content = properties.stream()
-                .map(propertyMapper::mapTupleToProperty)
-                .collect(Collectors.toList());
+        List<PropertyResponseDto> content = propertyMapper.mapToPropertyResponseDto(properties);
 
         return new PageImpl<>(content, pageable, total);
     }
