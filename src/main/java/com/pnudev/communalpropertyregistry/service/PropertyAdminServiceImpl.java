@@ -1,6 +1,8 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
+import com.pnudev.communalpropertyregistry.dto.AddressDto;
+import com.pnudev.communalpropertyregistry.dto.AddressResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.IllegalAddressException;
@@ -25,14 +27,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Slf4j
 @Service
 public class PropertyAdminServiceImpl implements PropertyAdminService {
 
-    private static final Pattern pattern = Pattern.compile(".*position\":\\{\"lat\":(?<lat>[\\d\\.]+),\"lon\":(?<lon>[\\d\\.]+).*");
+    private static final Pattern pattern = Pattern.compile("freeformAddress\":\"(?<freeformAddress>[^\"]+).*?position\":\\{\"lat\":(?<lat>[\\d.]+),\"lon\":(?<lon>[\\d.]+)");
 
     private final Environment environment;
 
@@ -88,14 +89,12 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
-    public void save(PropertyAdminFormDto propertyAdminFormDto) {
+    public void save(PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
 
-        log.info("Start convert from address to lat lon!");
-
-        Property.PropertyLocation propertyLocation = convertAddressToPropertyLocation(
-                propertyAdminFormDto.getAddress());
-
-        log.info("Finish convert address successful!");
+        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
+                .lat(address.getLat())
+                .lon(address.getLon())
+                .build();
 
         Property property = Property.builder()
                 .id(propertyAdminFormDto.getId())
@@ -126,10 +125,13 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         propertyRepository.deleteById(id);
     }
 
-    private Property.PropertyLocation convertAddressToPropertyLocation(String address) {
+    @Override
+    public AddressResponseDto getAddresses(String address) {
+
+        log.info("Method 'getAddresses' started work!");
 
         final String url = String.format("https://api.tomtom.com/search/2/geocode/%s.json?" +
-                        "storeResult=false&limit=1&lat=48.610742062164974f&lon=24.975710390429917&radius=30000&language=uk-UA&key=%s",
+                        "storeResult=false&limit=20&lat=48.610742062164974f&lon=24.975710390429917&radius=30000&language=uk-UA&key=%s",
                 address, environment.getProperty("application.tomtom.api.key")
         );
 
@@ -139,22 +141,34 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         try {
             response = new RestTemplate().getForObject(url, String.class);
         } catch (RestClientException e) {
-            log.error("RestClientException was thrown, failed to convert address to lat lon!");
-            throw new ServiceException("Перевірка адреси перестала працювати, попробуйте ще раз або перевірте API ключ!");
+            log.error("RestClientException was caught, failed to get response in method 'getAddresses'!");
+            throw new ServiceException("Попробуйте ввести іншу адрасу бо ми цю неможем обробити!");
         }
 
         if (nonNull(response)) {
             matcher = pattern.matcher(response);
         }
 
-        if (isNull(matcher) || !matcher.matches()) {
+        List<AddressDto> addresses = new ArrayList<>();
+
+        if (nonNull(matcher)) {
+            while (matcher.find()) {
+                addresses.add(AddressDto.builder()
+                        .address(matcher.group("freeformAddress"))
+                        .lat(Double.parseDouble(matcher.group("lat")))
+                        .lon(Double.parseDouble(matcher.group("lon")))
+                        .build()
+                );
+            }
+        }
+
+        if (addresses.isEmpty()) {
             throw new IllegalAddressException("Невірно вказаний адрес, ми не можемо знайти де це!");
         }
 
-        return Property.PropertyLocation.builder()
-                .lat(Double.parseDouble(matcher.group("lat")))
-                .lon(Double.parseDouble(matcher.group("lon")))
-                .build();
+        log.info("Method 'getAddresses' is going to finish work successful!");
+
+        return new AddressResponseDto(addresses);
     }
 
 }

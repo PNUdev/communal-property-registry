@@ -1,6 +1,8 @@
 package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
+import com.pnudev.communalpropertyregistry.dto.AddressDto;
+import com.pnudev.communalpropertyregistry.dto.AddressResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
@@ -101,14 +103,42 @@ public class PropertyAdminController {
         return "admin/common/deleteConfirmation";
     }
 
+    @GetMapping("/addresses")
+    public String address(Model model) {
+
+        if (!model.containsAttribute("propertyAdminFormDto")) {
+            return "redirect:/admin/properties";
+        }
+
+        return "/admin/common/address";
+    }
+
     @PostMapping("/save")
-    public String save(PropertyAdminFormDto propertyAdminFormDto, RedirectAttributes redirectAttributes) {
+    public String save(PropertyAdminFormDto propertyAdminFormDto,
+                       AddressDto addressDto,
+                       RedirectAttributes redirectAttributes) {
 
-        propertyAdminService.save(propertyAdminFormDto);
 
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно було створено(оновлено)!");
+        if (nonNull(addressDto) && nonNull(addressDto.getLat()) && nonNull(addressDto.getLon())) {
+            propertyAdminService.save(propertyAdminFormDto, addressDto);
 
-        return "redirect:/admin/properties";
+            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно створено(оновлено)!");
+            return "redirect:/admin/properties";
+        }
+
+        AddressResponseDto addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
+
+        if (addresses.getAddresses().size() == 1) {
+            propertyAdminService.save(propertyAdminFormDto, addresses.getAddresses().get(0));
+
+            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно створено(оновлено)!");
+            return "redirect:/admin/properties";
+        }
+
+        redirectAttributes.addFlashAttribute("addressesResponseDto", addresses);
+        redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
+
+        return "redirect:/admin/properties/addresses";
     }
 
     @PostMapping("/delete/{id}")
@@ -116,7 +146,7 @@ public class PropertyAdminController {
 
         propertyAdminService.delete(id);
 
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно було видаено!");
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно видалено!");
 
         return "redirect:/admin/properties";
     }
