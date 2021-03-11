@@ -20,7 +20,7 @@
             </div>
 
             <div>
-                <label for="name" class="form-label">name</label>
+                <label for="name" class="form-label">Назва</label>
                 <input name="name" type="text" id="name" class="form-control" value="${(propertyAdminDto.name)!}"
                        required>
             </div>
@@ -69,16 +69,15 @@
 
             <div>
                 <label for="area" class="form-label">Площа</label>
-                <input name="area" type="number" class="form-control" id="area"
-                       value="<#if propertyAdminDto??>#{propertyAdminDto.area}</#if>"
-                       required>
+                <input name="area" type="number" class="form-control" step="0.01" id="area"
+                       number="<#if propertyAdminDto??>#{propertyAdminDto.area}</#if>" required>
             </div>
 
             <div>
                 <label for="areaTransferred" class="form-label">Передана площа</label>
-                <div class="input-group" id="areaTransferred">
-                    <input name="areaTransferred" type="number" class="form-control"
-                           value="<#if propertyAdminDto??>#{propertyAdminDto.areaTransferred}</#if>" required>
+                <div class="input-group">
+                    <input name="areaTransferred" type="number" step="0.01" class="form-control" id="areaTransferred"
+                           number="<#if propertyAdminDto??>#{propertyAdminDto.areaTransferred}</#if>" required>
 
                     <div class="input-group-text">
                         <label class="form-check-label" for="checkbox1">Публічні дані?&#x00A0;&#x00A0;</label>
@@ -90,7 +89,7 @@
             </div>
 
             <div>
-                <label for="balanceHolder" class="form-label">BalanceHolder</label>
+                <label for="balanceHolder" class="form-label">Балансо утримувач</label>
                 <div class="input-group" id="balanceHolder">
                     <input name="balanceHolder" type="text" class="form-control"
                            value="${(propertyAdminDto.balanceHolder)!}" required>
@@ -120,7 +119,7 @@
             <div>
                 <label for="leaseAgreementEndDate" class="form-label">Дата закінчення договору оренди</label>
                 <div class="input-group" id="leaseAgreementEndDate">
-                    <input name="leaseAgreementEndDate" type="date" class="form-control"
+                    <input name="leaseAgreementEndDate" type="date" max="3000-01-01" class="form-control"
                            value="${(propertyAdminDto.leaseAgreementEndDate)!}" required>
 
                     <div class="input-group-text">
@@ -134,9 +133,9 @@
 
             <div>
                 <label for="amountOfRent" class="form-label">Сума за оренду</label>
-                <div class="input-group" id="amountOfRent">
-                    <input name="amountOfRent" type="number" class="form-control" required
-                           value="<#if propertyAdminDto??>#{propertyAdminDto.amountOfRent}</#if>">
+                <div class="input-group">
+                    <input name="amountOfRent" type="number" step="0.01" class="form-control" id="amountOfRent" required
+                           number="<#if propertyAdminDto??>#{propertyAdminDto.amountOfRent}</#if>">
 
                     <div class="input-group-text">
                         <label class="form-check-label" for="checkbox5">Публічні дані?&#x00A0;&#x00A0;</label>
@@ -181,8 +180,15 @@
         imageDisplay.src = imageUrl.value;
     };
 
-    document.addEventListener('DOMContentLoaded', setImageSrcUrl);
     imageUrl.addEventListener('change', setImageSrcUrl);
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.getElementById("area").value = document.getElementById("area").getAttribute("number").replace(",",".");
+        document.getElementById("areaTransferred").value = document.getElementById("areaTransferred").getAttribute("number").replace(",",".");
+        document.getElementById("amountOfRent").value = document.getElementById("amountOfRent").getAttribute("number").replace(",",".");
+
+        setImageSrcUrl();
+    });
 
     imageDisplay.addEventListener('load', function () {
         imagePreviewBlock.hidden = false;
