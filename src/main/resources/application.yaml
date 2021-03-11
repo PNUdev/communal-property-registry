@@ -11,3 +11,5 @@ spring:
     password: ${ADMIN_PASSWORD:admin}
   data:
     web.pageable.one-indexed-parameters: true
+
+rest.properties.pagination.size: 5

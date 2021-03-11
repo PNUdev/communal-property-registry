@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface AttachmentRepository extends CrudRepository<Attachment, Long> {
 
-    List<Attachment> findAttachmentsByPropertyIdEquals(Long propertyId);
+    List<Attachment> findAttachmentsByPropertyId(Long propertyId);
 
 }

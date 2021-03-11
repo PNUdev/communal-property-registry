@@ -1,48 +1,52 @@
 package com.pnudev.communalpropertyregistry.service;
 
+import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
+import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceException;
-import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
+import com.pnudev.communalpropertyregistry.repository.dsl.QueryDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
-import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
-import com.pnudev.communalpropertyregistry.util.mapper.PropertyToPropertyDtoMapper;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 import static java.util.Objects.nonNull;
+
 
 @Slf4j
 @Service
 public class PropertyServiceImpl implements PropertyService {
 
-    private final PropertyDslRepository propertyLocationDslRepository;
-
     private final PropertyRepository propertyRepository;
 
-    // TODO: 21.02.21 Replace repository with service, when second will be implemented
-    private final CategoryByPurposeRepository categoryByPurposeRepository;
+    private final CategoryByPurposeService categoryByPurposeService;
 
-    private final PropertyToPropertyDtoMapper propertyToPropertyDtoMapper;
+    private final QueryDslRepository<Property> propertyDslRepository;
+
+    private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyServiceImpl(PropertyDslRepository propertyLocationDslRepository,
+    public PropertyServiceImpl(CategoryByPurposeService categoryByPurposeService,
+                               QueryDslRepository<Property> propertyDslRepository,
                                PropertyRepository propertyRepository,
-                               CategoryByPurposeRepository categoryByPurposeRepository,
-                               PropertyToPropertyDtoMapper propertyToPropertyDtoMapper) {
+                               PropertyMapper propertyMapper) {
 
-        this.propertyLocationDslRepository = propertyLocationDslRepository;
+        this.categoryByPurposeService = categoryByPurposeService;
+        this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
-        this.categoryByPurposeRepository = categoryByPurposeRepository;
-        this.propertyToPropertyDtoMapper = propertyToPropertyDtoMapper;
+        this.propertyMapper = propertyMapper;
     }
-
 
     @Override
     public PropertiesLocationsResponseDto getMapLocations(String searchQuery,
@@ -66,14 +70,63 @@ public class PropertyServiceImpl implements PropertyService {
                     .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
         }
 
-        return propertyLocationDslRepository.findAllMapLocations(predicates.toArray(Predicate[]::new));
+        List<Property> properties = propertyDslRepository
+                .findAll(predicates.toArray(Predicate[]::new));
 
+        return PropertiesLocationsResponseDto.builder()
+                .mapLocations(properties.stream()
+                                .map(propertyMapper::mapToPropertyLocationDto)
+                                .collect(Collectors.toList()))
+                .build();
     }
 
     @Override
-    public Property findById(Long id){
-        return propertyRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Приміщення не знайдено"));
+    public Page<PropertyResponseDto> findPropertiesBySearchQuery(String searchQuery, String propertyStatus,
+                                                         Long categoryByPurposeId, Pageable pageable) {
+
+        // Used for predicate initialization.
+        // Following query predicate will return all records
+
+        BooleanExpression predicate = property.id.isNotNull();
+
+        if (nonNull(searchQuery)) {
+
+            predicate = predicate.andAnyOf(
+                    property.name.contains(searchQuery),
+                    property.address.contains(searchQuery));
+        }
+
+        if (nonNull(propertyStatus)) {
+
+            try {
+
+                Property.PropertyStatus status = Property.PropertyStatus.valueOf(propertyStatus.toUpperCase());
+                predicate = predicate.and(property.propertyStatus.eq(status.name()));
+
+            } catch (IllegalArgumentException e) {
+                throw new ServiceException("Вказаної категорії не існує");
+            }
+        }
+
+        if (nonNull(categoryByPurposeId)) {
+
+            CategoryByPurpose category = categoryByPurposeService
+                    .findById(categoryByPurposeId);
+
+            predicate = predicate.and(property.categoryByPurposeId.eq(category.getId()));
+        }
+
+        Page<Property> properties = propertyDslRepository.findAll(pageable, predicate);
+
+        return properties.map(propertyMapper::mapToPropertyResponseDto);
+    }
+
+    @Override
+    public PropertyResponseDto findById(Long id) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("Приміщення не знайдене"));
+
+        return propertyMapper.mapToPropertyResponseDto(property);
     }
 
     @Override
