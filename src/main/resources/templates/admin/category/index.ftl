@@ -1,40 +1,41 @@
 <#include '../include/header.ftl'>
 
 
-<div class="categories-container">
+<div class="categories">
 
-        <div class="category__new">
-            <a class="m-2 btn btn-secondary" href="/admin/categories/new">Створити категорію</a>
-        </div>
+    <div class="categories__new">
+        <a class="m-2 btn btn-secondary" href="/admin/categories/new">Створити категорію</a>
+    </div>
 
-        <table class="table table-stripped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Назва</th>
-                    <th scope="col">&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="categories__list table table-stripped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Назва</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
 
-            <#list categoriesPage.content as category>
-                    <tr>
-                        <th scope="row">${category.id}</th>
-                        <td>${category.name}</td>
-                        <td>
-                            <a class=" btn btn-sm btn-primary" href="/admin/categories/${category.id}">Детальніше</a>
-                        </td>
-                    </tr>
-            </#list>
+        <#list categoriesPage.content as category>
+            <tr>
+                <th scope="row">${category.id}</th>
+                <td class="">${category.name}</td>
+                <td>
+                    <a class=" btn btn-sm btn-primary" href="/admin/categories/${category.id}">Детальніше</a>
+                </td>
+            </tr>
+        </#list>
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <div class="m-5">
+    <div class="categories__pages">
 
-            <ul class="pagination mx-auto">
+        <div>
+            <ul class="pagination mx-auto d-inline-flex">
 
-                <#if !categoriesPage.isFirstPage >
+                <#if !categoriesPage.first >
                     <form action="/admin/categories" method="GET">
                         <li class="page-item">
                             <button type="submit"
@@ -48,7 +49,7 @@
 
                 <#list 1..categoriesPage.totalPages as pageNumber>
                     <form action="/admin/categories" method="GET">
-                        <li class="page-item <#if pageNumber - 1 == categoriesPage.page>active</#if>">
+                        <li class="page-item <#if pageNumber - 1 == categoriesPage.number>active</#if>">
                             <button type="submit"
                                     class="page-link">
                                 ${pageNumber}
@@ -58,7 +59,7 @@
                     </form>
                 </#list>
 
-                <#if !categoriesPage.isLastPage >
+                <#if !categoriesPage.last >
                     <form action="/admin/categories" method="GET">
                         <li class="page-item">
                             <button type="submit"
@@ -71,10 +72,11 @@
                 </#if>
 
             </ul>
-
         </div>
 
     </div>
+
+</div>
 
 <#include '../../include/footer.ftl'>
 

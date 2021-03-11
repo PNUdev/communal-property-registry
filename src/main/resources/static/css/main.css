@@ -1,7 +1,10 @@
 
+/* ==== CATEGORIES SECTION ==== */
 .category__container {
     margin: 5%;
-    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .category__name {
@@ -10,4 +13,28 @@
 
 .category__function {
     margin-right: 10px;
+}
+
+.categories__list {
+    width: 100%;
+    margin: auto;
+}
+
+.categories__pages {
+    margin-left: 33vw;
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+.categories__list td, th {
+    text-align: center;
+}
+
+.return-back-button {
+    margin-top: 40px;
+}
+
+.return-back-button a {
+    padding: 0px 42px;
+    font-size: 25px;
 }

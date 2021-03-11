@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.dto;
+package com.pnudev.communalpropertyregistry.dto.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryByPurposeDto {
+public class CategoryByPurposeFormDto {
 
     private String name;
 

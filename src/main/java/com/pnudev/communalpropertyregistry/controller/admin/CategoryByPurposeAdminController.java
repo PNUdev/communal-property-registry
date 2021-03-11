@@ -1,34 +1,27 @@
 package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeDto;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePageDto;
+import com.pnudev.communalpropertyregistry.dto.form.CategoryByPurposeFormDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
-import com.pnudev.communalpropertyregistry.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
-import static java.lang.Math.abs;
-import static java.util.Objects.nonNull;
 
 @Controller
 @RequestMapping("/admin/categories")
 public class CategoryByPurposeAdminController {
-
-    @Value("${rest.categories.pagination.size}")
-    private Integer pageSize;
 
     private final CategoryByPurposeService categoryByPurposeService;
 
@@ -38,12 +31,10 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping
-    public String getAllCategories(Integer page, Model model) {
+    public String findAll(@PageableDefault Pageable pageable, Model model) {
 
-        page = (nonNull(page)) ? page : 0;
-
-        CategoryByPurposePageDto categoriesPage = categoryByPurposeService
-                .findAll(PageRequest.of(abs(page), pageSize));
+        Page<CategoryByPurpose> categoriesPage = categoryByPurposeService
+                .findAll(pageable);
 
         model.addAttribute("categoriesPage", categoriesPage);
 
@@ -51,7 +42,7 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping("/{id}")
-    public String getCategoryById(@PathVariable("id") Long id, Model model) {
+    public String findById(@PathVariable("id") Long id, Model model) {
 
         CategoryByPurpose category = categoryByPurposeService.findById(id);
         model.addAttribute("category", category);
@@ -60,36 +51,26 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping("/new")
-    public String getCreatePage(Model model) {
-
-        model.addAttribute("actionType", "Створити");
-        model.addAttribute("returnBackUrl", "/admin/categories");
-        model.addAttribute("postUrl", "/admin/categories/create");
-
+    public String createForm() {
         return "admin/category/form";
     }
 
     @PostMapping("/create")
-    public String create(@Validated CategoryByPurposeDto categoryByPurposeCreateDto,
+    public String create(@Validated CategoryByPurposeFormDto categoryByPurposeCreateDto,
                          RedirectAttributes redirectAttributes) {
 
         categoryByPurposeService.create(categoryByPurposeCreateDto);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
-                "Категорія була успішно створена");
+                "Категорія створена успішно!");
 
         return "redirect:/admin/categories/new";
     }
 
     @GetMapping("/edit/{id}")
-    public String getUpdatePage(@PathVariable("id") Long id, Model model) {
+    public String editForm(@PathVariable("id") Long id, Model model) {
 
         CategoryByPurpose category = categoryByPurposeService.findById(id);
-
-        model.addAttribute("actionType", "Оновити");
-        model.addAttribute("returnBackUrl", "/admin/categories/" + id);
-        model.addAttribute("postUrl", "/admin/categories/update/" + id);
-
         model.addAttribute("category", category);
 
         return "admin/category/form";
@@ -97,22 +78,22 @@ public class CategoryByPurposeAdminController {
 
     @PostMapping("/update/{id}")
     public String update(@PathVariable("id") Long categoryId,
-                         @Validated CategoryByPurposeDto categoryByPurposeDto,
+                         @Validated CategoryByPurposeFormDto categoryByPurposeDto,
                          RedirectAttributes redirectAttributes) {
 
         categoryByPurposeService.update(categoryByPurposeDto, categoryId);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
-                "Категорія була успішно оновлена");
+                "Категорія оновлена успішно!");
 
         return "redirect:/admin/categories/" + categoryId;
     }
 
     @GetMapping("/delete/{id}")
-    public String getConfirmationPage(@PathVariable("id") Long id, Model model,
-                                      HttpServletRequest request) {
+    public String deleteConfirmation(@PathVariable("id") Long id, Model model,
+                                     @RequestHeader("referer") String returnBackUrl) {
 
-        model.addAttribute("message", "Ви впевнені що хочете видалити дану категорію за призначенням?");
-        model.addAttribute("returnBackUrl", HttpUtils.getPreviousPageUrl(request));
+        model.addAttribute("message", "Ви впевнені, що хочете видалити дану категорію?");
+        model.addAttribute("returnBackUrl", returnBackUrl);
 
         return "admin/common/deleteConfirmation";
     }
@@ -123,7 +104,7 @@ public class CategoryByPurposeAdminController {
         categoryByPurposeService.delete(id);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
-                "Категорія була успішно видалена");
+                "Категорія видалена успішно!");
 
         return "redirect:/admin/categories/";
     }

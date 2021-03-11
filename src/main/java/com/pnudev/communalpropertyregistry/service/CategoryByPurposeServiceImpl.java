@@ -1,9 +1,9 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeDto;
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposePageDto;
-import com.pnudev.communalpropertyregistry.exception.ServiceException;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
+import com.pnudev.communalpropertyregistry.dto.form.CategoryByPurposeFormDto;
+import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,28 +28,18 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public CategoryByPurposePageDto findAll(Pageable pageable) {
-
-        Page<CategoryByPurpose> categoriesPage = categoryByPurposeRepository
-                .findAll(pageable);
-
-        return CategoryByPurposePageDto.builder()
-                .content(categoriesPage.getContent())
-                .page(categoriesPage.getNumber())
-                .totalPages(categoriesPage.getTotalPages())
-                .isFirstPage(categoriesPage.isFirst())
-                .isLastPage(categoriesPage.isLast())
-                .build();
+    public Page<CategoryByPurpose> findAll(Pageable pageable) {
+        return categoryByPurposeRepository.findAll(pageable);
     }
 
     @Override
     public CategoryByPurpose findById(Long id) {
         return categoryByPurposeRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Категорію не знайдено"));
+                .orElseThrow(() -> new ServiceAdminException("Категорію не знайдено!"));
     }
 
     @Override
-    public void create(CategoryByPurposeDto categoryByPurposeDto) {
+    public void create(CategoryByPurposeFormDto categoryByPurposeDto) {
 
         validateCategoryName(categoryByPurposeDto.getName());
 
@@ -58,10 +48,12 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
                 .build();
 
         categoryByPurposeRepository.save(categoryByPurpose);
+
+        log.info("Category {}({}) was created", categoryByPurpose.getName(), categoryByPurpose.getId());
     }
 
     @Override
-    public void update(CategoryByPurposeDto categoryByPurposeDto, Long categoryId) {
+    public void update(CategoryByPurposeFormDto categoryByPurposeDto, Long categoryId) {
 
         validateCategoryName(categoryByPurposeDto.getName());
 
@@ -72,13 +64,15 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
                 .build();
 
         categoryByPurposeRepository.save(updatedCategory);
+
+        log.info("Category {}({}) was updated", category.getName(), category.getId());
     }
 
     @Override
     public void delete(Long id) {
 
         if (propertyRepository.existsByCategoryByPurposeId(id)) {
-            throw new ServiceException("Неможливо видалити категорію допоки є маєтки позначені нею.");
+            throw new ServiceAdminException("Дію неможливо виконати, оскільки дана категорія активно використовується!");
         }
 
         categoryByPurposeRepository.deleteById(id);
@@ -88,8 +82,10 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     private void validateCategoryName(String name) {
 
         if (categoryByPurposeRepository.existsByName(name)) {
-            throw new ServiceException("Категорія з даною назвою уже існує");
+            throw new ServiceAdminException("Категорія з даною назвою уже існує!");
         }
+
+        log.error("Category with name {} already exists", name);
     }
 
 }
