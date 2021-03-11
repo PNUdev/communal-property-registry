@@ -1,5 +1,6 @@
 package com.pnudev.communalpropertyregistry.domain;
 
+import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Embedded;
 
 import java.time.LocalDate;
+import java.util.Optional;
+
+import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 
 @Data
 @Builder(toBuilder = true)
@@ -67,11 +71,17 @@ public class Property {
 
     public enum PropertyStatus {
 
-        NON_RENT,
-        RENT,
-        FIRST_OR_SECOND_TYPE_LIST,
-        PRIVATIZED,
-        USED_BY_CITY_COUNCIL
+        NON_RENT, RENT, FIRST_OR_SECOND_TYPE_LIST, PRIVATIZED, USED_BY_CITY_COUNCIL;
 
+        public static Optional<PropertyStatus> fromName(String name) {
+            try {
+
+                Property.PropertyStatus status = Property.PropertyStatus.valueOf(name.toUpperCase());
+                return Optional.of(status);
+
+            } catch (IllegalArgumentException e) {
+                return Optional.empty();
+            }
+        }
     }
 }

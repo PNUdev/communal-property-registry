@@ -5,6 +5,7 @@ import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -20,6 +21,11 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public List<Attachment> findByPropertyId(Long id) {
         return attachmentRepository.findAttachmentsByPropertyId(id);
+    }
+
+    @Override
+    public List<Attachment> findByPropertyIdIn(Collection<Long> id) {
+        return attachmentRepository.findAttachmentsByPropertyIdIn(id);
     }
 
 }

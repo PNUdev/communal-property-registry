@@ -8,8 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface PropertyRepository extends CrudRepository<Property, Long>,
-                                            PagingAndSortingRepository<Property, Long> {
+public interface PropertyRepository extends CrudRepository<Property, Long> {
 
     @Query("SELECT " +
             "cbp.name as category, " +

@@ -21,11 +21,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
 
     @Override
     public List<AttachmentCategory> findAll() {
-        Iterable<AttachmentCategory> all = attachmentCategoryRepository.findAll();
-
-        return StreamSupport
-                .stream(all.spliterator(), true)
-                .collect(Collectors.toList());
+        return attachmentCategoryRepository.findAll();
     }
 
 }

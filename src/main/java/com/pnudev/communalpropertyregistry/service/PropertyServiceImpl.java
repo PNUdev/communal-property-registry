@@ -4,21 +4,20 @@ import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
-import com.pnudev.communalpropertyregistry.exception.ServiceException;
-import com.pnudev.communalpropertyregistry.repository.dsl.QueryDslRepository;
+import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
+import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 import static java.util.Objects.nonNull;
@@ -32,13 +31,13 @@ public class PropertyServiceImpl implements PropertyService {
 
     private final CategoryByPurposeService categoryByPurposeService;
 
-    private final QueryDslRepository<Property> propertyDslRepository;
+    private final PropertyDslRepository propertyDslRepository;
 
     private final PropertyMapper propertyMapper;
 
     @Autowired
     public PropertyServiceImpl(CategoryByPurposeService categoryByPurposeService,
-                               QueryDslRepository<Property> propertyDslRepository,
+                               PropertyDslRepository propertyDslRepository,
                                PropertyRepository propertyRepository,
                                PropertyMapper propertyMapper) {
 
@@ -49,9 +48,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public PropertiesLocationsResponseDto getMapLocations(String searchQuery,
-                                                          String propertyStatus,
-                                                          Long categoryByPurposeId) {
+    public PropertiesLocationsResponseDto getMapLocations(String searchQuery, String propertyStatus, Long categoryByPurposeId) {
 
         log.info("Get property location request");
 
@@ -70,14 +67,8 @@ public class PropertyServiceImpl implements PropertyService {
                     .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
         }
 
-        List<Property> properties = propertyDslRepository
-                .findAll(predicates.toArray(Predicate[]::new));
-
-        return PropertiesLocationsResponseDto.builder()
-                .mapLocations(properties.stream()
-                                .map(propertyMapper::mapToPropertyLocationDto)
-                                .collect(Collectors.toList()))
-                .build();
+        return propertyDslRepository
+                .findAllMapLocations(predicates.toArray(Predicate[]::new));
     }
 
     @Override
@@ -87,25 +78,22 @@ public class PropertyServiceImpl implements PropertyService {
         // Used for predicate initialization.
         // Following query predicate will return all records
 
-        BooleanExpression predicate = property.id.isNotNull();
+        List<Predicate> predicates = new ArrayList<>() {{
+            add(property.id.isNotNull());
+        }};
 
         if (nonNull(searchQuery)) {
 
-            predicate = predicate.andAnyOf(
-                    property.name.contains(searchQuery),
-                    property.address.contains(searchQuery));
+            predicates.add(property.name.contains(searchQuery)
+                    .or(property.address.contains(searchQuery)));
         }
 
         if (nonNull(propertyStatus)) {
 
-            try {
+            Property.PropertyStatus status = Property.PropertyStatus.fromName(propertyStatus)
+                    .orElseThrow(() -> new ServiceApiException("Вказана категорія не існує!"));
 
-                Property.PropertyStatus status = Property.PropertyStatus.valueOf(propertyStatus.toUpperCase());
-                predicate = predicate.and(property.propertyStatus.eq(status.name()));
-
-            } catch (IllegalArgumentException e) {
-                throw new ServiceException("Вказаної категорії не існує");
-            }
+            predicates.add(property.propertyStatus.eq(status.name()));
         }
 
         if (nonNull(categoryByPurposeId)) {
@@ -113,18 +101,21 @@ public class PropertyServiceImpl implements PropertyService {
             CategoryByPurpose category = categoryByPurposeService
                     .findById(categoryByPurposeId);
 
-            predicate = predicate.and(property.categoryByPurposeId.eq(category.getId()));
+            predicates.add(property.categoryByPurposeId.eq(category.getId()));
         }
 
-        Page<Property> properties = propertyDslRepository.findAll(pageable, predicate);
+        Page<Property> properties = propertyDslRepository
+                .findAll(pageable, predicates.toArray(Predicate[]::new));
 
-        return properties.map(propertyMapper::mapToPropertyResponseDto);
+        return new PageImpl<>(propertyMapper.mapToPropertyResponseDto(properties.getContent()),
+                pageable,
+                properties.getTotalElements());
     }
 
     @Override
     public PropertyResponseDto findById(Long id) {
         Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Приміщення не знайдене"));
+                .orElseThrow(() -> new ServiceApiException("Приміщення не знайдено!"));
 
         return propertyMapper.mapToPropertyResponseDto(property);
     }
