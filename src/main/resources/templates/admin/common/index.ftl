@@ -32,7 +32,7 @@
                 <div class="row g-0">
                     <div class="col-md-7">
                         <label for="search" class="visually-hidden">Пошук</label>
-                        <input name="q" type="search" class="form-control" id="search" placeholder="Пошук">
+                        <input name="q" type="search" class="form-control" id="search" value="${(searchQuery)!}" placeholder="Пошук">
                     </div>
 
                     <div class="col-auto">
@@ -49,20 +49,27 @@
                 <div class="row g-2 mt-1">
                     <div class="col-auto">
                         <select name="status" id="status" class="form-select">
-                            <option value="all" selected>Будь-який статус</option>
-                            <option value="RENT">Орендовані</option>
-                            <option value="NON_RENT">Не орендовані</option>
-                            <option value="FIRST_OR_SECOND_TYPE_LIST">I-II типу</option>
-                            <option value="PRIVATIZED">Приватизовані</option>
-                            <option value="USED_BY_CITY_COUNCIL">Вик. міськвладою</option>
+                            <option value="all" <#if !searchPropertyStatus??>selected</#if>>
+                                Будь-який статус</option>
+                            <option value="RENT" <#if searchPropertyStatus?? && searchPropertyStatus = "RENT">selected</#if>>
+                                Орендовані</option>
+                            <option value="NON_RENT" <#if searchPropertyStatus?? && searchPropertyStatus = "NON_RENT">selected</#if>>
+                                Не орендовані</option>
+                            <option value="FIRST_OR_SECOND_TYPE_LIST" <#if searchPropertyStatus?? && searchPropertyStatus = "FIRST_OR_SECOND_TYPE_LIST">selected</#if>>
+                                I-II типу</option>
+                            <option value="PRIVATIZED" <#if searchPropertyStatus?? && searchPropertyStatus = "PRIVATIZED">selected</#if>>
+                                Приватизовані</option>
+                            <option value="USED_BY_CITY_COUNCIL" <#if searchPropertyStatus?? && searchPropertyStatus = "USED_BY_CITY_COUNCIL">selected</#if>>
+                                Вик. міськвладою</option>
                         </select>
                     </div>
 
                     <div class="col-auto">
                         <select name="category" id="category" class="form-select">
-                            <option value="-1" selected>Будь-яка категорія</option>
+                            <option value="-1" <#if !searchCategoryByPurposeId??>selected</#if>>Будь-яка категорія</option>
                             <#list categoriesByPurpose as categoryByPurpose>
-                                <option value="${categoryByPurpose.id}">${categoryByPurpose.name}</option>
+                                <option value="${categoryByPurpose.id}" <#if searchCategoryByPurposeId?? && searchCategoryByPurposeId = categoryByPurpose.id>selected</#if>>
+                                    ${categoryByPurpose.name}</option>
                             </#list>
                         </select>
                     </div>
@@ -77,6 +84,10 @@
             </a>
             <span class="text-success">*-дані які показуються публічно</span>
             <span class="text-danger">*-дані які приховані</span>
+        </div>
+
+        <div class="h-4 p-1">
+            Знайдено <b>#{propertiesPage.totalElements}</b> результат(ів):
         </div>
 
         <div class="py-1">
