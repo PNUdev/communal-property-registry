@@ -140,7 +140,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr class="stats__item" v-for="stat in stats" v-cloak>
+                    <tr class="stats__item" v-for="stat in stats" v-model="stats" v-cloak>
                         <th scope="row">{{stat.category}}</th>
                         <td>{{stat.totalNumber}}</td>
                         <td>{{stat.numberOfRented}}</td>
