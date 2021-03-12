@@ -2,7 +2,8 @@
 
 <div class="container py-5">
 
-    <form action="/admin/properties/save" method="post" id="address_form" onsubmit="setValues()">
+    <label for="address" class="form-label">Уточніть яку ви хотіли ввести адресу з списку:</label>
+    <form action="/admin/properties/save" method="post" id="address_form" onsubmit="setValues()" class="form-control">
         <select name="address" class="form-select" id="address">
             <#list addressesResponseDto.addresses as address>
                 <option lat="${address.lat}" lon="${address.lon}">${address.address}</option>
@@ -29,7 +30,7 @@
         <input name="amountOfRentPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.amountOfRentPubliclyViewable>checked</#if>/>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <button type="submit" class="btn btn-primary">Вибрати</button>
+        <button type="submit" class="btn btn-primary mt-2">Вибрати</button>
     </form>
 </div>
 

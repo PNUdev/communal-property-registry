@@ -17,6 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -56,7 +57,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
-    public Page<PropertyAdminDto> findAll(String nameOrAddress, Long categoryByPurposeId, String propertyStatus, Pageable pageable) {
+    public Page<PropertyAdminDto> findAll(@Nullable String nameOrAddress, @Nullable Long categoryByPurposeId, @Nullable String propertyStatus, Pageable pageable) {
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -130,7 +131,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
         log.info("Method 'getAddresses' started work!");
 
-        final String url = String.format("https://api.tomtom.com/search/2/geocode/%s.json?" +
+        final String URL = String.format("https://api.tomtom.com/search/2/geocode/%s.json?" +
                         "storeResult=false&limit=20&lat=48.610742062164974f&lon=24.975710390429917&radius=30000&language=uk-UA&key=%s",
                 address, environment.getProperty("application.tomtom.api.key")
         );
@@ -139,7 +140,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         Matcher matcher = null;
 
         try {
-            response = new RestTemplate().getForObject(url, String.class);
+            response = new RestTemplate().getForObject(URL, String.class);
         } catch (RestClientException e) {
             log.error("RestClientException was caught, failed to get response in method 'getAddresses'!");
             throw new ServiceException("Попробуйте ввести іншу адрасу бо ми цю неможем обробити!");
@@ -166,7 +167,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
             throw new IllegalAddressException("Невірно вказаний адрес, ми не можемо знайти де це!");
         }
 
-        log.info("Method 'getAddresses' is going to finish work successful!");
+        log.info("Method 'getAddresses' is going to finish work successfully!");
 
         return new AddressResponseDto(addresses);
     }

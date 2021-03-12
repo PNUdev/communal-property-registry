@@ -73,6 +73,11 @@
                             </#list>
                         </select>
                     </div>
+
+                    <div class="col-auto">
+                        <a href="/admin/properties" class="h3 text-decoration-none">&#128473;</a>
+                    </div>
+
                 </div>
 
             </form>
