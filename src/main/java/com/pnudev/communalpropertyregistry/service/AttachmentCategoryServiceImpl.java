@@ -2,6 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
 import com.pnudev.communalpropertyregistry.dto.AttachmentCategoryDto;
+import com.pnudev.communalpropertyregistry.exception.ServiceException;
 import com.pnudev.communalpropertyregistry.repository.AttachmentCategoryRepository;
 import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
 
     @Override
     public AttachmentCategory findById(Long id) {
-        return attachmentCategoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Категорію не знайдено"));
+        return attachmentCategoryRepository.findById(id).orElseThrow(()-> new ServiceException("Категорію не знайдено"));
     }
 
     @Override
@@ -59,7 +60,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
     public void create(AttachmentCategoryDto attachmentCategoryDto) {
 
         if(attachmentCategoryRepository.existsByName(attachmentCategoryDto.getName())){
-            throw new RuntimeException("Така категорія уже існує");
+            throw new ServiceException("Така категорія уже існує");
         }
 
         AttachmentCategory attachmentCategory = AttachmentCategory.builder()
@@ -75,7 +76,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
     public void delete(Long id) {
 
         if(attachmentRepository.existsByAttachmentCategoryId(id)){
-            throw new RuntimeException("Дана категорія використовується, її не можливо видалити");
+            throw new ServiceException("Дана категорія використовується, її не можливо видалити");
         }
 
         attachmentCategoryRepository.deleteById(id);

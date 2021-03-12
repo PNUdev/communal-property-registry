@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 
 @Controller
-@RequestMapping("/admin/attachmentCategories")
+@RequestMapping("/admin/attachment-categories")
 public class AttachmentCategoryAdminController {
 
     private final AttachmentCategoryService attachmentCategoryService;
@@ -52,7 +52,7 @@ public class AttachmentCategoryAdminController {
 
         attachmentCategoryService.create(attachmentCategoryDto);
 
-        return "redirect:/admin/attachmentCategories";
+        return "redirect:/admin/attachment-categories";
     }
 
     @GetMapping("/edit/{id}")
@@ -68,14 +68,14 @@ public class AttachmentCategoryAdminController {
 
         attachmentCategoryService.updateById(id, attachmentCategoryDto);
 
-        return "redirect:/admin/attachmentCategories";
+        return "redirect:/admin/attachment-categories";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id, Model model){
 
         model.addAttribute("message", "Ви впевнені, що хочете видалити дану категорію?");
-        model.addAttribute("returnBackUrl", "/admin/attachmentCategories/" + id);
+        model.addAttribute("returnBackUrl", "/admin/attachment-categories/" + id);
 
         return "admin/common/deleteConfirmation";
     }
@@ -84,9 +84,9 @@ public class AttachmentCategoryAdminController {
     public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 
         attachmentCategoryService.delete(id);
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно видалено!");
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію було успішно видалено!");
 
-        return "redirect:/admin/attachmentCategories";
+        return "redirect:/admin/attachment-categories";
     }
 
 }

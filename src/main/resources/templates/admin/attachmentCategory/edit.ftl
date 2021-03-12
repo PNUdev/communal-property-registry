@@ -1,11 +1,11 @@
 <#include '../include/header.ftl'>
 
 <div class="m-2">
-    <a class="btn btn-outline-primary" href="/admin/attachmentCategories/${attachmentCategory.id}">&#8592;</a>
+    <a class="btn btn-outline-primary" href="/admin/attachment-categories/${attachmentCategory.id}">&#8592;</a>
 </div>
 
 <div>
-    <form action="/admin/attachmentCategories/edit/${attachmentCategory.id}" method="post">
+    <form action="/admin/attachment-categories/edit/${attachmentCategory.id}" method="post">
         <h2 class="text-center">Оновити категорію</h2>
         <div class="d-flex justify-content-center">
             <label class="form-label" for="name">Назва категорії&#x00A0;&#x00A0;</label>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="d-flex flex-row justify-content-center">
-            <button class="btn btn-info m-1">Зберегти</button>
+            <button class="btn btn-primary m-1">Зберегти</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         </div>
 
