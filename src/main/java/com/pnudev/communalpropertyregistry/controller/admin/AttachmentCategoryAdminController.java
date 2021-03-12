@@ -48,9 +48,10 @@ public class AttachmentCategoryAdminController {
     }
 
     @PostMapping("/new")
-    public String create(AttachmentCategoryDto attachmentCategoryDto){
+    public String create(AttachmentCategoryDto attachmentCategoryDto, RedirectAttributes redirectAttributes){
 
         attachmentCategoryService.create(attachmentCategoryDto);
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію було успішно створено!");
 
         return "redirect:/admin/attachment-categories";
     }
@@ -64,9 +65,11 @@ public class AttachmentCategoryAdminController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editById(@PathVariable Long id, AttachmentCategoryDto attachmentCategoryDto){
+    public String editById(@PathVariable Long id, AttachmentCategoryDto attachmentCategoryDto,
+                           RedirectAttributes redirectAttributes){
 
         attachmentCategoryService.updateById(id, attachmentCategoryDto);
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію було успішно оновлено!");
 
         return "redirect:/admin/attachment-categories";
     }

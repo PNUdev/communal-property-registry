@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
 import com.pnudev.communalpropertyregistry.dto.AttachmentCategoryDto;
-import com.pnudev.communalpropertyregistry.exception.ServiceException;
+import com.pnudev.communalpropertyregistry.exception.AttachmentCategoryException;
 import com.pnudev.communalpropertyregistry.repository.AttachmentCategoryRepository;
 import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,13 +42,21 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
 
     @Override
     public AttachmentCategory findById(Long id) {
-        return attachmentCategoryRepository.findById(id).orElseThrow(()-> new ServiceException("Категорію не знайдено"));
+        return attachmentCategoryRepository.findById(id).orElseThrow(
+                ()-> new AttachmentCategoryException("Категорію не знайдено"));
     }
 
     @Override
     public void updateById(Long id, AttachmentCategoryDto attachmentCategoryDto) {
 
         AttachmentCategory attachmentCategory = findById(id);
+
+        if(attachmentCategoryRepository.existsByName(attachmentCategoryDto.getName()) &&
+                !attachmentCategoryDto.getName().equals(attachmentCategory.getName())){
+
+            throw new AttachmentCategoryException("Категорія з таким іменем уже існує");
+        }
+
         attachmentCategory.setName(attachmentCategoryDto.getName());
         attachmentCategory.setPubliclyViewable(attachmentCategoryDto.isPubliclyViewable());
         attachmentCategoryRepository.save(attachmentCategory);
@@ -60,7 +68,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
     public void create(AttachmentCategoryDto attachmentCategoryDto) {
 
         if(attachmentCategoryRepository.existsByName(attachmentCategoryDto.getName())){
-            throw new ServiceException("Така категорія уже існує");
+            throw new AttachmentCategoryException("Категорія з таким іменем уже існує");
         }
 
         AttachmentCategory attachmentCategory = AttachmentCategory.builder()
@@ -76,7 +84,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
     public void delete(Long id) {
 
         if(attachmentRepository.existsByAttachmentCategoryId(id)){
-            throw new ServiceException("Дана категорія використовується, її не можливо видалити");
+            throw new AttachmentCategoryException("Дана категорія використовується, її не можливо видалити");
         }
 
         attachmentCategoryRepository.deleteById(id);
