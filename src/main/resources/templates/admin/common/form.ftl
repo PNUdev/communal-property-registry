@@ -28,7 +28,7 @@
             <div>
                 <label for="categoryByPurpose" class="form-label">Категорія за призначенням</label>
                 <select name="categoryByPurposeId" class="form-select" id="categoryByPurpose" required>
-                    <#list categoriesByPurpose as categoryByPurpose>
+                    <#list categoryByPurposeResponseDto.categoriesByPurpose as categoryByPurpose>
                         <option value="${categoryByPurpose.id}"
                                 <#if propertyAdminDto?? && categoryByPurpose.name == propertyAdminDto.categoryByPurposeName>selected</#if>>
                             ${categoryByPurpose.name}

@@ -1,6 +1,5 @@
 package com.pnudev.communalpropertyregistry.util.mapper;
 
-<<<<<<< HEAD
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
@@ -27,7 +26,50 @@ public class PropertyMapper {
         this.categoryByPurposeRepository = categoryByPurposeRepository;
     }
 
-    public List<PropertyAdminDto> mapToPropertyAdminDto(List<Property> properties) {
+    public PropertyLocationDto mapToPropertyLocationDto(Tuple tuple) {
+
+        return PropertyLocationDto.builder()
+                .propertyId(tuple.get(property.id))
+                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
+                .lat(tuple.get(property.lat))
+                .lon(tuple.get(property.lon))
+                .build();
+    }
+
+    public List<Property> mapToProperties(List<Tuple> properties) {
+        return properties.stream().map(this::mapToProperty).collect(Collectors.toList());
+    }
+
+    public Property mapToProperty(Tuple tuple) {
+
+        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
+                .lat(tuple.get(property.lat))
+                .lon(tuple.get(property.lon))
+                .build();
+
+        return Property.builder()
+                .id(tuple.get(property.id))
+                .imageUrl(tuple.get(property.imageUrl))
+                .address(tuple.get(property.address))
+                .propertyLocation(propertyLocation)
+                .name(tuple.get(property.name))
+                .categoryByPurposeId(tuple.get(property.categoryByPurposeId))
+                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
+                .area(tuple.get(property.area))
+                .areaTransferred(tuple.get(property.areaTransferred))
+                .balanceHolder(tuple.get(property.balanceHolder))
+                .owner(tuple.get(property.owner))
+                .leaseAgreementEndDate(tuple.get(property.leaseAgreementEndDate).toLocalDate())
+                .amountOfRent(tuple.get(property.amountOfRent))
+                .isAreaTransferredPubliclyViewable(tuple.get(property.isAreaTransferredPubliclyViewable))
+                .isBalanceHolderPubliclyViewable(tuple.get(property.isBalanceHolderPubliclyViewable))
+                .isOwnerPubliclyViewable(tuple.get(property.isOwnerPubliclyViewable))
+                .isLeaseAgreementEndDatePubliclyViewable(tuple.get(property.isLeaseAgreementEndDatePubliclyViewable))
+                .isAmountOfRentPubliclyViewable(tuple.get(property.isAmountOfRentPubliclyViewable))
+                .build();
+    }
+
+    public List<PropertyAdminDto> mapToPropertiesAdminDto(List<Property> properties) {
 
         List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeRepository.findAll();
 
@@ -73,16 +115,6 @@ public class PropertyMapper {
                 .filter(c -> c.getId().equals(id)).findAny();
 
         return categoryByPurpose.orElseThrow(() -> new RuntimeException("Не знайдено категорії за призначенням!"));
-    }
-
-    public PropertyLocationDto mapToPropertyLocationDto(Tuple tuple) {
-
-        return PropertyLocationDto.builder()
-                .propertyId(tuple.get(property.id))
-                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
-                .lat(tuple.get(property.lat))
-                .lon(tuple.get(property.lon))
-                .build();
     }
 
 }

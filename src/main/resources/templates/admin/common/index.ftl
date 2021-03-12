@@ -67,7 +67,7 @@
                     <div class="col-auto">
                         <select name="category" id="category" class="form-select">
                             <option value="-1" <#if !searchCategoryByPurposeId??>selected</#if>>Будь-яка категорія</option>
-                            <#list categoriesByPurpose as categoryByPurpose>
+                            <#list categoryByPurposeResponseDto.categoriesByPurpose as categoryByPurpose>
                                 <option value="${categoryByPurpose.id}" <#if searchCategoryByPurposeId?? && searchCategoryByPurposeId = categoryByPurpose.id>selected</#if>>
                                     ${categoryByPurpose.name}</option>
                             </#list>

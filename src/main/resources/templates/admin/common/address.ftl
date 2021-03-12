@@ -13,6 +13,7 @@
         <input type="hidden" name="lat" id="lat">
         <input type="hidden" name="lon" id="lon">
 
+        <input type="hidden" name="id" value="<#if propertyAdminFormDto.id??>#{propertyAdminFormDto.id}</#if>"/>
         <input name="imageUrl" type="hidden" value="${propertyAdminFormDto.imageUrl}">
         <input name="name" type="hidden" value="${propertyAdminFormDto.name}">
         <input name="categoryByPurposeId" type="hidden" value="#{propertyAdminFormDto.categoryByPurposeId}">

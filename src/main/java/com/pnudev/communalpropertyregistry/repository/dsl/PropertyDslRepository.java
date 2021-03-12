@@ -12,4 +12,6 @@ public interface PropertyDslRepository {
 
     PropertiesLocationsResponseDto findAllMapLocations(Predicate... where);
 
+    Page<Property> findAll(Pageable pageable, Predicate... where);
+
 }

@@ -1,8 +1,8 @@
 package com.pnudev.communalpropertyregistry.controller.admin;
 
-import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.AddressDto;
 import com.pnudev.communalpropertyregistry.dto.AddressResponseDto;
+import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 import static java.util.Objects.nonNull;
@@ -49,11 +47,11 @@ public class PropertyAdminController {
                           @PageableDefault(sort = "name") Pageable pageable,
                           Model model) {
 
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
+        CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
         Page<PropertyAdminDto> propertiesAdminPage = propertyAdminService.findAll(
                 searchQuery, categoryByPurposeId, propertyStatus, pageable);
 
-        model.addAttribute("categoriesByPurpose", categoriesByPurpose);
+        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);
         model.addAttribute("propertiesPage", propertiesAdminPage);
 
         if (nonNull(searchQuery)) {
@@ -74,9 +72,9 @@ public class PropertyAdminController {
     @GetMapping("/new")
     public String create(Model model) {
 
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
+        CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
 
-        model.addAttribute("categoriesByPurpose", categoriesByPurpose);
+        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);
 
         return "admin/common/form";
     }
@@ -85,10 +83,10 @@ public class PropertyAdminController {
     public String update(@PathVariable(name = "id") Long id, Model model) {
 
         PropertyAdminDto propertyAdminDto = propertyAdminService.findById(id);
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
+        CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
 
         model.addAttribute("propertyAdminDto", propertyAdminDto);
-        model.addAttribute("categoriesByPurpose", categoriesByPurpose);
+        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);
 
         return "admin/common/form";
     }
