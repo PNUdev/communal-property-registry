@@ -100,7 +100,7 @@
                 <div class="row my-3 bg-light rounded p-3">
 
                     <div class="col-md-4">
-                        <img src="${property.imageUrl}" alt="Ілюстрація майна" class="mw-100 mh-100">
+                        <img src="${property.imageUrl}" alt="Ілюстрація майна" class="mw-100 mh-100 w-100" onerror="this.src='/images/default_img.png'">
                     </div>
 
                     <div class="col-md-5 d-flex flex-column col-md-5 justify-content-between">

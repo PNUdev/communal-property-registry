@@ -18,7 +18,7 @@ public class ExceptionInterceptor {
                                           RedirectAttributes redirectAttributes,
                                           HttpServletRequest request) {
 
-        log.error("IllegalAddressException was thrown, httpServletRequest: {}", request, illegalAddressException);
+        log.info("IllegalAddressException was resolved");
 
         redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), illegalAddressException.getMessage());
 
