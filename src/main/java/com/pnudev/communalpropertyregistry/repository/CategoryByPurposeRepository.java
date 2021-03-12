@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface CategoryByPurposeRepository extends CrudRepository<CategoryByPurpose, Long> {
 
-    @Override
     List<CategoryByPurpose> findAll();
 
 }

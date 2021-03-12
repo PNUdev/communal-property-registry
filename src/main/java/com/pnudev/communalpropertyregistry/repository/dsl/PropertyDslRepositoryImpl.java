@@ -34,6 +34,7 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
     @Override
     public PropertiesLocationsResponseDto findAllMapLocations(Predicate... where) {
 
+
         List<Tuple> properties = queryFactory
                 .select(property.id, property.propertyStatus, property.lon, property.lat)
                 .from(property)
