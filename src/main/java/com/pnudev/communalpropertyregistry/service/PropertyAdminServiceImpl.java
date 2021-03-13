@@ -5,8 +5,8 @@ import com.pnudev.communalpropertyregistry.dto.AddressDto;
 import com.pnudev.communalpropertyregistry.dto.AddressResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
-import com.pnudev.communalpropertyregistry.exception.IllegalAddressException;
-import com.pnudev.communalpropertyregistry.exception.ServiceException;
+import com.pnudev.communalpropertyregistry.exception.IllegalAddressAdminException;
+import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
@@ -57,12 +57,16 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
-    public Page<PropertyAdminDto> findAll(@Nullable String nameOrAddress, @Nullable Long categoryByPurposeId, @Nullable String propertyStatus, Pageable pageable) {
+    public Page<PropertyAdminDto> findAll(@Nullable String nameOrAddress,
+                                          @Nullable Long categoryByPurposeId,
+                                          @Nullable String propertyStatus,
+                                          Pageable pageable) {
 
         List<Predicate> predicates = new ArrayList<>();
 
         if (nonNull(nameOrAddress)) {
-            predicates.add(property.name.contains(nameOrAddress).or(property.address.contains(nameOrAddress)));
+            predicates.add(property.name.contains(nameOrAddress)
+                    .or(property.address.contains(nameOrAddress)));
         }
 
         if (nonNull(categoryByPurposeId)) {
@@ -84,7 +88,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     public PropertyAdminDto findById(Long id) {
 
         Property property = propertyRepository.findById(id).orElseThrow(
-                () -> new ServiceException("Майно не знайдено!"));
+                () -> new ServiceAdminException("Майно не знайдено!"));
 
         return propertyMapper.mapToPropertyAdminDto(property);
     }
@@ -143,7 +147,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
             response = new RestTemplate().getForObject(URL, String.class);
         } catch (RestClientException e) {
             log.error("RestClientException was caught, failed to get response in method 'getAddresses'!");
-            throw new ServiceException("Попробуйте ввести іншу адрасу бо ми цю неможем обробити!");
+            throw new IllegalAddressAdminException("Таку адресу неможливо обробити, спробуйте ввести іншу!");
         }
 
         if (nonNull(response)) {
@@ -164,7 +168,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         }
 
         if (addresses.isEmpty()) {
-            throw new IllegalAddressException("Невірно вказаний адрес, ми не можемо знайти де це!");
+            throw new IllegalAddressAdminException("Невірно вказаний адрес!");
         }
 
         log.info("Method 'getAddresses' is going to finish work successfully!");

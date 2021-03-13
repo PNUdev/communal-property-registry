@@ -5,7 +5,6 @@ import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,7 +32,6 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
     @Override
     public PropertiesLocationsResponseDto findAllMapLocations(Predicate... where) {
-
 
         List<Tuple> properties = queryFactory
                 .select(property.id, property.propertyStatus, property.lon, property.lat)

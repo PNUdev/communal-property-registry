@@ -44,7 +44,7 @@ public class PropertyAdminController {
     public String findAll(@Nullable @RequestParam(name = "q") String searchQuery,
                           @Nullable @RequestParam(name = "category") Long categoryByPurposeId,
                           @Nullable @RequestParam(name = "status") String propertyStatus,
-                          @PageableDefault(sort = "name") Pageable pageable,
+                          @PageableDefault Pageable pageable,
                           Model model) {
 
         CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
@@ -66,17 +66,13 @@ public class PropertyAdminController {
             model.addAttribute("searchPropertyStatus", propertyStatus);
         }
 
-        return "admin/common/index";
+        return "admin/property/index";
     }
 
     @GetMapping("/new")
     public String create(Model model) {
-
-        CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
-
-        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);
-
-        return "admin/common/form";
+        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeService.findAll());
+        return "admin/property/form";
     }
 
     @GetMapping("/update/{id}")
@@ -88,7 +84,7 @@ public class PropertyAdminController {
         model.addAttribute("propertyAdminDto", propertyAdminDto);
         model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);
 
-        return "admin/common/form";
+        return "admin/property/form";
     }
 
 
@@ -108,7 +104,7 @@ public class PropertyAdminController {
             return "redirect:/admin/properties";
         }
 
-        return "/admin/common/address";
+        return "/admin/property/address";
     }
 
     @PostMapping("/save")
@@ -116,11 +112,10 @@ public class PropertyAdminController {
                        AddressDto addressDto,
                        RedirectAttributes redirectAttributes) {
 
-
         if (nonNull(addressDto) && nonNull(addressDto.getLat()) && nonNull(addressDto.getLon())) {
             propertyAdminService.save(propertyAdminFormDto, addressDto);
 
-            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно створено(оновлено)!");
+            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
             return "redirect:/admin/properties";
         }
 
@@ -129,7 +124,7 @@ public class PropertyAdminController {
         if (addresses.getAddresses().size() == 1) {
             propertyAdminService.save(propertyAdminFormDto, addresses.getAddresses().get(0));
 
-            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно створено(оновлено)!");
+            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
             return "redirect:/admin/properties";
         }
 
@@ -144,7 +139,7 @@ public class PropertyAdminController {
 
         propertyAdminService.delete(id);
 
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно було успішно видалено!");
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно видалено!");
 
         return "redirect:/admin/properties";
     }

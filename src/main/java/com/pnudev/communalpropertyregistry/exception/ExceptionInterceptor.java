@@ -13,27 +13,37 @@ import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.ERR
 @ControllerAdvice
 public class ExceptionInterceptor {
 
-    @ExceptionHandler(IllegalAddressException.class)
-    public String illegalAddressException(IllegalAddressException illegalAddressException,
-                                          RedirectAttributes redirectAttributes,
-                                          HttpServletRequest request) {
+    @ExceptionHandler(CategoryByPurposeException.class)
+    public String categoryByPurposeException(CategoryByPurposeException categoryByPurposeException,
+                                             RedirectAttributes redirectAttributes) {
 
-        log.info("IllegalAddressException was resolved");
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), categoryByPurposeException.getMessage());
 
-        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), illegalAddressException.getMessage());
+        log.info("CategoryByPurposeException was resolved");
 
         return "redirect:/admin/properties";
     }
 
-    @ExceptionHandler(ServiceException.class)
-    public String serviceException(ServiceException serviceException, RedirectAttributes redirectAttributes,
+    @ExceptionHandler(IllegalAddressAdminException.class)
+    public String illegalAddressException(IllegalAddressAdminException illegalAddressException,
+                                          RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), illegalAddressException.getMessage());
+
+        log.info("IllegalAddressAdminException was resolved");
+
+        return "redirect:/admin/properties";
+    }
+
+    @ExceptionHandler(ServiceAdminException.class)
+    public String serviceAdminException(ServiceAdminException serviceAdminException, RedirectAttributes redirectAttributes,
                                    HttpServletRequest request) {
 
-        log.error("ServiceException was thrown, httpServletRequest: {}", request, serviceException);
+        log.error("ServiceAdminException was thrown, httpServletRequest: {}", request, serviceAdminException);
 
-        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceException.getMessage());
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceAdminException.getMessage());
 
-        return "redirect:/";
+        return "redirect:/admin/properties";
     }
 
 }
