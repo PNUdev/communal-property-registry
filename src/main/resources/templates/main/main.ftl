@@ -68,7 +68,7 @@
 
         </div>
 
-        <div class="property-items">
+        <div class="property-items" v-cloak>
             <div class="property" v-model="properties" v-for="prop in properties"
                         @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 

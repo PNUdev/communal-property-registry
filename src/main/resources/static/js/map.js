@@ -53,7 +53,7 @@ function updateMarkers(){
 async function getMarkers(){
     axios.get(`/api/properties/map-locations` + location.search)
         .then(resp => {
-            resp.data.forEach(propertyLocationData => {
+            resp.data["mapLocations"].forEach(propertyLocationData => {
                 addMarker({
                     id: propertyLocationData.propertyId,
 

@@ -34,7 +34,7 @@ const APP_PROPERTIES = new Vue({
 
         async getCategories(){
             axios.get('/api/categories-by-purpose')
-                .then(resp => this.categories = resp.data)
+                .then(resp => this.categories = resp.data["categoriesByPurpose"])
                 .catch(error => {
                     console.error("CATEGORIES-BY-PURPOSE FAILED TO LOAD\n" + error);
                 })
@@ -177,7 +177,7 @@ const APP_STATS = new Vue({
     methods: {
         async getStatistics() {
             axios.get('/api/statistics')
-                .then(resp => this.stats = resp.data)
+                .then(resp => this.stats = resp.data["propertyStatistics"])
                 .catch(error => {
                     console.error("STATISTICS FAILED TO LOAD\n" + error);
                 })
