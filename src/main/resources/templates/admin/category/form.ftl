@@ -36,7 +36,7 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
             <div class="d-flex justify-content-center">
-                <button id="submit-button" class="mt-2 btn btn-primary "
+                <button <#if category??>disabled</#if> id="submit-button" class="mt-2 btn btn-primary "
                         type="submit"><#if category??>Оновити<#else >Створити</#if></button>
             </div>
         </form>
@@ -50,21 +50,15 @@
 
         let input_field = document.getElementById("category-name");
 
-        input_field.addEventListener("load", preventSameNameSubmit());
-        input_field.addEventListener("change", preventSameNameSubmit);
-
-        function preventSameNameSubmit() {
+        input_field.addEventListener("change", () => {
 
             let button = document.getElementById("submit-button");
 
-            if (input_field.value == "${category.name}") {
-                button.setAttribute("disabled", "disabled");
-
-            } else {
+            if (input_field.value != "${category.name}") {
                 button.removeAttribute("disabled");
             }
 
-        }
+        });
 
     </script>
 </#if>

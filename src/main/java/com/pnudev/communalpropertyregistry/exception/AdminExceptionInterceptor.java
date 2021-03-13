@@ -20,6 +20,16 @@ public class AdminExceptionInterceptor {
         return "main/error";
     }
 
+    @ExceptionHandler(CategoryExistsException.class)
+    public String categoryExistsException(CategoryExistsException categoryExistsException,
+                                        HttpServletRequest request,
+                                        Model model) {
+
+        model.addAttribute("errorMessage", categoryExistsException.getMessage());
+        model.addAttribute("previousLocation", "/admin/categories/");
+        return "main/error";
+    }
+
     @ExceptionHandler(CategoryDuplicationException.class)
     public String categoryDuplicationException(HttpServletRequest request,
                                                CategoryDuplicationException categoryDuplicationException,
