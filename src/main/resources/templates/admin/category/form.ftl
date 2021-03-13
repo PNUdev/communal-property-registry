@@ -25,8 +25,11 @@
                        <#if category?? >value="${category.name}"</#if> autofocus>
 
                 <#if message?? >
-                    <small id="nameMessage"
-                           class="form-text text-warning bg-primary rounded px-4">${message}</small>
+                    <div class="d-flex justify-content-center">
+                        <small id="nameMessage" class="form-text text-warning bg-primary rounded px-4">
+                            ${message}
+                        </small>
+                    </div>
                 </#if>
 
             </div>
