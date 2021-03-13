@@ -3,6 +3,7 @@ package com.pnudev.communalpropertyregistry.service;
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.form.CategoryByPurposeFormDto;
 import com.pnudev.communalpropertyregistry.exception.CategoryDuplicationException;
+import com.pnudev.communalpropertyregistry.exception.CategoryExistsException;
 import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
 
     private final CategoryByPurposeRepository categoryByPurposeRepository;
+
     private final PropertyRepository propertyRepository;
 
     @Autowired
@@ -72,7 +74,8 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     public void delete(Long id) {
 
         if (propertyRepository.existsByCategoryByPurposeId(id)) {
-            throw new ServiceAdminException("Дію неможливо виконати, оскільки дана категорія активно використовується!");
+            log.error("Category is used by property. Can't delete category");
+            throw new CategoryExistsException("Дію неможливо виконати, оскільки дана категорія активно використовується!");
         }
 
         categoryByPurposeRepository.deleteById(id);
@@ -82,10 +85,10 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     private void validateCategoryName(String name) {
 
         if (categoryByPurposeRepository.existsByName(name)) {
+            log.error("Category with name {} already exists", name);
             throw new CategoryDuplicationException("Категорія з даною назвою уже існує!");
         }
 
-        log.error("Category with name {} already exists", name);
     }
 
 }

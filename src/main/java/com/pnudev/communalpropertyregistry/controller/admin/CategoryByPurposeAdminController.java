@@ -89,8 +89,7 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteConfirmation(@PathVariable("id") Long id, Model model,
-                                     @RequestHeader("referer") String returnBackUrl) {
+    public String deleteConfirmation(Model model, @RequestHeader("referer") String returnBackUrl) {
 
         model.addAttribute("message", "Ви впевнені, що хочете видалити дану категорію?");
         model.addAttribute("returnBackUrl", returnBackUrl);
