@@ -2,6 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.form.CategoryByPurposeFormDto;
+import com.pnudev.communalpropertyregistry.exception.CategoryDuplicationException;
 import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
@@ -81,7 +82,7 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     private void validateCategoryName(String name) {
 
         if (categoryByPurposeRepository.existsByName(name)) {
-            throw new ServiceAdminException("Категорія з даною назвою уже існує!");
+            throw new CategoryDuplicationException("Категорія з даною назвою уже існує!");
         }
 
         log.error("Category with name {} already exists", name);
