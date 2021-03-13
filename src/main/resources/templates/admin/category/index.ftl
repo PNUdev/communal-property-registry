@@ -30,51 +30,61 @@
         </tbody>
     </table>
 
-    <div class="categories__pages">
+    <#if (categoriesPage.totalPages > 1) >
 
-        <div>
-            <ul class="pagination mx-auto d-inline-flex">
+        <div class="categories__pages">
 
-                <#if !categoriesPage.first >
-                    <form action="/admin/categories" method="GET">
-                        <li class="page-item">
-                            <button type="submit"
-                                    class="page-link">
-                                Перша
-                            </button>
-                        </li>
-                        <input type="hidden" name="page" value="0">
-                    </form>
-                </#if>
+            <div>
+                <ul class="pagination mx-auto d-inline-flex">
 
-                <#list 1..categoriesPage.totalPages as pageNumber>
-                    <form action="/admin/categories" method="GET">
-                        <li class="page-item <#if pageNumber - 1 == categoriesPage.number>active</#if>">
-                            <button type="submit"
-                                    class="page-link">
-                                ${pageNumber}
-                            </button>
-                        </li>
-                        <input type="hidden" name="page" value="${pageNumber - 1}">
-                    </form>
-                </#list>
+                    <#if !categoriesPage.first >
+                        <form action="/admin/categories" method="GET">
+                            <li class="page-item">
+                                <button type="submit"
+                                        class="page-link">
+                                    Перша
+                                </button>
+                            </li>
+                            <input type="hidden" name="page" value="0">
+                        </form>
+                    </#if>
 
-                <#if !categoriesPage.last >
-                    <form action="/admin/categories" method="GET">
-                        <li class="page-item">
-                            <button type="submit"
-                                    class="page-link">
-                                Остання
-                            </button>
-                        </li>
-                        <input type="hidden" name="page" value="${categoriesPage.totalPages - 1}">
-                    </form>
-                </#if>
+                    <#list 1..categoriesPage.totalPages as pageNumber>
+                        <form action="/admin/categories" method="GET">
+                            <li class="page-item <#if pageNumber - 1 == categoriesPage.number>active</#if>">
+                                <button type="submit"
+                                        class="page-link">
+                                    ${pageNumber}
+                                </button>
+                            </li>
+                            <input type="hidden" name="page" value="${pageNumber}">
+                        </form>
+                    </#list>
 
-            </ul>
+                    <#if !categoriesPage.last >
+                        <form action="/admin/categories" method="GET">
+                            <li class="page-item">
+                                <button type="submit"
+                                        class="page-link">
+                                    Остання
+                                </button>
+                            </li>
+                            <input type="hidden" name="page" value="${categoriesPage.totalPages}">
+                        </form>
+                    </#if>
+
+                </ul>
+            </div>
+
         </div>
 
-    </div>
+    </#if>
+
+    <#if categoriesPage.totalElements == 0>
+        <div class="alert alert-primary w-75 text-center mx-auto mt-5">
+            Список категорій порожній
+        </div>
+    </#if>
 
 </div>
 

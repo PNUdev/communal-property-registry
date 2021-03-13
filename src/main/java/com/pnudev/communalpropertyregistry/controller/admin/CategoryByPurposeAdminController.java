@@ -64,7 +64,7 @@ public class CategoryByPurposeAdminController {
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
                 "Категорія створена успішно!");
 
-        return "redirect:/admin/categories/new";
+        return "redirect:/admin/categories";
     }
 
     @GetMapping("/edit/{id}")
