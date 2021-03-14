@@ -24,7 +24,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
-    public List<Attachment> findByPropertyIdIn(Collection<Long> id) {
+    public List<Attachment> findByPropertyIdIn(List<Long> id) {
         return attachmentRepository.findAttachmentsByPropertyIdIn(id);
     }
 

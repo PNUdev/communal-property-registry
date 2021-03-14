@@ -9,6 +9,6 @@ public interface AttachmentService {
 
     List<Attachment> findByPropertyId(Long id);
 
-    List<Attachment> findByPropertyIdIn(Collection<Long> id);
+    List<Attachment> findByPropertyIdIn(List<Long> id);
 
 }

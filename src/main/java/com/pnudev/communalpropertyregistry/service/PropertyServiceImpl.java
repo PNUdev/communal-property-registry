@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
@@ -74,12 +75,8 @@ public class PropertyServiceImpl implements PropertyService {
     public Page<PropertyResponseDto> findPropertiesBySearchQuery(String searchQuery, String propertyStatus,
                                                          Long categoryByPurposeId, Pageable pageable) {
 
-        // Used for predicate initialization.
-        // Following query predicate will return all records
-
-        List<Predicate> predicates = new ArrayList<>() {{
-            add(property.id.isNotNull());
-        }};
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(property.id.isNotNull());
 
         if (nonNull(searchQuery)) {
 
@@ -113,11 +110,6 @@ public class PropertyServiceImpl implements PropertyService {
                 .orElseThrow(() -> new ServiceApiException("Приміщення не знайдено!"));
 
         return propertyMapper.mapToPropertyResponseDto(property);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        propertyRepository.deleteById(id);
     }
 
 }

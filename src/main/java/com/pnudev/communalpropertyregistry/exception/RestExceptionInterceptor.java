@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RestExceptionInterceptor {
 
 //    @ExceptionHandler(Exception.class)
-//    public ErrorResponse generalError() {
-//        return ErrorResponse.builder()
-//                .message("Внутрішня помилка сервера")
-//                .status(500)
-//                .build();
-//    }
+    public ErrorResponse generalError() {
+        return ErrorResponse.builder()
+                .message("Внутрішня помилка сервера")
+                .status(500)
+                .build();
+    }
 
     @ExceptionHandler(ServiceApiException.class)
     public ErrorResponse serviceApiException(ServiceApiException serviceApiException) {

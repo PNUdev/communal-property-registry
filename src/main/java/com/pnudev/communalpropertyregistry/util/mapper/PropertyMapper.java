@@ -98,7 +98,7 @@ public class PropertyMapper {
                 .build();
     }
 
-    public Property mapTupleToProperty(Tuple tuple) {
+    public Property mapToProperty(Tuple tuple) {
 
         Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
                 .lat(tuple.get(property.lat))
