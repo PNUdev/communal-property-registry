@@ -78,11 +78,14 @@
                 <div class="property-data">
                     <h3 class="property__title">{{prop.name}}</h3>
 
-                    <p class="property__area_transferred" v-if="prop.areaTransferred">
-                        {{prop.areaTransferred}}м<sup>2</sup>
-                    </p>
+                    <div class="property-area-main">
+                        <p class="property__area_transferred" v-if="prop.areaTransferred">
+                            {{prop.areaTransferred}}м<sup>2</sup>
+                        </p>
 
-                    <p class="property__area">{{prop.area}}м<sup>2</sup></p>
+                        <p class="property__area">{{prop.area}}м<sup>2</sup></p>
+                    </div>
+
                     <p class="property__address">{{prop.address}}</p>
 
                     <p :style="{background:getStatusLabelColor(prop.status)}" class="property__status">
@@ -101,14 +104,17 @@
                         </li>
                     </ul>
 
-                    <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
-                            @click="showAttachmentsModal(prop.attachments)">
+                    <div class="property__footer">
+                        <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
+                                @click="showAttachmentsModal(prop.attachments)">
 
-                        Переглянути прикріплення &#129034;
-                    </button>
+                            Переглянути прикріплення &#129034;
+                        </button>
 
-                    <p v-if="prop.amountOfRent" class="property__amount">{{prop.amountOfRent}}₴</p>
+                        <p v-if="prop.amountOfRent" class="property__amount">{{prop.amountOfRent}}₴</p>
+                    </div>
                 </div>
+
             </div>
         </div>
 
