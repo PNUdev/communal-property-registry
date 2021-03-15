@@ -109,6 +109,29 @@ public class PropertyAdminController {
         return "/admin/property/address";
     }
 
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable(name = "id") Long id,
+                         PropertyAdminFormDto propertyAdminFormDto,
+                         RedirectAttributes redirectAttributes,
+                         AddressDto addressDto) {
+
+        if (isNull(addressDto.getLat()) || isNull(addressDto.getLon())) {
+            List<AddressDto> addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
+            if (addresses.size() != 1) {
+                redirectAttributes.addFlashAttribute("addressDto", addresses);
+                redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
+                return "redirect:/admin/properties/addresses";
+            } else {
+                addressDto = addresses.get(0);
+            }
+        }
+
+        propertyAdminService.update(id, propertyAdminFormDto, addressDto);
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно усішно оновлено!");
+
+        return "redirect:/admin/properties";
+    }
+
     @PostMapping("/save")
     public String save(PropertyAdminFormDto propertyAdminFormDto,
                        AddressDto addressDto,
@@ -125,8 +148,8 @@ public class PropertyAdminController {
             }
         }
 
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
         propertyAdminService.save(propertyAdminFormDto, addressDto);
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено!");
 
         return "redirect:/admin/properties";
     }

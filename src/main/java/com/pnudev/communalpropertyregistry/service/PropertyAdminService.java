@@ -16,6 +16,8 @@ public interface PropertyAdminService {
 
     void save(PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
 
+    void update(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
+
     List<AddressDto> getAddresses(String address);
 
     void delete(Long id);

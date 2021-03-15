@@ -13,7 +13,6 @@
         <input type="hidden" name="lat" id="lat">
         <input type="hidden" name="lon" id="lon">
 
-        <input type="hidden" name="id" value="<#if propertyAdminFormDto.id??>#{propertyAdminFormDto.id}</#if>"/>
         <input name="imageUrl" type="hidden" value="${propertyAdminFormDto.imageUrl}">
         <input name="name" type="hidden" value="${propertyAdminFormDto.name}">
         <input name="categoryByPurposeId" type="hidden" value="#{propertyAdminFormDto.categoryByPurposeId}">
@@ -31,7 +30,7 @@
         <input name="amountOfRentPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.amountOfRentPubliclyViewable>checked</#if>/>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <button type="submit" class="btn btn-primary mt-2">Вибрати</button>
+        <button type="submit" class="btn btn-primary mt-2" <#if propertyAdminFormDto.id??> formaction="/admin/properties/update/#{propertyAdminFormDto.id}"</#if>>Вибрати</button>
     </form>
 </div>
 

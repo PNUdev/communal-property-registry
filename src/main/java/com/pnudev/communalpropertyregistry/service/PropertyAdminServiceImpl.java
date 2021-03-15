@@ -91,6 +91,38 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
+    public void update(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
+
+        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
+                .lat(address.getLat())
+                .lon(address.getLon())
+                .build();
+
+        Property property = Property.builder()
+                .id(id)
+                .imageUrl(propertyAdminFormDto.getImageUrl())
+                .address(propertyAdminFormDto.getAddress())
+                .propertyLocation(propertyLocation)
+                .name(propertyAdminFormDto.getName())
+                .categoryByPurposeId(propertyAdminFormDto.getCategoryByPurposeId())
+                .propertyStatus(propertyAdminFormDto.getPropertyStatus())
+                .area(propertyAdminFormDto.getArea())
+                .areaTransferred(propertyAdminFormDto.getAreaTransferred())
+                .balanceHolder(propertyAdminFormDto.getBalanceHolder())
+                .owner(propertyAdminFormDto.getOwner())
+                .leaseAgreementEndDate(propertyAdminFormDto.getLeaseAgreementEndDate())
+                .amountOfRent(propertyAdminFormDto.getAmountOfRent())
+                .isAreaTransferredPubliclyViewable(propertyAdminFormDto.isAreaTransferredPubliclyViewable())
+                .isBalanceHolderPubliclyViewable(propertyAdminFormDto.isBalanceHolderPubliclyViewable())
+                .isOwnerPubliclyViewable(propertyAdminFormDto.isOwnerPubliclyViewable())
+                .isLeaseAgreementEndDatePubliclyViewable(propertyAdminFormDto.isLeaseAgreementEndDatePubliclyViewable())
+                .isAmountOfRentPubliclyViewable(propertyAdminFormDto.isAmountOfRentPubliclyViewable())
+                .build();
+
+        propertyRepository.save(property);
+    }
+
+    @Override
     public void save(PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
 
         Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
@@ -99,7 +131,6 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
                 .build();
 
         Property property = Property.builder()
-                .id(propertyAdminFormDto.getId())
                 .imageUrl(propertyAdminFormDto.getImageUrl())
                 .address(propertyAdminFormDto.getAddress())
                 .propertyLocation(propertyLocation)

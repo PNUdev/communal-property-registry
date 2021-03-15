@@ -161,12 +161,14 @@
             </div>
 
             <div class="d-flex justify-content-evenly mt-3">
-                <input type="hidden" name="id" value="${(propertyAdminDto.id)!}"
-                       <#if !propertyAdminDto??>disabled</#if>/>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <button type="submit" class="btn btn-outline-primary">Зберегти</button>
                 <#if propertyAdminDto??>
+                    <button type="submit" class="btn btn-outline-primary" formaction="/admin/properties/update/${propertyAdminDto.id}">
+                        Оновити
+                    </button>
                     <a href="/admin/properties/delete/#{propertyAdminDto.id}" class="link-danger">Видалити</a>
+                <#else >
+                    <button type="submit" class="btn btn-outline-primary">Зберегти</button>
                 </#if>
             </div>
         </form>

@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PropertyAdminFormDto {
 
-    private Long id;
-
     private String imageUrl;
 
     private String address;
