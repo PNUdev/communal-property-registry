@@ -14,8 +14,8 @@ public interface CategoryByPurposeService {
 
     void create(CategoryByPurposeFormDto categoryByPurposeDto);
 
-    void update(CategoryByPurposeFormDto categoryByPurposeDto, Long categoryId);
+    void updateById(CategoryByPurposeFormDto categoryByPurposeDto, Long categoryId);
 
-    void delete(Long id);
+    void deleteById(Long id);
 
 }

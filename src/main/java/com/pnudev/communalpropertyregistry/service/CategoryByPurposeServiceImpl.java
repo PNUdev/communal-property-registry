@@ -55,7 +55,7 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public void update(CategoryByPurposeFormDto categoryByPurposeDto, Long categoryId) {
+    public void updateById(CategoryByPurposeFormDto categoryByPurposeDto, Long categoryId) {
 
         validateCategoryName(categoryByPurposeDto.getName());
 
@@ -71,7 +71,7 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
 
         if (propertyRepository.existsByCategoryByPurposeId(id)) {
             log.error("Category is used by property. Can't delete category");
