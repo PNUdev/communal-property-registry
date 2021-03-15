@@ -19,7 +19,7 @@
                     <label class="mb-3 h3 user-select-none" for="category-name">Назва категорії</label>
                 </div>
 
-                <input type="text" class="form-control" name="name"
+                <input required type="text" class="form-control" name="name"
                        aria-describedby="nameMessage"
                        id="category-name" placeholder="Введіть назву категорії"
                        <#if category?? >value="${category.name}"</#if> autofocus>

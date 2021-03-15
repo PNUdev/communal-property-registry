@@ -81,7 +81,7 @@ public class CategoryByPurposeAdminController {
                          @Validated CategoryByPurposeFormDto categoryByPurposeDto,
                          RedirectAttributes redirectAttributes) {
 
-        categoryByPurposeService.update(categoryByPurposeDto, categoryId);
+        categoryByPurposeService.updateById(categoryByPurposeDto, categoryId);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
                 "Категорія оновлена успішно!");
 
@@ -98,9 +98,9 @@ public class CategoryByPurposeAdminController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteById(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 
-        categoryByPurposeService.delete(id);
+        categoryByPurposeService.deleteById(id);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(),
                 "Категорія видалена успішно!");
