@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Controller
@@ -113,28 +114,21 @@ public class PropertyAdminController {
                        AddressDto addressDto,
                        RedirectAttributes redirectAttributes) {
 
-        List<AddressDto> addresses = null;
-
-        if (nonNull(addressDto) && nonNull(addressDto.getLat()) && nonNull(addressDto.getLon())) {
-            propertyAdminService.save(propertyAdminFormDto, addressDto);
-        } else {
-            addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
-            if (addresses.size() == 1) {
-                propertyAdminService.save(propertyAdminFormDto, addresses.get(0));
+        if (isNull(addressDto.getLat()) || isNull(addressDto.getLon())) {
+            List<AddressDto> addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
+            if (addresses.size() != 1) {
+                redirectAttributes.addFlashAttribute("addressDto", addresses);
+                redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
+                return "redirect:/admin/properties/addresses";
+            } else {
+                addressDto = addresses.get(0);
             }
         }
 
-        if (nonNull(addressDto) && nonNull(addressDto.getLat()) && nonNull(addressDto.getLon())
-        || addresses.size() == 1) {
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
+        propertyAdminService.save(propertyAdminFormDto, addressDto);
 
-            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
-            return "redirect:/admin/properties";
-        }
-
-        redirectAttributes.addFlashAttribute("addressDto", addresses);
-        redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
-
-        return "redirect:/admin/properties/addresses";
+        return "redirect:/admin/properties";
     }
 
     @PostMapping("/delete/{id}")
