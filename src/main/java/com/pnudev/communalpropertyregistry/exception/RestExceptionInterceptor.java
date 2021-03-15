@@ -18,7 +18,7 @@ public class RestExceptionInterceptor {
     public ErrorResponse serviceApiException(ServiceApiException serviceApiException) {
         return ErrorResponse.builder()
                 .message(serviceApiException.getMessage())
-                .status(400)
+                .status(404)
                 .build();
     }
 }

@@ -47,7 +47,7 @@ public class PropertyMapper {
         CategoryByPurpose categoryByPurpose = categoryByPurposeService
                 .findById(property.getCategoryByPurposeId());
 
-        return PropertyResponseDto.builder()
+        return createPropertyResponseDtoWithPublicFields(property).toBuilder()
                 .id(property.getId())
                 .area(property.getArea())
                 .name(property.getName())
@@ -55,15 +55,6 @@ public class PropertyMapper {
                 .imageUrl(property.getImageUrl())
                 .propertyStatus(property.getPropertyStatus())
                 .propertyLocation(property.getPropertyLocation())
-                .owner(property.isOwnerPubliclyViewable() ? property.getOwner() : null)
-                .amountOfRent(property.isAmountOfRentPubliclyViewable() ?
-                        property.getAmountOfRent() : null)
-                .balanceHolder(property.isBalanceHolderPubliclyViewable() ?
-                        property.getBalanceHolder() : null)
-                .areaTransferred(property.isAreaTransferredPubliclyViewable() ?
-                        property.getAreaTransferred() : null)
-                .leaseAgreementEndDate(property.isLeaseAgreementEndDatePubliclyViewable()
-                        ? property.getLeaseAgreementEndDate() : null)
                 .categoryByPurposeName(categoryByPurpose.getName())
                 .attachments(createAttachmentResponseDto(property.getId(), attachments, attachmentCategories))
                 .build();
@@ -160,6 +151,20 @@ public class PropertyMapper {
                 .map((category) -> createAttachmentResponseDto(filteredAttachments, category))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private PropertyResponseDto createPropertyResponseDtoWithPublicFields(Property property) {
+        return PropertyResponseDto.builder()
+                .owner(property.isOwnerPubliclyViewable() ? property.getOwner() : null)
+                .amountOfRent(property.isAmountOfRentPubliclyViewable() ?
+                        property.getAmountOfRent() : null)
+                .balanceHolder(property.isBalanceHolderPubliclyViewable() ?
+                        property.getBalanceHolder() : null)
+                .areaTransferred(property.isAreaTransferredPubliclyViewable() ?
+                        property.getAreaTransferred() : null)
+                .leaseAgreementEndDate(property.isLeaseAgreementEndDatePubliclyViewable()
+                        ? property.getLeaseAgreementEndDate() : null)
+                .build();
     }
 
     private PropertyResponseDto mapToPropertyResponseDto(Tuple propertyTuple,
