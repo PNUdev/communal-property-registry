@@ -51,7 +51,7 @@ public class AttachmentCategoryAdminController {
     public String create(AttachmentCategoryDto attachmentCategoryDto, RedirectAttributes redirectAttributes){
 
         attachmentCategoryService.create(attachmentCategoryDto);
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію було успішно створено!");
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію успішно створено!");
 
         return "redirect:/admin/attachment-categories";
     }
@@ -69,7 +69,7 @@ public class AttachmentCategoryAdminController {
                            RedirectAttributes redirectAttributes){
 
         attachmentCategoryService.updateById(id, attachmentCategoryDto);
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію було успішно оновлено!");
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію успішно оновлено!");
 
         return "redirect:/admin/attachment-categories";
     }
@@ -87,7 +87,7 @@ public class AttachmentCategoryAdminController {
     public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 
         attachmentCategoryService.delete(id);
-        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію було успішно видалено!");
+        redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію успішно видалено!");
 
         return "redirect:/admin/attachment-categories";
     }

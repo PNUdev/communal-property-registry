@@ -5,21 +5,9 @@
 </div>
 
 <#if ERROR_FLASH_MESSAGE?? || SUCCESS_FLASH_MESSAGE??>
-
     <div class="alert mt-4 <#if SUCCESS_FLASH_MESSAGE??>alert-success<#else>alert-danger</#if>" id="popup" role="alert">
         ${(SUCCESS_FLASH_MESSAGE)!}${(ERROR_FLASH_MESSAGE)!}
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                let modal = document.getElementById("popup");
-                setTimeout(function () {
-                    modal.hidden = true;
-                }, 5000);
-            });
-        </script>
-
     </div>
-
 </#if>
 
 <#if attachmentCategoriesPage.getNumberOfElements() gt 0 >
@@ -41,7 +29,7 @@
                 <td>${category.name}</td>
                 <td>${category.isPubliclyViewable()?string("Так", "Ні")}</td>
                 <td>
-                    <a class=" btn btn-sm btn-primary" href="/admin/attachment-categories/${category.id}">Детальніше</a>
+                    <a class="btn btn-sm btn-primary" href="/admin/attachment-categories/${category.id}">Детальніше</a>
                 </td>
             </tr>
         </#list>
@@ -83,4 +71,11 @@
 <#else> <h2 class="text-center">Немає жодної категорії</h2>
 
 </#if>
+<script>
+    setTimeout(function () {
+        document.getElementById("popup").hidden = true;
+    }, 5000);
+</script>
 <#include '../../include/footer.ftl'>
+
+

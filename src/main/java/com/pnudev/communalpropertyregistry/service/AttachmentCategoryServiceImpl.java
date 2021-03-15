@@ -84,7 +84,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
     public void delete(Long id) {
 
         if(attachmentRepository.existsByAttachmentCategoryId(id)){
-            throw new AttachmentCategoryException("Дана категорія використовується, її не можливо видалити");
+            throw new AttachmentCategoryException("Дію неможливо виконати, оскільки дана категорія активно використовується!");
         }
 
         attachmentCategoryRepository.deleteById(id);
