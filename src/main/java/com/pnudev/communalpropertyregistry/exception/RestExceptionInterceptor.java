@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RestExceptionInterceptor {
 
-//    @ExceptionHandler(Exception.class)
-    public ErrorResponse generalError() {
+    @ExceptionHandler(Exception.class)
+    public ErrorResponse handleInternalServerError(Exception exception) {
         return ErrorResponse.builder()
-                .message("Внутрішня помилка сервера")
+                .message(exception.getMessage())
                 .status(500)
                 .build();
     }
 
     @ExceptionHandler(ServiceApiException.class)
-    public ErrorResponse serviceApiException(ServiceApiException serviceApiException) {
+    public ErrorResponse handleServiceApiException(ServiceApiException serviceApiException) {
         return ErrorResponse.builder()
                 .message(serviceApiException.getMessage())
                 .status(404)
