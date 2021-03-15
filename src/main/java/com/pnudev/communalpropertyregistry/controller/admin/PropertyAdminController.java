@@ -1,7 +1,6 @@
 package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.dto.AddressDto;
-import com.pnudev.communalpropertyregistry.dto.AddressResponseDto;
 import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 import static java.util.Objects.nonNull;
@@ -112,23 +113,25 @@ public class PropertyAdminController {
                        AddressDto addressDto,
                        RedirectAttributes redirectAttributes) {
 
+        List<AddressDto> addresses = null;
+
         if (nonNull(addressDto) && nonNull(addressDto.getLat()) && nonNull(addressDto.getLon())) {
             propertyAdminService.save(propertyAdminFormDto, addressDto);
+        } else {
+            addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
+            if (addresses.size() == 1) {
+                propertyAdminService.save(propertyAdminFormDto, addresses.get(0));
+            }
+        }
+
+        if (nonNull(addressDto) && nonNull(addressDto.getLat()) && nonNull(addressDto.getLon())
+        || addresses.size() == 1) {
 
             redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
             return "redirect:/admin/properties";
         }
 
-        AddressResponseDto addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
-
-        if (addresses.getAddresses().size() == 1) {
-            propertyAdminService.save(propertyAdminFormDto, addresses.getAddresses().get(0));
-
-            redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено(оновлено)!");
-            return "redirect:/admin/properties";
-        }
-
-        redirectAttributes.addFlashAttribute("addressesResponseDto", addresses);
+        redirectAttributes.addFlashAttribute("addressDto", addresses);
         redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
 
         return "redirect:/admin/properties/addresses";

@@ -13,28 +13,6 @@ import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.ERR
 @ControllerAdvice
 public class ExceptionInterceptor {
 
-    @ExceptionHandler(CategoryByPurposeException.class)
-    public String categoryByPurposeException(CategoryByPurposeException categoryByPurposeException,
-                                             RedirectAttributes redirectAttributes) {
-
-        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), categoryByPurposeException.getMessage());
-
-        log.info("CategoryByPurposeException was resolved");
-
-        return "redirect:/admin/properties";
-    }
-
-    @ExceptionHandler(IllegalAddressAdminException.class)
-    public String illegalAddressException(IllegalAddressAdminException illegalAddressException,
-                                          RedirectAttributes redirectAttributes) {
-
-        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), illegalAddressException.getMessage());
-
-        log.info("IllegalAddressAdminException was resolved");
-
-        return "redirect:/admin/properties";
-    }
-
     @ExceptionHandler(ServiceAdminException.class)
     public String serviceAdminException(ServiceAdminException serviceAdminException, RedirectAttributes redirectAttributes,
                                    HttpServletRequest request) {

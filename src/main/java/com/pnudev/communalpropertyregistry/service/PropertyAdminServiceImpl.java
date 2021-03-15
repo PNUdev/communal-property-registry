@@ -2,10 +2,8 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.AddressDto;
-import com.pnudev.communalpropertyregistry.dto.AddressResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
-import com.pnudev.communalpropertyregistry.exception.IllegalAddressAdminException;
 import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
@@ -13,7 +11,7 @@ import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +34,8 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     private static final Pattern pattern = Pattern.compile("freeformAddress\":\"(?<freeformAddress>[^\"]+).*?position\":\\{\"lat\":(?<lat>[\\d.]+),\"lon\":(?<lon>[\\d.]+)");
 
-    private final Environment environment;
+    @Value("${application.tomtom.api.key}")
+    private String tomtomApiKey;
 
     private final PropertyDslRepository propertyDslRepository;
 
@@ -45,12 +44,10 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyAdminServiceImpl(Environment environment,
-                                    PropertyDslRepository propertyDslRepository,
+    public PropertyAdminServiceImpl(PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
                                     PropertyMapper propertyMapper) {
 
-        this.environment = environment;
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
         this.propertyMapper = propertyMapper;
@@ -131,13 +128,13 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
-    public AddressResponseDto getAddresses(String address) {
+    public List<AddressDto> getAddresses(String address) {
 
         log.info("Method 'getAddresses' started work!");
 
         final String URL = String.format("https://api.tomtom.com/search/2/geocode/%s.json?" +
                         "storeResult=false&limit=20&lat=48.610742062164974f&lon=24.975710390429917&radius=30000&language=uk-UA&key=%s",
-                address, environment.getProperty("application.tomtom.api.key")
+                address, tomtomApiKey
         );
 
         String response = null;
@@ -147,7 +144,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
             response = new RestTemplate().getForObject(URL, String.class);
         } catch (RestClientException e) {
             log.error("RestClientException was caught, failed to get response in method 'getAddresses'!");
-            throw new IllegalAddressAdminException("Таку адресу неможливо обробити, спробуйте ввести іншу!");
+            throw new ServiceAdminException("Таку адресу неможливо обробити, спробуйте ввести іншу!");
         }
 
         if (nonNull(response)) {
@@ -168,12 +165,12 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         }
 
         if (addresses.isEmpty()) {
-            throw new IllegalAddressAdminException("Невірно вказаний адрес!");
+            throw new ServiceAdminException("Невірно вказаний адрес!");
         }
 
         log.info("Method 'getAddresses' is going to finish work successfully!");
 
-        return new AddressResponseDto(addresses);
+        return addresses;
     }
 
 }

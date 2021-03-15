@@ -5,7 +5,7 @@
     <label for="address" class="form-label">Уточніть яку ви хотіли ввести адресу з списку:</label>
     <form action="/admin/properties/save" method="post" id="address_form" onsubmit="setValues()" class="form-control">
         <select name="address" class="form-select" id="address">
-            <#list addressesResponseDto.addresses as address>
+            <#list addressDto as address>
                 <option lat="${address.lat}" lon="${address.lon}">${address.address}</option>
             </#list>
         </select>
