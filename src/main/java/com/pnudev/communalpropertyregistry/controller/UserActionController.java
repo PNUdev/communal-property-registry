@@ -1,13 +1,12 @@
 package com.pnudev.communalpropertyregistry.controller;
 
 import com.pnudev.communalpropertyregistry.domain.UserAction;
-import com.pnudev.communalpropertyregistry.dto.IpAddressAndCountDto;
+import com.pnudev.communalpropertyregistry.dto.UserActionPairDto;
 import com.pnudev.communalpropertyregistry.service.UserActionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,10 +33,10 @@ public class UserActionController {
     }
 
     @GetMapping
-    public String getAnalyticPairs(
-            @PageableDefault(size = 14, sort = "ipAddress", direction = Sort.Direction.ASC) Pageable pageable, Model model){
+    public String getAllUserActionPair(
+            @PageableDefault(size = 14) Pageable pageable, Model model) {
 
-        Page<IpAddressAndCountDto> ipAddressAndCountDtoList = userActionService.countAllByIpAddresses(pageable);
+        Page<UserActionPairDto> ipAddressAndCountDtoList = userActionService.findAllUserActionPair(pageable);
 
         log.info("Analytics pairs successfully gathered!");
 
@@ -47,9 +46,9 @@ public class UserActionController {
     }
 
     @GetMapping("/partial")
-    public String getByIpAddress(
-            @PageableDefault(size = 6, sort = "time", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam String ipAddress, Model model){
+    public String getAllByIpAddress(
+            @PageableDefault(size = 6) Pageable pageable,
+            @RequestParam String ipAddress, Model model) {
 
         Page<UserAction> partialUserActionsByIpAddress = userActionService.findAllByIpAddress(ipAddress, pageable);
 

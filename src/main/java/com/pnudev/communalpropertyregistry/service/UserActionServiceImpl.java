@@ -1,8 +1,9 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.UserAction;
-import com.pnudev.communalpropertyregistry.dto.IpAddressAndCountDto;
+import com.pnudev.communalpropertyregistry.dto.UserActionPairDto;
 import com.pnudev.communalpropertyregistry.repository.UserActionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+import static com.pnudev.communalpropertyregistry.service.processor.UserActionProcessor.USER_ACTION_QUEUE_DESTINATION;
+import static java.util.Objects.isNull;
+
+@Slf4j
 @Service
 public class UserActionServiceImpl implements UserActionService {
-    private final static String DESTINATION_USER_ANALYTICS_QUEUE = "userActions";
-    private static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     private JmsTemplate jmsTemplate;
     private UserActionRepository userActionRepository;
@@ -30,26 +32,28 @@ public class UserActionServiceImpl implements UserActionService {
 
     @Override
     public void saveUserAction(HttpServletRequest httpServletRequest) {
+
         UserAction userAction = prepareUserAction(httpServletRequest);
 
-        //jmsTemplate.convertAndSend(DESTINATION_USER_ANALYTICS_QUEUE, userAction);
+        jmsTemplate.convertAndSend(USER_ACTION_QUEUE_DESTINATION, userAction);
 
-        System.out.println(userAction);
-        System.out.println("==========");
+        log.info("User action: [{}] sent to queue!", userAction);
     }
 
     @Override
-    public Page<IpAddressAndCountDto> countAllByIpAddresses(Pageable pageable) {
+    public Page<UserActionPairDto> findAllUserActionPair(Pageable pageable) {
+
         return new PageImpl<>(
-                userActionRepository.countByIpAddresses(pageable.getPageSize(), pageable.getOffset()),
-                pageable, userActionRepository.countAllByIpAddress()
+                userActionRepository.getCountPairsByIpAddresses(pageable.getPageSize(), pageable.getOffset()),
+                pageable, userActionRepository.countAllIpAddresses()
         );
     }
 
     @Override
     public Page<UserAction> findAllByIpAddress(String ipAddress, Pageable pageable) {
+
         return new PageImpl<>(
-                userActionRepository.findAllByIpAddress(ipAddress, pageable.getPageSize(), pageable.getOffset()),
+                userActionRepository.findUserActionsByIpAddressOrderByTimeDesc(ipAddress, pageable),
                 pageable, userActionRepository.countByIpAddress(ipAddress)
         );
     }
@@ -57,7 +61,7 @@ public class UserActionServiceImpl implements UserActionService {
     private UserAction prepareUserAction(HttpServletRequest servletRequest) {
 
         final String httpMethod = servletRequest.getMethod();
-        final String ipAddress = getApAddress(servletRequest);
+        final String ipAddress = getIpAddress(servletRequest);
         final String url = getUrl(servletRequest);
         final String referrerUrl = servletRequest.getHeader("referer");
         final LocalDateTime dateTime = LocalDateTime.now();
@@ -67,24 +71,34 @@ public class UserActionServiceImpl implements UserActionService {
                 .httpMethod(httpMethod)
                 .ipAddress(ipAddress)
                 .url(url)
-                .referrerUrl(referrerUrl)
+                .referrerUrl(isNull(referrerUrl) ? " " : referrerUrl)
                 .time(dateTime)
                 .build();
 
     }
 
-    private String getApAddress(HttpServletRequest servletRequest) {
+    private String getIpAddress(HttpServletRequest servletRequest) {
+
         final String ipAddress = servletRequest.getHeader("X-Forward-For");
+
         return ipAddress != null ? ipAddress : servletRequest.getRemoteAddr();
     }
 
     private String getUrl(HttpServletRequest request) {
-        final String uri = request.getScheme() + "://" +
-                request.getServerName() +
-                ("http".equals(request.getScheme()) && request.getServerPort() == 80
-                        || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort()) +
-                request.getRequestURI() +
-                (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-        return uri;
+
+        StringBuilder uri = new StringBuilder();
+        uri.append(request.getScheme())
+                .append("://")
+                .append(request.getServerName())
+                .append(
+                        ("http".equals(request.getScheme()) && request.getServerPort() == 80
+                                || "https".equals(request.getScheme()) && request.getServerPort() == 443
+                                ? "" : ":" + request.getServerPort()
+                        )
+                )
+                .append(request.getRequestURI())
+                .append((request.getQueryString() != null ? "?" + request.getQueryString() : ""));
+
+        return uri.toString();
     }
 }

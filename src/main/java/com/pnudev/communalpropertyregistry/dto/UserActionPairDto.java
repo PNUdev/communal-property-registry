@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IpAddressAndCountDto {
+public class UserActionPairDto {
+
     private String ipAddress;
+
     private Long count;
 }
