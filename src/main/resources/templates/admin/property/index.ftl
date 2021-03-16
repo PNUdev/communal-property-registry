@@ -10,14 +10,6 @@
         <div class="alert mt-4 <#if SUCCESS_FLASH_MESSAGE??>alert-success<#else>alert-danger</#if>" id="popup" role="alert">
             ${(SUCCESS_FLASH_MESSAGE)!}${(ERROR_FLASH_MESSAGE)!}
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                let modal = document.getElementById("popup");
-                setTimeout(function () {
-                    modal.hidden = true;
-                }, 5000);
-            });
-        </script>
     </#if>
 
     <#if propertiesPage.number lt 0 || (propertiesPage.totalPages !=0 && propertiesPage.number gt propertiesPage.totalPages - 1)>
@@ -175,7 +167,7 @@
             </#list>
         </div>
 
-        <#if propertiesPage.number==0 && !propertiesPage.content?has_content>
+        <#if propertiesPage.number == 0 && !propertiesPage.content?has_content>
             <h1 class="text-center mt-5">
                 <#if searchUrl?length == 0>
                     Список майна пустий
@@ -189,7 +181,7 @@
 
                     <li class="page-item <#if propertiesPage.number == 0 >disabled</#if>">
                         <a class="page-link" href="?page=${propertiesPage.number}${searchUrl}">
-                            Попередня сторінка
+                            &#129040;
                         </a>
                     </li>
 
@@ -241,7 +233,7 @@
                     </#if>
                     <li class="page-item <#if propertiesPage.number == propertiesPage.totalPages - 1 >disabled</#if>">
                         <a class="page-link" href="?page=${propertiesPage.number + 2}${searchUrl}">
-                            Наступна сторінка
+                            &#129042;
                         </a>
                     </li>
 
@@ -289,6 +281,13 @@
         history.replaceState(null, null, '?' + queryParams);
         search_form.submit();
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let modal = document.getElementById("popup");
+        setTimeout(function () {
+            modal.hidden = true;
+        }, 5000);
+    });
 </script>
 
 <#include "../../include/footer.ftl">

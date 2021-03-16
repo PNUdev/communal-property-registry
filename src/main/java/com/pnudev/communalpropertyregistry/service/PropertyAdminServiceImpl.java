@@ -7,18 +7,16 @@ import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
+import com.pnudev.communalpropertyregistry.util.TomTomClient;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +32,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     private static final Pattern pattern = Pattern.compile("freeformAddress\":\"(?<freeformAddress>[^\"]+).*?position\":\\{\"lat\":(?<lat>[\\d.]+),\"lon\":(?<lon>[\\d.]+)");
 
-    @Value("${application.tomtom.api.key}")
-    private String tomtomApiKey;
+    private final TomTomClient tomTomClient;
 
     private final PropertyDslRepository propertyDslRepository;
 
@@ -44,10 +41,12 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyAdminServiceImpl(PropertyDslRepository propertyDslRepository,
+    public PropertyAdminServiceImpl(TomTomClient tomTomClient,
+                                    PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
                                     PropertyMapper propertyMapper) {
 
+        this.tomTomClient = tomTomClient;
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
         this.propertyMapper = propertyMapper;
@@ -72,7 +71,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
         if (nonNull(propertyStatus)) {
             predicates.add(property.propertyStatus
-                    .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus))));
+                    .eq(Property.PropertyStatus.valueOf(propertyStatus).name()));
         }
 
         Page<Property> propertiesPage = propertyDslRepository.findAll(pageable, predicates.toArray(Predicate[]::new));
@@ -93,13 +92,15 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     @Override
     public void update(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
 
+        Property propertyFromDb = propertyRepository.findById(id)
+                .orElseThrow(() -> new ServiceAdminException("Майно не існує!"));
+
         Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
                 .lat(address.getLat())
                 .lon(address.getLon())
                 .build();
 
-        Property property = Property.builder()
-                .id(id)
+        Property property = propertyFromDb.toBuilder()
                 .imageUrl(propertyAdminFormDto.getImageUrl())
                 .address(propertyAdminFormDto.getAddress())
                 .propertyLocation(propertyLocation)
@@ -123,7 +124,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
-    public void save(PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
+    public void create(PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
 
         Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
                 .lat(address.getLat())
@@ -163,40 +164,21 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
         log.info("Method 'getAddresses' started work!");
 
-        final String URL = String.format("https://api.tomtom.com/search/2/geocode/%s.json?" +
-                        "storeResult=false&limit=20&lat=48.610742062164974f&lon=24.975710390429917&radius=30000&language=uk-UA&key=%s",
-                address, tomtomApiKey
-        );
-
-        String response = null;
-        Matcher matcher = null;
-
-        try {
-            response = new RestTemplate().getForObject(URL, String.class);
-        } catch (RestClientException e) {
-            log.error("RestClientException was caught, failed to get response in method 'getAddresses'!");
-            throw new ServiceAdminException("Таку адресу неможливо обробити, спробуйте ввести іншу!");
-        }
-
-        if (nonNull(response)) {
-            matcher = pattern.matcher(response);
-        }
+        Matcher matcher = pattern.matcher(tomTomClient.getResponse(address));
 
         List<AddressDto> addresses = new ArrayList<>();
 
-        if (nonNull(matcher)) {
-            while (matcher.find()) {
-                addresses.add(AddressDto.builder()
-                        .address(matcher.group("freeformAddress"))
-                        .lat(Double.parseDouble(matcher.group("lat")))
-                        .lon(Double.parseDouble(matcher.group("lon")))
-                        .build()
-                );
-            }
+        while (matcher.find()) {
+            addresses.add(AddressDto.builder()
+                    .address(matcher.group("freeformAddress"))
+                    .lat(Double.parseDouble(matcher.group("lat")))
+                    .lon(Double.parseDouble(matcher.group("lon")))
+                    .build()
+            );
         }
 
         if (addresses.isEmpty()) {
-            throw new ServiceAdminException("Невірно вказаний адрес!");
+            throw new ServiceAdminException("Вказанa адресa є невірною!");
         }
 
         log.info("Method 'getAddresses' is going to finish work successfully!");

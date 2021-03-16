@@ -1,19 +1,21 @@
 <#include "../include/header.ftl">
 
+    <#assign addressExample = "Наприклад: вулиця Гуцульська, 18, Коломия, Івано-Франківська область, 78200"/>
+
 <div class="m-2">
     <a class="btn btn-outline-primary" href="/admin/properties">&#8592;</a>
 </div>
 
 <div class="w-100">
     <div class="col-md-5 mx-auto mt-5 py-3 px-5 rounded bg-light border">
-        <form action="/admin/properties/save" method="POST" id="save_form">
+        <form action="/admin/properties/new" method="POST" id="save_form">
 
             <div>
                 <label for="address" class="form-label">Адреса</label>
                 <input name="address" id="address" type="text" class="form-control"
                        value="${(propertyAdminDto.address)!}" required>
                 <div id="addressHelpBlock" class="form-text">
-                    Наприклад: вулиця Гуцульська, 18, Коломия, Івано-Франківська область, 78200
+                    ${addressExample}
                 </div>
             </div>
 

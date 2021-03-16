@@ -89,18 +89,17 @@ public class PropertyAdminController {
         return "admin/property/form";
     }
 
-
     @GetMapping("/delete/{id}")
     public String deleteConfirmation(@PathVariable(name = "id") Long id, Model model) {
 
-        model.addAttribute("message", "Ви впевнені що хочете видалити майно?");
+        model.addAttribute("message", "Ви впевнені, що хочете видалити майно?");
         model.addAttribute("returnBackUrl", "/admin/properties/update/" + id);
 
         return "admin/common/deleteConfirmation";
     }
 
     @GetMapping("/addresses")
-    public String address(Model model) {
+    public String choiceAddress(Model model) {
 
         if (!model.containsAttribute("propertyAdminFormDto")) {
             return "redirect:/admin/properties";
@@ -118,8 +117,9 @@ public class PropertyAdminController {
         if (isNull(addressDto.getLat()) || isNull(addressDto.getLon())) {
             List<AddressDto> addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
             if (addresses.size() != 1) {
-                redirectAttributes.addFlashAttribute("addressDto", addresses);
+                redirectAttributes.addFlashAttribute("addressesDto", addresses);
                 redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
+                redirectAttributes.addFlashAttribute("propertyId", id);
                 return "redirect:/admin/properties/addresses";
             } else {
                 addressDto = addresses.get(0);
@@ -132,15 +132,15 @@ public class PropertyAdminController {
         return "redirect:/admin/properties";
     }
 
-    @PostMapping("/save")
-    public String save(PropertyAdminFormDto propertyAdminFormDto,
-                       AddressDto addressDto,
-                       RedirectAttributes redirectAttributes) {
+    @PostMapping("/new")
+    public String create(PropertyAdminFormDto propertyAdminFormDto,
+                         AddressDto addressDto,
+                         RedirectAttributes redirectAttributes) {
 
         if (isNull(addressDto.getLat()) || isNull(addressDto.getLon())) {
             List<AddressDto> addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
             if (addresses.size() != 1) {
-                redirectAttributes.addFlashAttribute("addressDto", addresses);
+                redirectAttributes.addFlashAttribute("addressesDto", addresses);
                 redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
                 return "redirect:/admin/properties/addresses";
             } else {
@@ -148,7 +148,7 @@ public class PropertyAdminController {
             }
         }
 
-        propertyAdminService.save(propertyAdminFormDto, addressDto);
+        propertyAdminService.create(propertyAdminFormDto, addressDto);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно створено!");
 
         return "redirect:/admin/properties";

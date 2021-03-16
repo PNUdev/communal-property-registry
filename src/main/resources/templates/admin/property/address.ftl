@@ -2,10 +2,10 @@
 
 <div class="container py-5">
 
-    <label for="address" class="form-label">Уточніть яку ви хотіли ввести адресу з списку:</label>
-    <form action="/admin/properties/save" method="post" id="address_form" onsubmit="setValues()" class="form-control">
+    <label for="address" class="form-label">Уточніть яку адресу ви хотіли ввести з списку:</label>
+    <form action="/admin/properties/new" method="post" id="addressForm" onsubmit="setValues()" class="form-control">
         <select name="address" class="form-select" id="address">
-            <#list addressDto as address>
+            <#list addressesDto as address>
                 <option lat="${address.lat}" lon="${address.lon}">${address.address}</option>
             </#list>
         </select>
@@ -30,13 +30,13 @@
         <input name="amountOfRentPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.amountOfRentPubliclyViewable>checked</#if>/>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <button type="submit" class="btn btn-primary mt-2" <#if propertyAdminFormDto.id??> formaction="/admin/properties/update/#{propertyAdminFormDto.id}"</#if>>Вибрати</button>
+        <button type="submit" class="btn btn-primary mt-2" <#if propertyId??> formaction="/admin/properties/update/#{propertyId}"</#if>>Вибрати</button>
     </form>
 </div>
 
 <script>
     function setValues() {
-        let selectedElem = document.forms['address_form'].elements['address'].options[document.forms['address_form'].elements['address'].selectedIndex];
+        let selectedElem = document.forms['addressForm'].elements['address'].options[document.forms['addressForm'].elements['address'].selectedIndex];
 
         document.getElementById("lat").value = selectedElem.getAttribute('lat').replace(",", ".");
         document.getElementById("lon").value = selectedElem.getAttribute('lon').replace(",", ".");
@@ -45,7 +45,7 @@
         document.getElementById("area").value = document.getElementById('area').value.replace(",", ".");
         document.getElementById("areaTransferred").value = document.getElementById('areaTransferred').value.replace(",", ".");
 
-        document.getElementById("address_form").submit();
+        document.getElementById("addressForm").submit();
     }
 </script>
 

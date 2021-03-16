@@ -14,7 +14,7 @@ public interface PropertyAdminService {
 
     PropertyAdminDto findById(Long id);
 
-    void save(PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
+    void create(PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
 
     void update(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
 

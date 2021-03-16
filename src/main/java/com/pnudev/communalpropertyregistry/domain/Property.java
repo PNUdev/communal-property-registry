@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Embedded;
 import java.time.LocalDate;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Property {

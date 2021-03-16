@@ -113,10 +113,10 @@ public class PropertyMapper {
     private CategoryByPurpose findById(List<CategoryByPurpose> categoriesByPurposes, Long id) {
 
         Optional<CategoryByPurpose> categoryByPurpose = categoriesByPurposes.stream()
-                .filter(c -> c.getId().equals(id)).findAny();
+                .filter(c -> c.getId().equals(id)).findFirst();
 
         return categoryByPurpose.orElseThrow(
-                () -> new ServiceAdminException("Категорії за призначенням не знайдено!"));
+                () -> new ServiceAdminException("Категорію за призначенням не знайдено!"));
     }
 
 }
