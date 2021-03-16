@@ -16,5 +16,6 @@
     <header>
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Coat_of_Arms_of_Kolomyia.svg/1200px-Coat_of_Arms_of_Kolomyia.svg.png" alt="">
         <p class="header__title">Реєстр комунального майна</p>
+        <button class="switch-btn" onclick="switchMapPropertiesView(this)">Відкрити карту</button>
         <p class="header__city">м.Коломия</p>
     </header>

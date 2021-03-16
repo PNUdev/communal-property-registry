@@ -57,6 +57,10 @@ const APP_PROPERTIES = new Vue({
             this.totalPages = 0;
             this.updatePaginationBtnVisibility();
 
+            if(window.innerWidth <= 1000){
+                switchMapPropertiesView(document.querySelector(".switch-btn"));
+            }
+
             axios.get(`/api/properties/${id}`)
                 .then(resp =>{
                     this.properties = [resp.data];
@@ -184,3 +188,12 @@ const APP_STATS = new Vue({
         },
     }
 })
+
+function switchMapPropertiesView(button){
+    const properties = document.querySelector(".properties");
+    const mapAndStats = document.querySelector(".map-section");
+
+    button.innerHTML = button.innerHTML === "Відкрити карту" ? "&#8592; Повернутись" : "Відкрити карту";
+    properties.style.display = getComputedStyle(properties).display === "none" ? "flex" : "none";
+    mapAndStats.style.display = getComputedStyle(mapAndStats).display === "none" ? "flex" : "none";
+}

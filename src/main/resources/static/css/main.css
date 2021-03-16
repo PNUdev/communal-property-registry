@@ -123,6 +123,25 @@ header > img{
     transform: scale(1.2);
 }
 
+.switch-btn{
+    border: 1px solid #FAFAFA;
+    border-radius: 3em;
+    background: none;
+    color: #E8F2FC;
+
+    display: none;
+    position: fixed;
+    top: .25em;
+    right: 1em;
+    padding: .1em .8em;
+    z-index: 1;
+}
+
+.switch-btn:hover{
+    color: #253951;
+    background: #E8F2FC;
+}
+
 .properties-pagination{
     width: 9%;
     position: absolute;
@@ -489,12 +508,17 @@ header > img{
 
 @media (max-width:1000px) {
 
-    .property__status{
-        font-size: 13px;
+    .header__city{
+        display: none;
+    }
+
+    .switch-btn{
+        display: block;
     }
 
     .map-section{
         display: none;
+        width: 100%;
     }
 
     .properties{
@@ -503,6 +527,10 @@ header > img{
 
     .property{
         height: 12em;
+    }
+
+    .property__status{
+        font-size: 13px;
     }
 
     .property-area-main{
@@ -603,6 +631,11 @@ header > img{
         font-size: 13px;
     }
 
+    .switch-btn{
+        padding: .04em .8em .2em .8em;
+        top: .22em;
+    }
+
     .properties-pagination{
         width: 15%;
     }
@@ -633,10 +666,6 @@ header > img{
         font-size: 15px;
     }
 
-    .header__city{
-        display: none;
-    }
-
     .search-form{
         width: 100%;
         margin-bottom: .8em;
@@ -645,6 +674,24 @@ header > img{
     .properties__search{
         flex-wrap: wrap;
         margin-bottom: 0;
+    }
+
+    .switch-btn{
+        padding: .1em .8em .1em .8em;
+        font-size: 14.5px;
+        color: #253951;
+        background: #ffffff;
+        border:2px solid #C1CDDA;
+
+        top: 95.2%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .switch-btn:hover{
+        color: #FAFAFA;
+        background: #253951;
+        border:2px solid #253951;
     }
 
     .properties__management{
