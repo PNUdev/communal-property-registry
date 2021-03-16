@@ -387,9 +387,9 @@ header > img{
 
 .attachments-modal-close{
     position: absolute;
-    right: .6em;
+    right: 1.5em;
     top: 0;
-    font-size: 28px;
+    font-size: 34px;
     font-weight: bold;
     color: #ff6060;
     cursor: pointer;
@@ -591,6 +591,10 @@ header > img{
         width: 50%;
     }
 
+    .attachments-modal-close{
+        display: block;
+    }
+
 }
 
 @media (max-width:700px) {
@@ -674,12 +678,12 @@ header > img{
         padding-top: 3em;
     }
 
-    .attachment-modal > .card{
-        width: 80%;
+    .attachments-modal-close{
+        right: .6em;
     }
 
-    .attachments-modal-close{
-        display: block;
+    .attachment-modal > .card{
+        width: 80%;
     }
 
 }
