@@ -105,11 +105,11 @@
                         </div>
 
                         <div>
-                            Площа: #{property.area; m2}
+                            Площа: #{property.area; m2} м<sup>2</sup>
                         </div>
 
                         <div class="<#if property.areaTransferredPubliclyViewable>text-success<#else>text-danger</#if>">
-                            Передана площа: #{property.areaTransferred; m2}
+                            Передана площа: #{property.areaTransferred; m2} м<sup>2</sup>
                         </div>
 
                         <div class="<#if property.balanceHolderPubliclyViewable>text-success<#else>text-danger</#if>">

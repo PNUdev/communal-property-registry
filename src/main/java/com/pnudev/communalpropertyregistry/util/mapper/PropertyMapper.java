@@ -4,7 +4,7 @@ import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyLocationDto;
-import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
+import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import com.querydsl.core.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ public class PropertyMapper {
         Optional<CategoryByPurpose> categoryByPurpose = categoryByPurposeRepository.findById(property.getCategoryByPurposeId());
 
         return this.mapToPropertyAdminDto(property, Collections.singletonList(categoryByPurpose.orElseThrow(
-                () -> new ServiceAdminException("Категорії за призначенням не знайдено!"))));
+                () -> new PropertyAdminException("Категорії за призначенням не знайдено!"))));
     }
 
     private PropertyAdminDto mapToPropertyAdminDto(Property property, List<CategoryByPurpose> categoriesByPurpose) {
@@ -116,7 +116,7 @@ public class PropertyMapper {
                 .filter(c -> c.getId().equals(id)).findFirst();
 
         return categoryByPurpose.orElseThrow(
-                () -> new ServiceAdminException("Категорію за призначенням не знайдено!"));
+                () -> new PropertyAdminException("Категорію за призначенням не знайдено!"));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.pnudev.communalpropertyregistry.util;
 
-import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
+import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,15 +16,19 @@ public class TomTomClient {
     @Value("${application.tomtom.api.key}")
     private String tomtomApiKey;
 
-    public String getResponse(String address) {
+    public String processGetAddressRequest(String address) {
         final String URL = String.format(TOM_TOM_URL, address, tomtomApiKey);
 
         try {
-            return new RestTemplate().getForObject(URL, String.class);
+            String responseFromTomTom = new RestTemplate().getForObject(URL, String.class);
+
+            log.info("The address : [{}] was successfully found!", address);
+
+            return responseFromTomTom;
 
         } catch (RestClientException e) {
             log.error("RestClientException was caught, failed to get response in method 'getAddresses'!");
-            throw new ServiceAdminException("Таку адресу неможливо обробити, спробуйте ввести іншу!");
+            throw new PropertyAdminException("Таку адресу неможливо обробити, спробуйте ввести іншу!");
         }
     }
 

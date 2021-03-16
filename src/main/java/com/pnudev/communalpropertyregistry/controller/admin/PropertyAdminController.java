@@ -126,7 +126,7 @@ public class PropertyAdminController {
             }
         }
 
-        propertyAdminService.update(id, propertyAdminFormDto, addressDto);
+        propertyAdminService.updateById(id, propertyAdminFormDto, addressDto);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно усішно оновлено!");
 
         return "redirect:/admin/properties";
@@ -157,7 +157,7 @@ public class PropertyAdminController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
 
-        propertyAdminService.delete(id);
+        propertyAdminService.deleteById(id);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Майно успішно видалено!");
 

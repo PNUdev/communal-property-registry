@@ -13,6 +13,16 @@ import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.ERR
 @ControllerAdvice
 public class ExceptionInterceptor {
 
+    @ExceptionHandler(PropertyAdminException.class)
+    public String propertyAdminException(PropertyAdminException propertyAdminException, RedirectAttributes redirectAttributes) {
+
+        log.trace("PropertyAdminException was thrown", propertyAdminException);
+
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), propertyAdminException.getMessage());
+
+        return "redirect:/admin/properties";
+    }
+
     @ExceptionHandler(ServiceAdminException.class)
     public String serviceAdminException(ServiceAdminException serviceAdminException, RedirectAttributes redirectAttributes,
                                    HttpServletRequest request) {
@@ -21,7 +31,7 @@ public class ExceptionInterceptor {
 
         redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceAdminException.getMessage());
 
-        return "redirect:/admin/properties";
+        return "redirect:/admin";
     }
 
 }

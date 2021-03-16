@@ -16,10 +16,10 @@ public interface PropertyAdminService {
 
     void create(PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
 
-    void update(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
+    void updateById(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address);
 
     List<AddressDto> getAddresses(String address);
 
-    void delete(Long id);
+    void deleteById(Long id);
 
 }

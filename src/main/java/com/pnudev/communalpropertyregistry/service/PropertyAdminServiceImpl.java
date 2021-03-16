@@ -4,7 +4,7 @@ import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.AddressDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
-import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
+import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.util.TomTomClient;
@@ -84,16 +84,16 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     public PropertyAdminDto findById(Long id) {
 
         Property property = propertyRepository.findById(id).orElseThrow(
-                () -> new ServiceAdminException("Майно не знайдено!"));
+                () -> new PropertyAdminException("Майно не знайдено!"));
 
         return propertyMapper.mapToPropertyAdminDto(property);
     }
 
     @Override
-    public void update(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
+    public void updateById(Long id, PropertyAdminFormDto propertyAdminFormDto, AddressDto address) {
 
         Property propertyFromDb = propertyRepository.findById(id)
-                .orElseThrow(() -> new ServiceAdminException("Майно не існує!"));
+                .orElseThrow(() -> new PropertyAdminException("Майно не існує!"));
 
         Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
                 .lat(address.getLat())
@@ -155,16 +155,14 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         propertyRepository.deleteById(id);
     }
 
     @Override
     public List<AddressDto> getAddresses(String address) {
 
-        log.info("Method 'getAddresses' started work!");
-
-        Matcher matcher = pattern.matcher(tomTomClient.getResponse(address));
+        Matcher matcher = pattern.matcher(tomTomClient.processGetAddressRequest(address));
 
         List<AddressDto> addresses = new ArrayList<>();
 
@@ -178,10 +176,10 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         }
 
         if (addresses.isEmpty()) {
-            throw new ServiceAdminException("Вказанa адресa є невірною!");
+            throw new PropertyAdminException("Вказанa адресa є невірною!");
         }
 
-        log.info("Method 'getAddresses' is going to finish work successfully!");
+        log.info("Found [{}] addresses by input data: [{}]!", addresses.size(), address);
 
         return addresses;
     }
