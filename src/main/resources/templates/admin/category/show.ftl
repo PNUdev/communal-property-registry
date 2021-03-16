@@ -6,22 +6,15 @@
         <a class="btn btn-outline-primary" href="/admin/categories">&#8592;</a>
     </div>
 
-    <div class="category__container">
+    <div class="d-block mt-5 mx-auto flex-column align-items-center">
 
-        <div class="category__name">
+        <div class="mb-5">
             <h2 class="user-select-none"><p><b>Назва: </b><i>${category.name}</i></p></h2>
         </div>
 
         <div class="d-flex flex-row">
-
-            <div class="category__function">
                 <a class="btn btn-info" href="/admin/categories/edit/${category.id}">Редагувати</a>
-            </div>
-
-            <div class="category__function">
-                <a class="btn btn-danger" href="/admin/categories/delete/${category.id}">Видалити</a>
-            </div>
-
+                <a class="ms-3 btn btn-danger" href="/admin/categories/delete/${category.id}">Видалити</a>
         </div>
 
     </div>
