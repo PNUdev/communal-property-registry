@@ -385,6 +385,17 @@ header > img{
     overflow-y: scroll;
 }
 
+.attachments-modal-close{
+    position: absolute;
+    right: .6em;
+    top: 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff6060;
+    cursor: pointer;
+    display: none;
+}
+
 .attachment-modal>div{
     box-shadow: 2px 2px 10px #253951;
 }
@@ -392,6 +403,7 @@ header > img{
 .fade-enter-active, .fade-leave-active {
     transition: opacity .2s;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
     opacity: 0;
 }
@@ -481,6 +493,10 @@ header > img{
 
     .property{
         height: 9em;
+    }
+
+    .map-section{
+        display: flex;
     }
 
     .property-description{
@@ -654,8 +670,16 @@ header > img{
         font-size: 3.5em;
     }
 
+    .attachment-modal{
+        padding-top: 3em;
+    }
+
     .attachment-modal > .card{
         width: 80%;
+    }
+
+    .attachments-modal-close{
+        display: block;
     }
 
 }
@@ -773,6 +797,10 @@ header > img{
 
     .attachment-modal, .img-modal{
         width: 101vw;
+    }
+
+    .attachments-modal-close{
+        right: .3em;
     }
 
     .drop-filters-btn{

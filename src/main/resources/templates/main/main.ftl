@@ -12,6 +12,8 @@
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
+                <p class="attachments-modal-close">&#128473;</p>
+
                 <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                      v-for="attach in attachments" v-if="attach != null">
 

@@ -196,4 +196,7 @@ function switchMapPropertiesView(button){
     button.innerHTML = button.innerHTML === "Відкрити карту" ? "&#8592; Повернутись" : "Відкрити карту";
     properties.style.display = getComputedStyle(properties).display === "none" ? "flex" : "none";
     mapAndStats.style.display = getComputedStyle(mapAndStats).display === "none" ? "flex" : "none";
+
+    //map display settings drop after display:none, so this re-renders it properly
+    map.invalidateSize();
 }
