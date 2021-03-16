@@ -34,7 +34,7 @@ const APP_PROPERTIES = new Vue({
 
         async getCategories(){
             axios.get('/api/categories-by-purpose')
-                .then(resp => this.categories = resp.data)
+                .then(resp => this.categories = resp.data["categoriesByPurpose"])
                 .catch(error => {
                     console.error("CATEGORIES-BY-PURPOSE FAILED TO LOAD\n" + error);
                 })
@@ -56,6 +56,10 @@ const APP_PROPERTIES = new Vue({
             this.page = 0;
             this.totalPages = 0;
             this.updatePaginationBtnVisibility();
+
+            if(window.innerWidth <= 1000){
+                switchMapPropertiesView(document.querySelector(".switch-btn"));
+            }
 
             axios.get(`/api/properties/${id}`)
                 .then(resp =>{
@@ -177,10 +181,22 @@ const APP_STATS = new Vue({
     methods: {
         async getStatistics() {
             axios.get('/api/statistics')
-                .then(resp => this.stats = resp.data)
+                .then(resp => this.stats = resp.data["propertyStatistics"])
                 .catch(error => {
                     console.error("STATISTICS FAILED TO LOAD\n" + error);
                 })
         },
     }
 })
+
+function switchMapPropertiesView(button){
+    const properties = document.querySelector(".properties");
+    const mapAndStats = document.querySelector(".map-section");
+
+    button.innerHTML = button.innerHTML === "Відкрити карту" ? "&#8592; Повернутись" : "Відкрити карту";
+    properties.style.display = getComputedStyle(properties).display === "none" ? "flex" : "none";
+    mapAndStats.style.display = getComputedStyle(mapAndStats).display === "none" ? "flex" : "none";
+
+    //map display settings drop after display:none, so this re-renders it properly
+    map.invalidateSize();
+}

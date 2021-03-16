@@ -12,6 +12,8 @@
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
+                <p class="attachments-modal-close">&#128473;</p>
+
                 <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                      v-for="attach in attachments" v-if="attach != null">
 
@@ -68,7 +70,7 @@
 
         </div>
 
-        <div class="property-items">
+        <div class="property-items" v-cloak>
             <div class="property" v-model="properties" v-for="prop in properties"
                         @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
@@ -78,11 +80,14 @@
                 <div class="property-data">
                     <h3 class="property__title">{{prop.name}}</h3>
 
-                    <p class="property__area_transferred" v-if="prop.areaTransferred">
-                        {{prop.areaTransferred}}м<sup>2</sup>
-                    </p>
+                    <div class="property-area-main">
+                        <p class="property__area_transferred" v-if="prop.areaTransferred">
+                            {{prop.areaTransferred}}м<sup>2</sup>
+                        </p>
 
-                    <p class="property__area">{{prop.area}}м<sup>2</sup></p>
+                        <p class="property__area">{{prop.area}}м<sup>2</sup></p>
+                    </div>
+
                     <p class="property__address">{{prop.address}}</p>
 
                     <p :style="{background:getStatusLabelColor(prop.status)}" class="property__status">
@@ -101,14 +106,17 @@
                         </li>
                     </ul>
 
-                    <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
-                            @click="showAttachmentsModal(prop.attachments)">
+                    <div class="property__footer">
+                        <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
+                                @click="showAttachmentsModal(prop.attachments)">
 
-                        Переглянути прикріплення &#129034;
-                    </button>
+                            Переглянути прикріплення &#129034;
+                        </button>
 
-                    <p v-if="prop.amountOfRent" class="property__amount">{{prop.amountOfRent}}₴</p>
+                        <p v-if="prop.amountOfRent" class="property__amount">{{prop.amountOfRent}}₴</p>
+                    </div>
                 </div>
+
             </div>
         </div>
 
