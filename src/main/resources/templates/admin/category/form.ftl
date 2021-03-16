@@ -7,11 +7,11 @@
            href="/admin/categories<#if category??>/${category.id}</#if>">&#8592;</a>
     </div>
 
-    <div class="category__container">
+    <div class="d-block mt-5 mx-auto flex-column align-items-center">
 
         <h1 class="user-select-none"> <#if category??> Оновити<#else > Створити нову</#if> категорію</h1>
 
-        <form class="" action="/admin/categories<#if category??>/update/${category.id}<#else >/create</#if>"
+        <form action="/admin/categories<#if category??>/update/${category.id}<#else >/create</#if>"
               method="POST">
             <div class="form-group">
 
