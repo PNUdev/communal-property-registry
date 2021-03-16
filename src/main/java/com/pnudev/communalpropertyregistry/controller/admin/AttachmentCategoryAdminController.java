@@ -86,7 +86,7 @@ public class AttachmentCategoryAdminController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 
-        attachmentCategoryService.delete(id);
+        attachmentCategoryService.deleteById(id);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію успішно видалено!");
 
         return "redirect:/admin/attachment-categories";

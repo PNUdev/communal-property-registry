@@ -44,7 +44,7 @@ public class ExceptionInterceptor {
 
         redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceException.getMessage());
 
-        return "redirect:/admin/attachment-categories";
+        return "redirect:/admin";
     }
 
 }

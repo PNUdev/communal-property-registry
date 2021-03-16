@@ -19,6 +19,6 @@ public interface AttachmentCategoryService {
 
     void create(AttachmentCategoryDto attachmentCategoryDto);
 
-    void delete(Long id);
+    void deleteById(Long id);
 
 }
