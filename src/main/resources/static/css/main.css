@@ -101,7 +101,7 @@ header > img{
     position: relative;
 }
 
-.properties__management > select{
+#category__filter, #status__filter{
     height: 2em;
     background-color: #C1CDDA;
     color: #000;
@@ -111,16 +111,38 @@ header > img{
 
 .drop-filters-btn{
     display: inline-block;
-    font-size: 23px;
-    margin-bottom: 0;
-
+    font-size: 18px;
+    font-weight: bold;
+    width: 28px;
+    height: 28px;
+    margin: -.5em .5em;
+    position: relative;
     transition: .3s linear;
     cursor: pointer;
 }
 
-.drop-filters-btn:hover{
-    color: #ff2727;
-    transform: scale(1.2);
+.drop-filters-btn:before, .attachments-modal-close:before,
+.drop-filters-btn:after, .attachments-modal-close:after {
+    content: ' ';
+    position: absolute;
+    left: 14px;
+    height: 28px;
+    width: 2.5px;
+    background-color: #253951;
+    transition: .2s;
+}
+
+.drop-filters-btn:before, .attachments-modal-close:before {
+    transform: rotate(45deg);
+}
+
+.drop-filters-btn:after, .attachments-modal-close:after {
+    transform: rotate(-45deg);
+}
+
+.drop-filters-btn:hover:before,
+.drop-filters-btn:hover:after{
+    background: #ff2727;
 }
 
 .switch-btn{
@@ -363,6 +385,7 @@ header > img{
     left: -.01vw;
     top: -.5vh;
     backdrop-filter: blur(.3em);
+    -webkit-backdrop-filter: blur(.3em);
     z-index: 1001;
 }
 
@@ -382,18 +405,23 @@ header > img{
 .attachment-modal{
     padding: 2em 0;
     backdrop-filter: blur(.7em);
+    -webkit-backdrop-filter: blur(.7em);
     overflow-y: scroll;
 }
 
 .attachments-modal-close{
     position: absolute;
     right: 1.5em;
-    top: 0;
-    font-size: 34px;
-    font-weight: bold;
-    color: #ff6060;
+    top: .5em;
+    width: 25px;
+    height: 25px;
     cursor: pointer;
     display: none;
+}
+
+.attachments-modal-close:before, .attachments-modal-close:after{
+    width: 3px;
+    background: #ff6060;
 }
 
 .attachment-modal>div{
@@ -569,8 +597,11 @@ header > img{
     }
 
     .property-description{
-        margin-top: 1em;
         font-size: 15px;
+    }
+
+    .properties-pagination{
+        top: 40%;
     }
 
     #prev-btn, #next-btn{
@@ -657,12 +688,21 @@ header > img{
     }
 
     .properties-pagination{
+        top: 35%;
         width: 15%;
     }
 
     .properties__management{
         font-size: 13px;
         margin-bottom: -1px;
+    }
+
+    .drop-filters-btn{
+        height: 28px;
+    }
+
+    .drop-filters-btn:before, .drop-filters-btn:after{
+        height: 25px;
     }
 
     #prev-btn, #next-btn{
@@ -676,10 +716,6 @@ header > img{
 
     .attachment-modal{
         padding-top: 3em;
-    }
-
-    .attachments-modal-close{
-        right: .6em;
     }
 
     .attachment-modal > .card{
@@ -804,13 +840,21 @@ header > img{
     }
 
     .attachments-modal-close{
-        right: .3em;
+        right: 1em;
     }
 
     .drop-filters-btn{
+        margin:0;
+        height: 20px;
+        width: 25px;
         position: absolute;
-        top: -150%;
-        right: 0;
+        top: -111%;
+        right: 2%;
+    }
+
+    .drop-filters-btn:before, .drop-filters-btn:after{
+        height: 21px;
+        margin: 0;
     }
 
     #status__filter{
