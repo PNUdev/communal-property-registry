@@ -126,9 +126,8 @@ public class PropertyAdminController {
                 redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
                 redirectAttributes.addFlashAttribute("propertyId", id);
                 return "redirect:/admin/properties/addresses";
-            } else {
-                addressDto = addresses.get(0);
             }
+            addressDto = addresses.get(0);
         }
 
         propertyAdminService.updateById(id, propertyAdminFormDto, addressDto);
@@ -148,9 +147,8 @@ public class PropertyAdminController {
                 redirectAttributes.addFlashAttribute("addressesDto", addresses);
                 redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
                 return "redirect:/admin/properties/addresses";
-            } else {
-                addressDto = addresses.get(0);
             }
+            addressDto = addresses.get(0);
         }
 
         propertyAdminService.create(propertyAdminFormDto, addressDto);
