@@ -34,9 +34,8 @@ public class ExceptionInterceptor {
         return "redirect:/admin";
     }
 
-
     @ExceptionHandler(AttachmentCategoryException.class)
-    public String attachmentCategoryException(ServiceException serviceException,
+    public String attachmentCategoryException(AttachmentCategoryException serviceException,
                                               RedirectAttributes redirectAttributes,
                                               HttpServletRequest request) {
 
@@ -44,7 +43,7 @@ public class ExceptionInterceptor {
 
         redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceException.getMessage());
 
-        return "redirect:/admin";
+        return "redirect:/admin/attachment-categories";
     }
 
 }
