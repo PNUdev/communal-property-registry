@@ -7,7 +7,6 @@ import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
-import com.pnudev.communalpropertyregistry.util.TomTomClient;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 import static java.util.Objects.nonNull;
@@ -30,10 +27,6 @@ import static java.util.Objects.nonNull;
 @Service
 public class PropertyAdminServiceImpl implements PropertyAdminService {
 
-    private static final Pattern pattern = Pattern.compile("freeformAddress\":\"(?<freeformAddress>[^\"]+).*?position\":\\{\"lat\":(?<lat>[\\d.]+),\"lon\":(?<lon>[\\d.]+)");
-
-    private final TomTomClient tomTomClient;
-
     private final PropertyDslRepository propertyDslRepository;
 
     private final PropertyRepository propertyRepository;
@@ -41,12 +34,10 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     private final PropertyMapper propertyMapper;
 
     @Autowired
-    public PropertyAdminServiceImpl(TomTomClient tomTomClient,
-                                    PropertyDslRepository propertyDslRepository,
+    public PropertyAdminServiceImpl(PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
                                     PropertyMapper propertyMapper) {
 
-        this.tomTomClient = tomTomClient;
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
         this.propertyMapper = propertyMapper;
@@ -157,31 +148,6 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     @Override
     public void deleteById(Long id) {
         propertyRepository.deleteById(id);
-    }
-
-    @Override
-    public List<AddressDto> getAddresses(String address) {
-
-        Matcher matcher = pattern.matcher(tomTomClient.processGetAddressRequest(address));
-
-        List<AddressDto> addresses = new ArrayList<>();
-
-        while (matcher.find()) {
-            addresses.add(AddressDto.builder()
-                    .address(matcher.group("freeformAddress"))
-                    .lat(Double.parseDouble(matcher.group("lat")))
-                    .lon(Double.parseDouble(matcher.group("lon")))
-                    .build()
-            );
-        }
-
-        if (addresses.isEmpty()) {
-            throw new PropertyAdminException("Вказанa адресa є невірною!");
-        }
-
-        log.info("Found [{}] addresses by input data: [{}]!", addresses.size(), address);
-
-        return addresses;
     }
 
 }

@@ -76,14 +76,14 @@
             <div>
                 <label for="area" class="form-label">Площа</label>
                 <input name="area" type="number" class="form-control" step="0.01" id="area"
-                       number="<#if propertyAdminDto??>#{propertyAdminDto.area}</#if>" required>
+                       value="${(propertyAdminDto.area?string("0.00;; decimalSeparator='.'"))!}" required>
             </div>
 
             <div>
                 <label for="areaTransferred" class="form-label">Передана площа</label>
                 <div class="input-group">
                     <input name="areaTransferred" type="number" step="0.01" class="form-control" id="areaTransferred"
-                           number="<#if propertyAdminDto??>#{propertyAdminDto.areaTransferred}</#if>" required>
+                           value="${(propertyAdminDto.areaTransferred?string("0.00;; decimalSeparator='.'"))!}" required>
 
                     <div class="input-group-text">
                         <label class="form-check-label" for="checkbox1">Публічні дані?&#x00A0;&#x00A0;</label>
@@ -141,7 +141,7 @@
                 <label for="amountOfRent" class="form-label">Сума за оренду</label>
                 <div class="input-group">
                     <input name="amountOfRent" type="number" step="0.01" class="form-control" id="amountOfRent" required
-                           number="<#if propertyAdminDto??>#{propertyAdminDto.amountOfRent}</#if>">
+                           value="${(propertyAdminDto.amountOfRent?string("0.00;; decimalSeparator='.'"))!}">
 
                     <div class="input-group-text">
                         <label class="form-check-label" for="checkbox5">Публічні дані?&#x00A0;&#x00A0;</label>
@@ -189,14 +189,7 @@
     };
 
     imageUrl.addEventListener('change', setImageSrcUrl);
-    document.addEventListener('DOMContentLoaded', function () {
-
-        document.getElementById("area").value = document.getElementById("area").getAttribute("number").replace(",",".");
-        document.getElementById("areaTransferred").value = document.getElementById("areaTransferred").getAttribute("number").replace(",",".");
-        document.getElementById("amountOfRent").value = document.getElementById("amountOfRent").getAttribute("number").replace(",",".");
-
-        setImageSrcUrl();
-    });
+    document.addEventListener('DOMContentLoaded', setImageSrcUrl);
 
     imageDisplay.addEventListener('load', function () {
         imagePreviewBlock.hidden = false;

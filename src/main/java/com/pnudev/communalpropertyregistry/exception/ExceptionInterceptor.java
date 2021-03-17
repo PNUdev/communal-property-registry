@@ -16,7 +16,7 @@ public class ExceptionInterceptor {
     @ExceptionHandler(PropertyAdminException.class)
     public String propertyAdminException(PropertyAdminException propertyAdminException, RedirectAttributes redirectAttributes) {
 
-        log.trace("PropertyAdminException was thrown", propertyAdminException);
+        log.error("PropertyAdminException was thrown", propertyAdminException);
 
         redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), propertyAdminException.getMessage());
 

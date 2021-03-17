@@ -6,6 +6,7 @@ import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import com.pnudev.communalpropertyregistry.service.PropertyAdminService;
+import com.pnudev.communalpropertyregistry.util.AddressResolverClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,14 +31,18 @@ import static java.util.Objects.nonNull;
 @RequestMapping("/admin/properties")
 public class PropertyAdminController {
 
+    private final AddressResolverClient addressResolverClient;
+
     private final PropertyAdminService propertyAdminService;
 
     private final CategoryByPurposeService categoryByPurposeService;
 
     @Autowired
-    public PropertyAdminController(PropertyAdminService propertyAdminService,
+    public PropertyAdminController(AddressResolverClient addressResolverClient,
+                                   PropertyAdminService propertyAdminService,
                                    CategoryByPurposeService categoryByPurposeService) {
 
+        this.addressResolverClient = addressResolverClient;
         this.propertyAdminService = propertyAdminService;
         this.categoryByPurposeService = categoryByPurposeService;
     }
@@ -115,7 +120,7 @@ public class PropertyAdminController {
                          AddressDto addressDto) {
 
         if (isNull(addressDto.getLat()) || isNull(addressDto.getLon())) {
-            List<AddressDto> addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
+            List<AddressDto> addresses = addressResolverClient.getAddressesDto(propertyAdminFormDto.getAddress());
             if (addresses.size() != 1) {
                 redirectAttributes.addFlashAttribute("addressesDto", addresses);
                 redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);
@@ -138,7 +143,7 @@ public class PropertyAdminController {
                          RedirectAttributes redirectAttributes) {
 
         if (isNull(addressDto.getLat()) || isNull(addressDto.getLon())) {
-            List<AddressDto> addresses = propertyAdminService.getAddresses(propertyAdminFormDto.getAddress());
+            List<AddressDto> addresses = addressResolverClient.getAddressesDto(propertyAdminFormDto.getAddress());
             if (addresses.size() != 1) {
                 redirectAttributes.addFlashAttribute("addressesDto", addresses);
                 redirectAttributes.addFlashAttribute("propertyAdminFormDto", propertyAdminFormDto);

@@ -17,8 +17,8 @@
         <input name="name" type="hidden" value="${propertyAdminFormDto.name}">
         <input name="categoryByPurposeId" type="hidden" value="#{propertyAdminFormDto.categoryByPurposeId}">
         <input name="propertyStatus" type="hidden" value="${propertyAdminFormDto.propertyStatus}">
-        <input name="area" type="hidden" value="#{propertyAdminFormDto.area}" id="area">
-        <input name="areaTransferred" type="hidden" value="#{propertyAdminFormDto.areaTransferred}" id="areaTransferred">
+        <input name="area" type="hidden" value="${propertyAdminFormDto.area?string("0.00;; decimalSeparator='.'")}" id="area">
+        <input name="areaTransferred" type="hidden" value="${propertyAdminFormDto.areaTransferred?string("0.00;; decimalSeparator='.'")}" id="areaTransferred">
         <input name="areaTransferredPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.areaTransferredPubliclyViewable>checked</#if>/>
         <input name="balanceHolder" type="hidden" value="${propertyAdminFormDto.balanceHolder}" >
         <input name="balanceHolderPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.balanceHolderPubliclyViewable>checked</#if>/>
@@ -26,7 +26,7 @@
         <input name="ownerPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.ownerPubliclyViewable>checked</#if>/>
         <input name="leaseAgreementEndDate" type="hidden" value="${propertyAdminFormDto.leaseAgreementEndDate}">
         <input name="leaseAgreementEndDatePubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.leaseAgreementEndDatePubliclyViewable>checked</#if>/>
-        <input name="amountOfRent" type="hidden" value="#{propertyAdminFormDto.amountOfRent}" id="amountOfRent">
+        <input name="amountOfRent" type="hidden" value="${propertyAdminFormDto.amountOfRent?string("0.00;; decimalSeparator='.'")}" id="amountOfRent">
         <input name="amountOfRentPubliclyViewable" type="checkbox" hidden <#if propertyAdminFormDto.amountOfRentPubliclyViewable>checked</#if>/>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -40,10 +40,6 @@
 
         document.getElementById("lat").value = selectedElem.getAttribute('lat').replace(",", ".");
         document.getElementById("lon").value = selectedElem.getAttribute('lon').replace(",", ".");
-
-        document.getElementById("amountOfRent").value = document.getElementById("amountOfRent").value.replace(",", ".");
-        document.getElementById("area").value = document.getElementById('area').value.replace(",", ".");
-        document.getElementById("areaTransferred").value = document.getElementById('areaTransferred').value.replace(",", ".");
 
         document.getElementById("addressForm").submit();
     }
