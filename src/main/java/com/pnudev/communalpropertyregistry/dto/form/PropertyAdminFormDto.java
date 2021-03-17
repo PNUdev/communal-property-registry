@@ -1,35 +1,27 @@
-package com.pnudev.communalpropertyregistry.domain;
+package com.pnudev.communalpropertyregistry.dto.form;
 
+import com.pnudev.communalpropertyregistry.domain.Property;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Embedded;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Data
-@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Property {
-
-    @Id
-    private Long id;
+public class PropertyAdminFormDto {
 
     private String imageUrl;
 
     private String address;
 
-    @Embedded.Nullable
-    private PropertyLocation propertyLocation;
-
     private String name;
 
     private Long categoryByPurposeId;
 
-    private PropertyStatus propertyStatus;
+    private Property.PropertyStatus propertyStatus;
 
     private Double area;
 
@@ -39,6 +31,7 @@ public class Property {
 
     private String owner;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate leaseAgreementEndDate;
 
     private Double amountOfRent;
@@ -52,23 +45,5 @@ public class Property {
     private boolean isLeaseAgreementEndDatePubliclyViewable;
 
     private boolean isAmountOfRentPubliclyViewable;
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class PropertyLocation {
-
-        private Double lat;
-
-        private Double lon;
-
-    }
-
-    public enum PropertyStatus {
-
-        NON_RENT, RENT, FIRST_OR_SECOND_TYPE_LIST, PRIVATIZED, USED_BY_CITY_COUNCIL
-
-    }
 
 }

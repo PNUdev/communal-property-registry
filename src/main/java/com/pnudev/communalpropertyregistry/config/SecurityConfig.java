@@ -13,12 +13,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/admin/**").authenticated()
-                .antMatchers(
-                        "/", "/api/statistics", "/api/properties/report", "/api/properties/map-locations",
-                        "/api/properties", "/api/properties/{id}", "/api/categories-by-purpose",
-                        "/images/**", "/css/main.css", "/js/**" )
-                .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .defaultSuccessUrl("/admin", true)
