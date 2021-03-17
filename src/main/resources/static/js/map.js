@@ -1,5 +1,10 @@
 //init map
-let map = L.map('map').setView([48.53, 25.05], 12)
+const KOLOMYIA_MAP_LOCATION = {
+    lat: 48.53,
+    lon: 25.05,
+};
+
+let map = L.map('map').setView([KOLOMYIA_MAP_LOCATION.lat, KOLOMYIA_MAP_LOCATION.lon], 12)
 
 L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FLZjrggiEUkOsMhDShR0', {
     attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>
