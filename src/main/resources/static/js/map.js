@@ -1,5 +1,10 @@
 //init map
-let map = L.map('map').setView([49.25589, 24.90972], 7)
+const KOLOMYIA_MAP_LOCATION = {
+    lat: 48.53,
+    lon: 25.05,
+};
+
+let map = L.map('map').setView([KOLOMYIA_MAP_LOCATION.lat, KOLOMYIA_MAP_LOCATION.lon], 12)
 
 L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FLZjrggiEUkOsMhDShR0', {
     attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>
@@ -79,14 +84,16 @@ function addMarker(marker) {
         'id', {value:marker.id})
         .addTo(map)
 
-    newMarker.on('click', handleMarkerClick)
+    newMarker.addEventListener("click", handleMarkerClick, {once:true});
     markerLayers.push(newMarker);
 }
 
 //display property when clicking marker
 function handleMarkerClick(e) {
-    APP_PROPERTIES.getPropertyOnMarkerClick(e.target.id)
-    map.setView(e.target.getLatLng(), 7)
+    if(e.originalEvent.isTrusted){
+        APP_PROPERTIES.getPropertyOnMarkerClick(e.target.id)
+        map.setView(e.target.getLatLng(), 12.5)
+    }
 }
 
 //Highlight marker on property hover

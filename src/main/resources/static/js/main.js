@@ -147,7 +147,7 @@ const APP_PROPERTIES = new Vue({
         showAttachmentsModal(attachments){
             this.attachments = attachments;
 
-            if(this.attachments?.length > 0){
+            if(this.attachments && this.attachments.length > 0){
                 this.showAttachModal = true;
             }
         },

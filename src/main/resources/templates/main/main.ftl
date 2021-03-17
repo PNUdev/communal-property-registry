@@ -12,7 +12,7 @@
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
-                <p class="attachments-modal-close">&#128473;</p>
+                <p class="attachments-modal-close"></p>
 
                 <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                      v-for="attach in attachments" v-if="attach != null">
@@ -60,7 +60,7 @@
 
                 </select>
 
-                <p class="drop-filters-btn" @click="dropFilters">&#128473;</p>
+                <p class="drop-filters-btn" @click="dropFilters"></p>
 
                 <div class="properties-pagination">
                     <button id="prev-btn" :disabled="!hasPrev" @click="changePage" ></button>
@@ -107,7 +107,8 @@
                     </ul>
 
                     <div class="property__footer">
-                        <button :class="[prop.attachments?.length > 0 ? '': 'property__attach_disabled', 'property__attach']"
+                        <button :class="[(prop.attachments && prop.attachments.length > 0) ?
+                                            '': 'property__attach_disabled', 'property__attach']"
                                 @click="showAttachmentsModal(prop.attachments)">
 
                             Переглянути прикріплення &#129034;
