@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Profile("production")
+@Profile("default")
 @Slf4j
 @Component
 public class TomTomAddressResolverClient implements AddressResolverClient {
