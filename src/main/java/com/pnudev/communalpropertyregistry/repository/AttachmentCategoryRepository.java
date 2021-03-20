@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AttachmentCategoryRepository extends CrudRepository<AttachmentCategory, Long> {
 
@@ -16,5 +17,7 @@ public interface AttachmentCategoryRepository extends CrudRepository<AttachmentC
     Boolean existsByName(String name);
 
     List<AttachmentCategory> findAll();
+
+    Optional<AttachmentCategory> findById(Long id);
 
 }
