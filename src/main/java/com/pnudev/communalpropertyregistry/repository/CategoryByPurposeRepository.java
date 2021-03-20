@@ -9,6 +9,4 @@ public interface CategoryByPurposeRepository extends CrudRepository<CategoryByPu
 
     List<CategoryByPurpose> findAll();
 
-    CategoryByPurpose findByName(String name);
-
 }

@@ -2,7 +2,7 @@ package com.pnudev.communalpropertyregistry.repository.dsl;
 
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
-import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
+import com.pnudev.communalpropertyregistry.mapper.PropertyMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.sql.SQLQueryFactory;

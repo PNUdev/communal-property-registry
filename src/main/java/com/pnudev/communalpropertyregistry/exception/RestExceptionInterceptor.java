@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RestExceptionInterceptor {
 
-    @ExceptionHandler(Exception.class)
+//    @ExceptionHandler(Exception.class)
     public ErrorResponse handleInternalServerError(Exception exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())

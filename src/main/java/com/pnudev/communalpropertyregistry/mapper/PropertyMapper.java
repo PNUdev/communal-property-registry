@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.util.mapper;
+package com.pnudev.communalpropertyregistry.mapper;
 
 import com.pnudev.communalpropertyregistry.domain.Attachment;
 import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
@@ -104,35 +104,6 @@ public class PropertyMapper {
                 .build();
     }
 
-    public Property mapToProperty(Tuple tuple) {
-
-        Property.PropertyLocation propertyLocation = Property.PropertyLocation.builder()
-                .lat(tuple.get(property.lat))
-                .lon(tuple.get(property.lon))
-                .build();
-
-        return Property.builder()
-                .id(tuple.get(property.id))
-                .imageUrl(tuple.get(property.imageUrl))
-                .address(tuple.get(property.address))
-                .propertyLocation(propertyLocation)
-                .name(tuple.get(property.name))
-                .categoryByPurposeId(tuple.get(property.categoryByPurposeId))
-                .propertyStatus(Property.PropertyStatus.valueOf(tuple.get(property.propertyStatus)))
-                .area(tuple.get(property.area))
-                .areaTransferred(tuple.get(property.areaTransferred))
-                .balanceHolder(tuple.get(property.balanceHolder))
-                .owner(tuple.get(property.owner))
-                .leaseAgreementEndDate(tuple.get(property.leaseAgreementEndDate).toLocalDate())
-                .amountOfRent(tuple.get(property.amountOfRent))
-                .isAreaTransferredPubliclyViewable(tuple.get(property.isAreaTransferredPubliclyViewable))
-                .isBalanceHolderPubliclyViewable(tuple.get(property.isBalanceHolderPubliclyViewable))
-                .isOwnerPubliclyViewable(tuple.get(property.isOwnerPubliclyViewable))
-                .isLeaseAgreementEndDatePubliclyViewable(tuple.get(property.isLeaseAgreementEndDatePubliclyViewable))
-                .isAmountOfRentPubliclyViewable(tuple.get(property.isAmountOfRentPubliclyViewable))
-                .build();
-    }
-
     private AttachmentResponseDto createAttachmentResponseDto(List<Attachment> attachments,
                                                               AttachmentCategory attachmentCategory) {
 
@@ -196,16 +167,21 @@ public class PropertyMapper {
                 .imageUrl(propertyTuple.get(property.imageUrl))
                 .propertyStatus(propertyStatus)
                 .propertyLocation(propertyLocation)
-                .owner(propertyTuple.get(property.isOwnerPubliclyViewable) ?
-                        propertyTuple.get(property.owner) : null)
-                .amountOfRent(propertyTuple.get(property.isAmountOfRentPubliclyViewable) ?
-                        propertyTuple.get(property.amountOfRent) : null)
-                .balanceHolder(propertyTuple.get(property.isBalanceHolderPubliclyViewable) ?
-                        propertyTuple.get(property.balanceHolder) : null)
-                .areaTransferred(propertyTuple.get(property.isAreaTransferredPubliclyViewable) ?
-                        propertyTuple.get(property.areaTransferred) : null)
-                .leaseAgreementEndDate(propertyTuple.get(property.isLeaseAgreementEndDatePubliclyViewable)
-                        ? propertyTuple.get(property.leaseAgreementEndDate).toLocalDate() : null)
+                .owner(validate(
+                        propertyTuple.get(property.isOwnerPubliclyViewable),
+                        propertyTuple.get(property.owner)))
+                .amountOfRent(validate(
+                        propertyTuple.get(property.isAmountOfRentPubliclyViewable),
+                        propertyTuple.get(property.amountOfRent)))
+                .balanceHolder(validate(
+                        propertyTuple.get(property.isBalanceHolderPubliclyViewable),
+                        propertyTuple.get(property.balanceHolder)))
+                .areaTransferred(validate(
+                        propertyTuple.get(property.isAreaTransferredPubliclyViewable),
+                        propertyTuple.get(property.areaTransferred)))
+                .leaseAgreementEndDate(validate(
+                        propertyTuple.get(property.isLeaseAgreementEndDatePubliclyViewable),
+                        propertyTuple.get(property.leaseAgreementEndDate).toLocalDate()))
                 .categoryByPurposeName(categoryByPurpose.getName())
                 .attachments(
                         createAttachmentResponseDto(
