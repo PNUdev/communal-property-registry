@@ -1,0 +1,85 @@
+<#include "../include/header.ftl">
+
+<div class="m-2">
+    <a class="btn btn-outline-primary" href="/admin/properties">&#8592;</a>
+</div>
+
+<div class="w-100">
+    <div class="col-md-5 mx-auto mt-5 py-3 px-5 rounded bg-light border">
+        <form method="POST" id="attachmentForm">
+
+            <div>
+                <label for="note" class="form-label">Примітка</label>
+                <input name="note" id="note" type="text" class="form-control"
+                       value="${(attachment.note)!}">
+            </div>
+
+            <div>
+                <label for="link" class="form-label">Посилання</label>
+                <input name="link" id="link" type="text" class="form-control"
+                       value="${(attachment.link)!}">
+            </div>
+
+            <div>
+                <label for="attachmentCategory" class="form-label">Категорія прикріплення</label>
+                <select name="attachmentCategoryId" class="form-select" id="attachmentCategory" required>
+                    <#list attachmentCategories as attachmentCategory>
+                        <option value="${attachmentCategory.id}" class="<#if attachmentCategory.publiclyViewable>text-success<#else>text-danger</#if>"
+                                <#if attachment?? && attachmentCategory.name == attachment.attachmentCategoryName>selected</#if>>
+                            ${attachmentCategory.name}
+                        </option>
+                    </#list>
+                </select>
+            </div>
+
+            <div>
+                <label for="publiclyViewableDiv" class="form-label">Налаштування публічності</label>
+                <div class="d-flex justify-content-between" id="publiclyViewableDiv">
+                    <label class="form-label" for="publiclyViewable">
+                        Прикріплення публічно доступне
+                    </label>
+                    <input name="publiclyViewable" id="publiclyViewable" type="checkbox" class="form-check-input h4"
+                           <#if attachment?? && attachment.publiclyViewable>checked</#if>/>
+                </div>
+            </div>
+
+            <p id="publiclyViewableHint"></p>
+
+            <div class="d-flex justify-content-evenly mt-3">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <#if attachment??>
+                    <button type="submit" class="btn btn-outline-primary" formaction="/admin/attachments/update/#{attachment.id}/property/#{propertyId}">
+                        Оновити
+                    </button>
+                    <a href="/admin/attachments/delete/#{attachment.id}" class="link-danger">Видалити</a>
+                <#else >
+                    <button type="submit" class="btn btn-outline-primary">Зберегти</button>
+                </#if>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let attachmentCategory = document.getElementById("attachmentCategory");
+    let publiclyViewable = document.getElementById("publiclyViewable");
+
+    attachmentCategory.onchange = function () {
+        let publiclyViewableHint = document.getElementById("publiclyViewableHint");
+        let selectTag = document.getElementById("attachmentCategory");
+        let selectedOption = selectTag.options[selectTag.selectedIndex];
+
+        if (selectedOption.classList.contains("text-danger")) {
+            publiclyViewable.setAttribute("disabled", "disabled");
+            publiclyViewableHint.innerText = "Вибрана категорія прикріплення не є публічно видимою!";
+            publiclyViewableHint.classList.add("alert", "alert-info");
+            publiclyViewable.checked = false;
+        } else {
+            publiclyViewable.removeAttribute("disabled");
+            publiclyViewableHint.innerText = "";
+            publiclyViewableHint.classList.remove("alert", "alert-info");
+        }
+    }
+</script>
+
+<#include "../../include/footer.ftl">

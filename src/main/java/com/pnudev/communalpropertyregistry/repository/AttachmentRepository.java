@@ -11,6 +11,14 @@ public interface AttachmentRepository extends CrudRepository<Attachment, Long> {
 
     List<Attachment> findAttachmentsByPropertyIdIn(List<Long> propertyIds);
 
+    List<Attachment> findAllByPropertyId(Long id);
+
+    void deleteAllByPropertyId(Long propertyId);
+
+    boolean existsByAttachmentCategoryIdAndPropertyIdAndIdNot(Long attachmentCategoryId, Long propertyId, Long AttachmentId);
+
+    boolean existsByAttachmentCategoryIdAndPropertyId(Long attachmentCategoryId, Long propertyId);
+
     boolean existsByAttachmentCategoryId(Long attachmentCategoryId);
 
 }

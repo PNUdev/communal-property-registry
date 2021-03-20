@@ -33,14 +33,18 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     private final PropertyMapper propertyMapper;
 
+    private final AttachmentAdminService attachmentAdminService;
+
     @Autowired
     public PropertyAdminServiceImpl(PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
-                                    PropertyMapper propertyMapper) {
+                                    PropertyMapper propertyMapper,
+                                    AttachmentAdminService attachmentAdminService) {
 
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
         this.propertyMapper = propertyMapper;
+        this.attachmentAdminService = attachmentAdminService;
     }
 
     @Override
@@ -147,6 +151,9 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     @Override
     public void deleteById(Long id) {
+
+        attachmentAdminService.deleteAllByPropertyId(id);
+
         propertyRepository.deleteById(id);
     }
 
