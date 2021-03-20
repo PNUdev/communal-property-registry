@@ -1,7 +1,7 @@
 <#include "../include/header.ftl">
 
 <#if SUCCESS_FLASH_MESSAGE?? || ERROR_FLASH_MESSAGE??>
-    <div class="alert mt-4 <#if SUCCESS_FLASH_MESSAGE??>alert-success<#else>alert-danger</#if>" id="popup" role="alert">
+    <div class="alert mt-4 col-md-10 mx-auto py-3 <#if SUCCESS_FLASH_MESSAGE??>alert-success<#else>alert-danger</#if>" id="popup" role="alert">
         ${(SUCCESS_FLASH_MESSAGE)!}${(ERROR_FLASH_MESSAGE)!}
     </div>
 </#if>
@@ -71,5 +71,14 @@
     </#if>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let modal = document.getElementById("popup");
+        setTimeout(function () {
+            modal.hidden = true;
+        }, 5000);
+    });
+</script>
 
 <#include "../../include/footer.ftl">
