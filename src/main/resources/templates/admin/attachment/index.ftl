@@ -58,8 +58,8 @@
                     </#if>
                 </td>
                 <td><#if attachment.attachmentCategoryPubliclyViewable>${attachment.publiclyViewable?string("Так","Ні")}<#else >-</#if></td>
-                <td><a href="/admin/attachments/update/#{attachment.id}/property/#{property.id}">Редагувати</a></td>
-                <td><a href="/admin/attachments/delete/#{attachment.id}">Видалити</a></td>
+                <td><a class="btn btn-outline-primary" href="/admin/attachments/update/#{attachment.id}/property/#{property.id}">Редагувати</a></td>
+                <td><a class="btn btn-outline-danger" href="/admin/attachments/delete/#{attachment.id}">Видалити</a></td>
             </tr>
         </#list>
         </tbody>

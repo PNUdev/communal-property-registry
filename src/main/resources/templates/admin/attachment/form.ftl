@@ -10,13 +10,13 @@
 
             <div>
                 <label for="note" class="form-label">Примітка</label>
-                <input name="note" id="note" type="text" class="form-control"
+                <input name="note" id="note" type="text" class="form-control" data-oldvalue="${(attachment.note)!}"
                        value="${(attachment.note)!}">
             </div>
 
             <div>
                 <label for="link" class="form-label">Посилання</label>
-                <input name="link" id="link" type="text" class="form-control"
+                <input name="link" id="link" type="text" class="form-control" data-oldvalue="${(attachment.link)!}"
                        value="${(attachment.link)!}">
             </div>
 
@@ -25,7 +25,7 @@
                 <select name="attachmentCategoryId" class="form-select" id="attachmentCategory" required>
                     <#list attachmentCategories as attachmentCategory>
                         <option value="${attachmentCategory.id}" class="<#if attachmentCategory.publiclyViewable>text-success<#else>text-danger</#if>"
-                                <#if attachment?? && attachmentCategory.name == attachment.attachmentCategoryName>selected</#if>>
+                                <#if attachment?? && attachmentCategory.name == attachment.attachmentCategoryName>selected data-oldvalue="#{attachmentCategory.id}"</#if>>
                             ${attachmentCategory.name}
                         </option>
                     </#list>
@@ -38,7 +38,7 @@
                     <label class="form-label" for="publiclyViewable">
                         Прикріплення публічно доступне
                     </label>
-                    <input name="publiclyViewable" id="publiclyViewable" type="checkbox" class="form-check-input h4"
+                    <input name="publiclyViewable" id="publiclyViewable" type="checkbox" class="form-check-input h4" data-oldvalue="${(attachment.publiclyViewable?string("1", "0"))!}"
                            <#if attachment?? && attachment.publiclyViewable>checked</#if>/>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <button type="submit" class="btn btn-outline-primary" formaction="/admin/attachments/update/#{attachment.id}/property/#{propertyId}">
                         Оновити
                     </button>
-                    <a href="/admin/attachments/delete/#{attachment.id}" class="link-danger">Видалити</a>
+                    <a href="/admin/attachments/delete/#{attachment.id}" class="btn btn-outline-danger">Видалити</a>
                 <#else >
                     <button type="submit" class="btn btn-outline-primary">Зберегти</button>
                 </#if>
@@ -61,6 +61,7 @@
 </div>
 
 <script>
+    let attachmentForm = document.getElementById("attachmentForm");
     let attachmentCategory = document.getElementById("attachmentCategory");
     let publiclyViewable = document.getElementById("publiclyViewable");
 
@@ -80,6 +81,33 @@
             publiclyViewableHint.classList.remove("alert", "alert-info");
         }
     }
+
+    function isUnique(elem) {
+        console.log(elem.value, elem.dataset.oldvalue);
+        return elem.value !== elem.dataset.oldvalue;
+    }
+
+    attachmentForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let note = document.getElementById("note");
+        let link = document.getElementById("link");
+        let publiclyViewable = document.getElementById("publiclyViewable");
+        let selectTag = document.getElementById("attachmentCategory");
+        let selectedOption = selectTag.options[selectTag.selectedIndex];
+
+        if (isUnique(note) || isUnique(link) || !selectedOption.dataset.oldvalue || publiclyViewable.checked != publiclyViewable.dataset.oldvalue) {
+            attachmentForm.submit();
+        } else {
+            if (!document.getElementById("popup")) {
+                let msg = "<div class='alert alert-danger text-center' id='popup'>Немає змін</div>";
+                attachmentForm.insertAdjacentHTML("beforebegin", msg);
+                setTimeout(function () {
+                    document.getElementById("popup").remove();
+                }, 5000);
+            }
+        }
+    });
 </script>
 
 <#include "../../include/footer.ftl">

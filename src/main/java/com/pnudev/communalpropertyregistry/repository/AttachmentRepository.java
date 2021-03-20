@@ -1,7 +1,9 @@
 package com.pnudev.communalpropertyregistry.repository;
 
 import com.pnudev.communalpropertyregistry.domain.Attachment;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -13,7 +15,8 @@ public interface AttachmentRepository extends CrudRepository<Attachment, Long> {
 
     List<Attachment> findAllByPropertyId(Long id);
 
-    void deleteAllByPropertyId(Long propertyId);
+    @Query("DELETE FROM attachment WHERE attachment.property_id = :propertyId")
+    void deleteAllByPropertyId(@Param("propertyId") Long propertyId);
 
     boolean existsByAttachmentCategoryIdAndPropertyIdAndIdNot(Long attachmentCategoryId, Long propertyId, Long AttachmentId);
 
