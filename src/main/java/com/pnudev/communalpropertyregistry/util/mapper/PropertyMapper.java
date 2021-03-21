@@ -127,7 +127,7 @@ public class PropertyMapper {
 
         List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
 
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.finAllCategories();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
         return properties.stream()
                 .map(property -> mapToPropertyResponseDto(property, filteredAttachments,
@@ -164,7 +164,7 @@ public class PropertyMapper {
                         property.isLeaseAgreementEndDatePubliclyViewable(),
                         property.getLeaseAgreementEndDate()))
                 .categoryByPurposeName(categoryByPurpose.getName())
-                .attachments(createAttachmentResponseDto(property.getId(), attachments, attachmentCategories))
+                .attachments(createAttachmentResponseDtos(property.getId(), attachments, attachmentCategories))
                 .build();
     }
 
@@ -182,33 +182,13 @@ public class PropertyMapper {
                 .findFirst()
                 .orElseThrow(() -> new ServiceApiException("Категорія за призначенням не знайдено!"));
 
-        return buildPropertyResponseDto(property, propertyCategoryByPurpose
-                , propertyAttachments, attachmentCategories);
+        return buildPropertyResponseDto(property, propertyCategoryByPurpose,
+                propertyAttachments, attachmentCategories);
     }
 
-    private AttachmentResponseDto createAttachmentResponseDto(List<Attachment> attachments,
-                                                              AttachmentCategory attachmentCategory) {
-
-        Attachment attachment = attachments.stream()
-                .filter((a) -> a.getAttachmentCategoryId().equals(attachmentCategory.getId())
-                        && a.isPubliclyViewable())
-                .findFirst()
-                .orElse(null);
-
-        if (nonNull(attachment)) {
-            return AttachmentResponseDto.builder()
-                    .categoryName(attachmentCategory.getName())
-                    .link(attachment.getLink())
-                    .note(attachment.getNote())
-                    .build();
-        }
-
-        return null;
-    }
-
-    private List<AttachmentResponseDto> createAttachmentResponseDto(Long propertyId,
-                                                                    List<Attachment> attachments,
-                                                                    List<AttachmentCategory> attachmentCategories) {
+    private List<AttachmentResponseDto> createAttachmentResponseDtos(Long propertyId,
+                                                                     List<Attachment> attachments,
+                                                                     List<AttachmentCategory> attachmentCategories) {
 
         List<Attachment> filteredAttachments = attachments.stream()
                 .filter(attachment -> attachment.getPropertyId().equals(propertyId))
@@ -219,6 +199,26 @@ public class PropertyMapper {
                 .map((category) -> createAttachmentResponseDto(filteredAttachments, category))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private AttachmentResponseDto createAttachmentResponseDto(List<Attachment> attachments,
+                                                              AttachmentCategory attachmentCategory) {
+
+        Attachment selectedAttachment = attachments.stream()
+                .filter(attachment -> attachment.getAttachmentCategoryId().equals(attachmentCategory.getId())
+                        && attachment.isPubliclyViewable())
+                .findFirst()
+                .orElse(null);
+
+        if (nonNull(selectedAttachment)) {
+            return AttachmentResponseDto.builder()
+                    .categoryName(attachmentCategory.getName())
+                    .link(selectedAttachment.getLink())
+                    .note(selectedAttachment.getNote())
+                    .build();
+        }
+
+        return null;
     }
 
     private PropertyAdminDto mapToPropertyAdminDto(Property property, List<CategoryByPurpose> categoriesByPurpose) {
@@ -247,7 +247,7 @@ public class PropertyMapper {
     private CategoryByPurpose findById(List<CategoryByPurpose> categoriesByPurposes, Long id) {
 
         Optional<CategoryByPurpose> categoryByPurpose = categoriesByPurposes.stream()
-                .filter(c -> c.getId().equals(id)).findFirst();
+                .filter(category -> category.getId().equals(id)).findFirst();
 
         return categoryByPurpose.orElseThrow(
                 () -> new PropertyAdminException("Категорію за призначенням не знайдено!"));

@@ -1,6 +1,5 @@
 package com.pnudev.communalpropertyregistry.service;
 
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
@@ -20,12 +19,7 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public CategoryByPurposeResponseDto findAll() {
-        return new CategoryByPurposeResponseDto(categoryByPurposeRepository.findAll());
-    }
-
-    @Override
-    public List<CategoryByPurpose> finAllCategories() {
+    public List<CategoryByPurpose> findAll() {
         return categoryByPurposeRepository.findAll();
     }
 

@@ -54,7 +54,9 @@ public class PropertyAdminController {
                           @PageableDefault Pageable pageable,
                           Model model) {
 
-        CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
+        CategoryByPurposeResponseDto categoryByPurposeResponseDto = new CategoryByPurposeResponseDto(
+                categoryByPurposeService.findAll());
+
         Page<PropertyAdminDto> propertiesAdminPage = propertyAdminService.findAll(
                 searchQuery, categoryByPurposeId, propertyStatus, pageable);
 
@@ -86,7 +88,8 @@ public class PropertyAdminController {
     public String update(@PathVariable(name = "id") Long id, Model model) {
 
         PropertyAdminDto propertyAdminDto = propertyAdminService.findById(id);
-        CategoryByPurposeResponseDto categoryByPurposeResponseDto = categoryByPurposeService.findAll();
+        CategoryByPurposeResponseDto categoryByPurposeResponseDto = new CategoryByPurposeResponseDto(
+                categoryByPurposeService.findAll());
 
         model.addAttribute("propertyAdminDto", propertyAdminDto);
         model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);

@@ -100,8 +100,6 @@ public class PropertyServiceImpl implements PropertyService {
             predicates.add(property.categoryByPurposeId.eq(category.getId()));
         }
 
-        // I decided to implement it this way in order to avoid creating additional method in repository
-
         Page<Property> propertyPages = propertyDslRepository
                 .findAll(pageable, predicates.toArray(Predicate[]::new));
 
