@@ -1,5 +1,7 @@
 package com.pnudev.communalpropertyregistry.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pnudev.communalpropertyregistry.domain.Property;
 import lombok.SneakyThrows;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -15,6 +17,8 @@ import java.awt.print.Pageable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 @Service
 public class ExcelReportBuilderServiceImpl implements ExcelReportBuilderService {
@@ -24,7 +28,6 @@ public class ExcelReportBuilderServiceImpl implements ExcelReportBuilderService 
     private final HSSFWorkbook workbook;
 
     private final HSSFSheet sheet;
-
 
     public ExcelReportBuilderServiceImpl(PropertyService propertyService) {
         this.workbook = new HSSFWorkbook();
@@ -72,11 +75,35 @@ public class ExcelReportBuilderServiceImpl implements ExcelReportBuilderService 
 
     }
 
-    private void writeDataRows(String searchQuery, String propertyStatus, Long categoryByPurposeId) {
+    private void writeDataRows(String searchQuery, String propertyStatus, Long categoryByPurposeI) {
 
-//        Page<PropertyResponseDto> properties = propertyService.findPropertiesBySearchQuery(
+//        List<PropertyResponseDto> properties = propertyService.findPropertiesBySearchQuery(
 //               searchQuery,  propertyStatus,  categoryByPurposeId, Pageable.unpaged());
 
+        ObjectMapper oMapper = new ObjectMapper();
+        int propertiesSize = 10;   // temporary
+        int columnsAmount = 14;    // temporary
+
+
+
+
+
+        IntStream.range(0, propertiesSize).forEach(
+                idx -> {
+                    Row row = sheet.createRow(idx+1);
+//                    Property property = properties.get(idx);
+//                    Map<String, Object> propertyMap = oMapper.convertValue(property, Map.class);
+
+
+                    for(int i =0; i < columnsAmount; i++){
+                        Cell cell = row.createCell(i);
+
+                        cell.setCellValue("YES");
+
+                        sheet.autoSizeColumn(i);
+                    }
+                }
+        );
     }
 
     private String getFileName(){
