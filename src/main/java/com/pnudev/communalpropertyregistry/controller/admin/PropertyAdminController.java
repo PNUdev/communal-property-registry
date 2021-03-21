@@ -79,7 +79,7 @@ public class PropertyAdminController {
 
     @GetMapping("/new")
     public String create(Model model) {
-        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeService.findAll());
+        model.addAttribute("categoriesByPurpose", categoryByPurposeService.findAll());
         return "admin/property/form";
     }
 
