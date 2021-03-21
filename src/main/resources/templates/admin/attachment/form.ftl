@@ -24,8 +24,12 @@
                 <label for="attachmentCategory" class="form-label">Категорія прикріплення</label>
                 <select name="attachmentCategoryId" class="form-select" id="attachmentCategory" required>
                     <#list attachmentCategories as attachmentCategory>
-                        <option value="${attachmentCategory.id}" class="<#if attachmentCategory.publiclyViewable>text-success<#else>text-danger</#if>"
-                                <#if attachment?? && attachmentCategory.name == attachment.attachmentCategoryName>selected data-oldvalue="#{attachmentCategory.id}"</#if>>
+                        <option value="${attachmentCategory.id}"
+                                class="<#if attachmentCategory.publiclyViewable>text-success<#else>text-danger</#if>"
+
+                                <#if attachment?? && attachmentCategory.name == attachment.attachmentCategoryName>
+                                    selected data-oldvalue="#{attachmentCategory.id}"
+                                </#if>>
                             ${attachmentCategory.name}
                         </option>
                     </#list>
@@ -38,7 +42,8 @@
                     <label class="form-label" for="publiclyViewable">
                         Прикріплення публічно доступне
                     </label>
-                    <input name="publiclyViewable" id="publiclyViewable" type="checkbox" class="form-check-input h4" data-oldvalue="${(attachment.publiclyViewable?string("1", "0"))!}"
+                    <input name="publiclyViewable" id="publiclyViewable" type="checkbox" class="form-check-input h4"
+                           data-oldvalue="${(attachment.publiclyViewable?string("1", "0"))!}"
                            <#if attachment?? && attachment.publiclyViewable>checked</#if>/>
                 </div>
             </div>
@@ -48,7 +53,8 @@
             <div class="d-flex justify-content-evenly mt-3">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <#if attachment??>
-                    <button type="submit" class="btn btn-outline-primary" formaction="/admin/attachments/update/#{attachment.id}/property/#{propertyId}">
+                    <button type="submit" class="btn btn-outline-primary"
+                            formaction="/admin/attachments/update/#{attachment.id}/property/#{propertyId}">
                         Оновити
                     </button>
                     <a href="/admin/attachments/delete/#{attachment.id}" class="btn btn-outline-danger">Видалити</a>
@@ -65,7 +71,7 @@
     let attachmentCategory = document.getElementById("attachmentCategory");
     let publiclyViewable = document.getElementById("publiclyViewable");
 
-    attachmentCategory.onchange = function () {
+    function attachmentCategoryOnChange() {
         let publiclyViewableHint = document.getElementById("publiclyViewableHint");
         let selectTag = document.getElementById("attachmentCategory");
         let selectedOption = selectTag.options[selectTag.selectedIndex];
@@ -82,8 +88,10 @@
         }
     }
 
+    document.addEventListener('DOMContentLoaded', attachmentCategoryOnChange);
+    attachmentCategory.onchange = attachmentCategoryOnChange;
+
     function isUnique(elem) {
-        console.log(elem.value, elem.dataset.oldvalue);
         return elem.value !== elem.dataset.oldvalue;
     }
 
@@ -96,15 +104,16 @@
         let selectTag = document.getElementById("attachmentCategory");
         let selectedOption = selectTag.options[selectTag.selectedIndex];
 
-        if (isUnique(note) || isUnique(link) || !selectedOption.dataset.oldvalue || publiclyViewable.checked != publiclyViewable.dataset.oldvalue) {
+        if (isUnique(note) || isUnique(link) || !selectedOption.dataset.oldvalue ||
+            publiclyViewable.checked != publiclyViewable.dataset.oldvalue) {
+
             attachmentForm.submit();
         } else {
             if (!document.getElementById("popup")) {
                 let msg = "<div class='alert alert-danger text-center' id='popup'>Немає змін</div>";
                 attachmentForm.insertAdjacentHTML("beforebegin", msg);
-                setTimeout(function () {
-                    document.getElementById("popup").remove();
-                }, 5000);
+
+                setTimeout(() => document.getElementById("popup").remove(), 5000);
             }
         }
     });

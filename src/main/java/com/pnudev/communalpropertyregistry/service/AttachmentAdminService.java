@@ -17,6 +17,4 @@ public interface AttachmentAdminService {
 
     void deleteById(Long id);
 
-    void deleteAllByPropertyId(Long propertyId);
-
 }

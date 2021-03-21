@@ -5,6 +5,7 @@ import com.pnudev.communalpropertyregistry.dto.AddressDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
+import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
@@ -33,18 +34,18 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     private final PropertyMapper propertyMapper;
 
-    private final AttachmentAdminService attachmentAdminService;
+    private final AttachmentRepository attachmentRepository;
 
     @Autowired
     public PropertyAdminServiceImpl(PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
                                     PropertyMapper propertyMapper,
-                                    AttachmentAdminService attachmentAdminService) {
+                                    AttachmentRepository attachmentRepository) {
 
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
         this.propertyMapper = propertyMapper;
-        this.attachmentAdminService = attachmentAdminService;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @Override
@@ -152,7 +153,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
     @Override
     public void deleteById(Long id) {
 
-        attachmentAdminService.deleteAllByPropertyId(id);
+        attachmentRepository.deleteAllByPropertyId(id);
 
         propertyRepository.deleteById(id);
     }

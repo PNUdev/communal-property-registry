@@ -85,9 +85,4 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
         attachmentRepository.deleteById(id);
     }
 
-    @Override
-    public void deleteAllByPropertyId(Long propertyId) {
-        attachmentRepository.deleteAllByPropertyId(propertyId);
-    }
-
 }
