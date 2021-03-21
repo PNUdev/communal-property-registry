@@ -76,7 +76,6 @@ public class PropertyServiceImpl implements PropertyService {
                                                          Long categoryByPurposeId, Pageable pageable) {
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(property.id.isNotNull());
 
         if (nonNull(searchQuery)) {
 
