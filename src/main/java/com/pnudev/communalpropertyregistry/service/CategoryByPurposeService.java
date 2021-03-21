@@ -1,9 +1,13 @@
 package com.pnudev.communalpropertyregistry.service;
 
-import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
+import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
+
+import java.util.List;
 
 public interface CategoryByPurposeService {
 
-    CategoryByPurposeResponseDto findAll();
+    List<CategoryByPurpose> findAll();
+
+    CategoryByPurpose findById(Long id);
 
 }

@@ -1,7 +1,7 @@
 const APP_PROPERTIES = new Vue({
     el: '#app_properties',
     data: {
-        page: 0,
+        page: 1,
         q: '',
         status: 'all',
         category: 'all',
@@ -9,7 +9,7 @@ const APP_PROPERTIES = new Vue({
         totalPages: 0,
         showModal: false,
         showAttachModal: false,
-        hasNext: true,
+        hasNext: false,
         hasPrev: false,
         imgUrl: null,
         url: "",
@@ -43,9 +43,8 @@ const APP_PROPERTIES = new Vue({
         async getProperties() {
             axios.get(`/api/properties${this.url}`)
                 .then(resp => {
-                    this.properties = resp.data;
-                    this.totalPages = resp["totalPages"];
-                    this.page = resp["number"];
+                    this.properties = resp.data["content"];
+                    this.totalPages = resp.data["totalPages"];
                 })
                 .catch(error => {
                     console.error("PROPERTIES FAILED TO LOAD\n" + error);
@@ -114,7 +113,9 @@ const APP_PROPERTIES = new Vue({
         },
 
         searchProperties(){
+            this.page = 1;
             this.setUrl();
+            this.updatePaginationBtnVisibility();
             updateMarkers();
         },
 
@@ -160,8 +161,8 @@ const APP_PROPERTIES = new Vue({
         },
 
         updatePaginationBtnVisibility(){
-            this.hasPrev = this.page > 0;
-            this.hasNext = this.page < this.totalPages;
+            this.hasPrev = this.page > 1;
+            this.hasNext = this.page < this.totalPages - 1;
         },
 
     }
