@@ -135,6 +135,24 @@ public class PropertyMapper {
                 .collect(Collectors.toList());
     }
 
+    private PropertyResponseDto mapToPropertyResponseDto(Property property,
+                                                         List<Attachment> attachments,
+                                                         List<AttachmentCategory> attachmentCategories,
+                                                         List<CategoryByPurpose> categoriesByPurpose) {
+
+        List<Attachment> propertyAttachments = attachments.stream()
+                .filter(attachment -> attachment.getPropertyId().equals(property.getId()))
+                .collect(Collectors.toList());
+
+        CategoryByPurpose propertyCategoryByPurpose = categoriesByPurpose.stream()
+                .filter(category -> category.getId().equals(property.getCategoryByPurposeId()))
+                .findFirst()
+                .orElseThrow(() -> new ServiceApiException("Категорія за призначенням не знайдено!"));
+
+        return buildPropertyResponseDto(property, propertyCategoryByPurpose,
+                propertyAttachments, attachmentCategories);
+    }
+
     private PropertyResponseDto buildPropertyResponseDto(Property property,
                                                          CategoryByPurpose categoryByPurpose,
                                                          List<Attachment> attachments,
@@ -166,24 +184,6 @@ public class PropertyMapper {
                 .categoryByPurposeName(categoryByPurpose.getName())
                 .attachments(createAttachmentResponseDtos(property.getId(), attachments, attachmentCategories))
                 .build();
-    }
-
-    private PropertyResponseDto mapToPropertyResponseDto(Property property,
-                                                         List<Attachment> attachments,
-                                                         List<AttachmentCategory> attachmentCategories,
-                                                         List<CategoryByPurpose> categoriesByPurpose) {
-
-        List<Attachment> propertyAttachments = attachments.stream()
-                .filter(attachment -> attachment.getPropertyId().equals(property.getId()))
-                .collect(Collectors.toList());
-
-        CategoryByPurpose propertyCategoryByPurpose = categoriesByPurpose.stream()
-                .filter(category -> category.getId().equals(property.getCategoryByPurposeId()))
-                .findFirst()
-                .orElseThrow(() -> new ServiceApiException("Категорія за призначенням не знайдено!"));
-
-        return buildPropertyResponseDto(property, propertyCategoryByPurpose,
-                propertyAttachments, attachmentCategories);
     }
 
     private List<AttachmentResponseDto> createAttachmentResponseDtos(Long propertyId,

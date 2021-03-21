@@ -1,5 +1,6 @@
 package com.pnudev.communalpropertyregistry.controller.admin;
 
+import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.AddressDto;
 import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
@@ -88,11 +89,10 @@ public class PropertyAdminController {
     public String update(@PathVariable(name = "id") Long id, Model model) {
 
         PropertyAdminDto propertyAdminDto = propertyAdminService.findById(id);
-        CategoryByPurposeResponseDto categoryByPurposeResponseDto = new CategoryByPurposeResponseDto(
-                categoryByPurposeService.findAll());
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
         model.addAttribute("propertyAdminDto", propertyAdminDto);
-        model.addAttribute("categoryByPurposeResponseDto", categoryByPurposeResponseDto);
+        model.addAttribute("categoriesByPurpose", categoriesByPurpose);
 
         return "admin/property/form";
     }
