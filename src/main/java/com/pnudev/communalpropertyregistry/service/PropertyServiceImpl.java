@@ -7,11 +7,12 @@ import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
-import com.pnudev.communalpropertyregistry.mapper.PropertyMapper;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -99,8 +100,15 @@ public class PropertyServiceImpl implements PropertyService {
             predicates.add(property.categoryByPurposeId.eq(category.getId()));
         }
 
-        return propertyDslRepository
+        // I decided to implement it this way in order to avoid creating additional method in repository
+
+        Page<Property> propertyPages = propertyDslRepository
                 .findAll(pageable, predicates.toArray(Predicate[]::new));
+
+        List<PropertyResponseDto> content = propertyMapper
+                .mapToPropertyResponseDto(propertyPages.getContent());
+
+        return new PageImpl<>(content, pageable, propertyPages.getTotalElements());
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.dto.CategoryByPurposeResponseDto;
 import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
+import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
 import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
 
     public CategoryByPurpose findById(Long id) {
         return categoryByPurposeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Дана категорія не існує!"));
+                .orElseThrow(() -> new ServiceApiException("Дана категорія не існує!"));
     }
 
 }

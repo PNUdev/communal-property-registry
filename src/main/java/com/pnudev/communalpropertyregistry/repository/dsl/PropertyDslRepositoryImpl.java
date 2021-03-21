@@ -1,8 +1,8 @@
 package com.pnudev.communalpropertyregistry.repository.dsl;
 
+import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
-import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
-import com.pnudev.communalpropertyregistry.mapper.PropertyMapper;
+import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.sql.SQLQueryFactory;
@@ -21,6 +21,7 @@ import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 public class PropertyDslRepositoryImpl implements PropertyDslRepository {
 
     private final SQLQueryFactory queryFactory;
+
     private final PropertyMapper propertyMapper;
 
     @Autowired
@@ -43,24 +44,25 @@ public class PropertyDslRepositoryImpl implements PropertyDslRepository {
     }
 
     @Override
-    public Page<PropertyResponseDto> findAll(Pageable pageable, Predicate... where) {
+    public Page<Property> findAll(Pageable pageable, Predicate... where) {
 
-        List<Tuple> properties = queryFactory
+        List<Tuple> tuples = queryFactory
                 .select(property.all())
                 .from(property)
                 .where(where)
-                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
 
-        long total = queryFactory
+        return new PageImpl<>(propertyMapper.mapToProperties(tuples), pageable, countAll(where));
+    }
+
+    private long countAll(Predicate... where) {
+        return queryFactory
+                .query()
                 .from(property)
                 .where(where)
                 .fetchCount();
-
-        List<PropertyResponseDto> content = propertyMapper.mapToPropertyResponseDto(properties);
-
-        return new PageImpl<>(content, pageable, total);
     }
 
 }
