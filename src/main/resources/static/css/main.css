@@ -104,11 +104,16 @@ header > img {
 }
 
 .properties__management {
+    height: 2em;
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 #category__filter, #status__filter {
     height: 2em;
+    width: 10em;
+    margin-right: .3em;
     background-color: #C1CDDA;
     color: #000;
     border: 0;
@@ -117,38 +122,18 @@ header > img {
 
 .drop-filters-btn {
     display: inline-block;
-    font-size: 18px;
-    font-weight: bold;
-    width: 28px;
-    height: 28px;
-    margin: -.5em .5em;
-    position: relative;
+    border: 1px solid #253951;
+    border-radius: 3em;
+    margin: 0;
+    padding: .1em 1em;
     transition: .3s linear;
     cursor: pointer;
 }
 
-.drop-filters-btn:before, .modal-close:before,
-.drop-filters-btn:after, .modal-close:after {
-    content: ' ';
-    position: absolute;
-    left: 14px;
-    height: 28px;
-    width: 2.5px;
-    background-color: #253951;
-    transition: .2s;
-}
-
-.drop-filters-btn:before, .modal-close:before {
-    transform: rotate(45deg);
-}
-
-.drop-filters-btn:after, .modal-close:after {
-    transform: rotate(-45deg);
-}
-
-.drop-filters-btn:hover:before,
-.drop-filters-btn:hover:after {
-    background: #ff2727;
+.drop-filters-btn:hover {
+    border-color: rgb(227, 98, 98);
+    background: rgb(227, 98, 98);
+    color: #FAFAFA;
 }
 
 .switch-btn {
@@ -172,44 +157,43 @@ header > img {
 
 .properties-pagination {
     width: 9%;
-    position: absolute;
-    right: 3%;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
+    height: 2em;
+    position: relative;
+    margin: 0 .1em 0 auto;
+    z-index: 2;
 }
 
 #prev-btn, #next-btn {
-    width: 2em;
-    height: 2em;
-    position: relative;
+    display: block;
+    position: absolute;
+    font-size: 2.6em;
     border: 0;
     border-radius: 50%;
     background-color: transparent;
-
+    transform: translateY(-30%);
     transition: .2s linear;
 }
 
-#prev-btn:not(:disabled):hover, #next-btn:not(:disabled):hover {
-    color: #253951;
-    background-color: #c4c4c4;;
+#prev-btn {
+    left: 0;
 }
 
-#prev-btn:after {
-    content: "\2039";
-    font-size: 2.6em;
-    position: absolute;
-    left: 25%;
-    top: -65%;
+#next-btn {
+    right: 0;
 }
 
-#next-btn:after {
-    content: "\203A";
-    font-size: 2.6em;
+#prev-btn:not(:disabled):hover:after, #next-btn:not(:disabled):hover:after {
+    content: "";
+    width: .8em;
+    height: .8em;
+
     position: absolute;
-    left: 30%;
-    top: -65%;
+    left: 0;
+    bottom: 15%;
+    transform: translateX(-32.5%);
+    border-radius: 50%;
+    background-color: #c4c4c4;
+    z-index: -1;
 }
 
 
@@ -311,7 +295,7 @@ header > img {
     color: #253951;
     font-size: 14px;
     padding: .1em 1em;
-    margin: 0 0 .8em 0;
+    margin: .3em 0 .8em 0;
 
     background-color: #c6dcf5;
     text-decoration: none;
@@ -342,6 +326,7 @@ header > img {
     position: absolute;
     right: 1em;
     bottom: 0;
+    margin-bottom: .6em;
 }
 
 
@@ -432,9 +417,23 @@ header > img {
     z-index: 1002;
 }
 
-.modal-close:before, .modal-close:after {
+.modal-close:before,
+.modal-close:after {
+    content: ' ';
+    position: absolute;
+    left: 14px;
+    height: 28px;
     width: 3px;
-    background: #ff6060;
+    background-color: #ff6060;;
+    transition: .2s;
+}
+
+.modal-close:before {
+    transform: rotate(45deg);
+}
+
+.modal-close:after {
+    transform: rotate(-45deg);
 }
 
 .img-modal-close {
@@ -553,17 +552,13 @@ header > img {
         font-size: 13px;
     }
 
-    .property__amount {
-        margin-bottom: .4em;
-    }
-
     .table td, .table th {
         font-size: 10px;
     }
 
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
 
     .header__city {
         display: none;
@@ -580,10 +575,6 @@ header > img {
 
     .properties {
         width: 100%;
-    }
-
-    .property {
-        height: 12em;
     }
 
     .property__status {
@@ -614,15 +605,11 @@ header > img {
     }
 
     .properties-pagination {
-        top: 40%;
+        width: 8%;
+        margin: 0 .8em .8em auto;
     }
 
     #prev-btn, #next-btn {
-        width: 2.5em;
-        height: 2.5em;
-    }
-
-    #prev-btn:after, #next-btn:after {
         font-size: 3.5em;
     }
 
@@ -649,14 +636,13 @@ header > img {
 @media (max-width: 700px) {
 
     .property {
-        height: 23em;
         flex-wrap: wrap;
         justify-content: flex-start;
     }
 
     .property > img {
         width: 100%;
-        height: 60%;
+        height: 15em;
         min-height: 5em;
         box-shadow: 1px -3px 5px #c4c4c4;
     }
@@ -672,8 +658,12 @@ header > img {
     }
 
     .property-description {
-        margin: 0;
+        margin: 0 0 .3em 0;
         font-size: 13px;
+    }
+
+    .properties-pagination {
+        width: 10%;
     }
 
     .property__status {
@@ -712,30 +702,12 @@ header > img {
     }
 
     .properties-pagination {
-        top: 35%;
-        width: 15%;
+        width: 12%;
     }
 
     .properties__management {
         font-size: 13px;
         margin-bottom: -1px;
-    }
-
-    .drop-filters-btn {
-        height: 28px;
-    }
-
-    .drop-filters-btn:before, .drop-filters-btn:after {
-        height: 25px;
-    }
-
-    #prev-btn, #next-btn {
-        width: 2.5em;
-        height: 2.5em;
-    }
-
-    #prev-btn:after, #next-btn:after {
-        font-size: 3.5em;
     }
 
     .attachment-modal {
@@ -752,7 +724,7 @@ header > img {
 
 }
 
-@media (max-width: 426px) {
+@media (max-width: 470px) {
 
     #wrapper {
         height: 95%;
@@ -795,14 +767,32 @@ header > img {
     }
 
     .properties-report-btn {
-        padding: .4em 2em;
+        padding: .4em 3%;
         margin: .3em 0 0 0;
     }
 
+    .drop-filters-btn {
+        margin: 0;
+        position: absolute;
+        padding: .3em 3%;
+        top: -126%;
+        right: 21%;
+    }
+
     .properties-pagination {
-        width: 18%;
-        top: -85%;
-        right: 10%;
+        top: -115%;
+        right: 0;
+    }
+
+    #status__filter {
+        width: 48%;
+    }
+
+    #category__filter {
+        position: absolute;
+        right: 0;
+        width: 48%;
+        margin-right: 0;
     }
 
     .property-items {
@@ -869,30 +859,6 @@ header > img {
 
     .attachment-modal, .img-modal {
         width: 101vw;
-    }
-
-    .drop-filters-btn {
-        margin: 0;
-        height: 20px;
-        width: 25px;
-        position: absolute;
-        top: -128%;
-        right: 2%;
-    }
-
-    .drop-filters-btn:before, .drop-filters-btn:after {
-        height: 21px;
-        margin: 0;
-    }
-
-    #status__filter {
-        width: 48%;
-    }
-
-    #category__filter {
-        position: absolute;
-        right: 0;
-        width: 48%;
     }
 
 }

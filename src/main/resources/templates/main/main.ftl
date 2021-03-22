@@ -61,11 +61,11 @@
 
                 </select>
 
-                <p class="drop-filters-btn" @click="dropFilters"></p>
+                <p class="drop-filters-btn" @click="dropFilters">Скасувати</p>
 
                 <div class="properties-pagination">
-                    <button id="prev-btn" :disabled="!hasPrev" @click="changePage" ></button>
-                    <button id="next-btn" :disabled="!hasNext" @click="changePage" ></button>
+                    <button id="prev-btn" :disabled="!hasPrev" @click="changePage" >&lsaquo;</button>
+                    <button id="next-btn" :disabled="!hasNext" @click="changePage" >&rsaquo;</button>
                 </div>
             </div>
 
