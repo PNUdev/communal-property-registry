@@ -12,6 +12,7 @@ const APP_PROPERTIES = new Vue({
         hasNext: false,
         hasPrev: false,
         imgUrl: null,
+        defaultImgUrl: "/images/default_img.png",
         url: "",
 
         attachments: [],
@@ -49,7 +50,6 @@ const APP_PROPERTIES = new Vue({
                 .catch(error => {
                     console.error("PROPERTIES FAILED TO LOAD\n" + error);
                 })
-
         },
 
         async getPropertyOnMarkerClick(id){
@@ -154,9 +154,12 @@ const APP_PROPERTIES = new Vue({
             }
         },
 
-        showImageInModal(imgUrl){
-            if(imgUrl) {
-                this.imgUrl = imgUrl;
+        showImageInModal(event){
+            let isLoaded = event.target.complete;
+            let isDefault = event.target.src.endsWith(this.defaultImgUrl);
+
+            if(isLoaded && !isDefault) {
+                this.imgUrl = event.target.src;
                 this.showModal = true;
             }
         },

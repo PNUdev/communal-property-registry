@@ -72,10 +72,11 @@
 
         <div class="property-items" v-cloak>
             <div class="property" v-model="properties" v-for="prop in properties"
-                        @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
+                 @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
-                <img title="Open in fullscreen" @click="showImageInModal(prop.imageUrl)"
-                     :src= "prop.imageUrl ? prop.imageUrl : '/images/default_img.png'">
+                <img title="Open in fullscreen" @click="showImageInModal"
+                     :src="prop.imageUrl ? prop.imageUrl : defaultImgUrl"
+                     @error="$event.target.src = defaultImgUrl">
 
                 <div class="property-data">
                     <h3 class="property__title">{{prop.name}}</h3>
