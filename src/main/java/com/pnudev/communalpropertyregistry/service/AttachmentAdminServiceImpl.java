@@ -4,7 +4,9 @@ import com.pnudev.communalpropertyregistry.domain.Attachment;
 import com.pnudev.communalpropertyregistry.dto.AttachmentAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.AttachmentAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.AttachmentAdminException;
+import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
 import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
+import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.AttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,16 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
 
     private final AttachmentMapper attachmentMapper;
 
+    private final PropertyRepository propertyRepository;
+
     @Autowired
     public AttachmentAdminServiceImpl(AttachmentRepository attachmentRepository,
-                                      AttachmentMapper attachmentMapper) {
+                                      AttachmentMapper attachmentMapper,
+                                      PropertyRepository propertyRepository) {
 
         this.attachmentRepository = attachmentRepository;
         this.attachmentMapper = attachmentMapper;
+        this.propertyRepository = propertyRepository;
     }
 
     @Override
@@ -55,6 +61,11 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
 
     @Override
     public List<AttachmentAdminDto> findAllByPropertyId(Long id) {
+
+        if (!propertyRepository.existsById(id)) {
+            throw new PropertyAdminException("Майно не існує!");
+        }
+
         return attachmentMapper.mapToAttachmentsAdminDto(
                 attachmentRepository.findAllByPropertyId(id)
         );
