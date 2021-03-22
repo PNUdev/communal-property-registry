@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-html, body{
+html, body {
     height: 100%;
     overflow: hidden
 }
@@ -127,8 +127,8 @@ header > img {
     cursor: pointer;
 }
 
-.drop-filters-btn:before, .attachments-modal-close:before,
-.drop-filters-btn:after, .attachments-modal-close:after {
+.drop-filters-btn:before, .modal-close:before,
+.drop-filters-btn:after, .modal-close:after {
     content: ' ';
     position: absolute;
     left: 14px;
@@ -138,11 +138,11 @@ header > img {
     transition: .2s;
 }
 
-.drop-filters-btn:before, .attachments-modal-close:before {
+.drop-filters-btn:before, .modal-close:before {
     transform: rotate(45deg);
 }
 
-.drop-filters-btn:after, .attachments-modal-close:after {
+.drop-filters-btn:after, .modal-close:after {
     transform: rotate(-45deg);
 }
 
@@ -226,7 +226,8 @@ header > img {
 
 .property {
     width: 100%;
-    height: 10em;
+    min-height: 10em;
+    height: auto;
     margin-bottom: .5em;
     border-radius: 0 .8em .8em 0;
     box-shadow: 1px 1px 5px #c4c4c4;
@@ -238,7 +239,6 @@ header > img {
 .property > img {
     display: block;
     width: 30%;
-    height: 100%;
     margin-right: 0;
     opacity: .9;
     cursor: pointer;
@@ -246,11 +246,15 @@ header > img {
 
 .property-data {
     width: 70%;
+    height: auto;
     border: 2px solid #C1CDDA;
+    display: flex;
+    flex-direction: column;
+
     border-left: 0;
     border-radius: 0 .8em .8em 0;
+    padding: 0 8.5em 0 .5em;
     overflow: hidden;
-    padding-left: .5em;
 }
 
 .property__title {
@@ -259,7 +263,7 @@ header > img {
 }
 
 .property__title:after {
-    content: " -";
+    content: " - ";
     font-weight: normal;
     font-size: 16px;
 }
@@ -299,12 +303,15 @@ header > img {
     font-weight: 600;
 }
 
+.property__footer {
+    margin-top: auto;
+}
+
 .property__attach {
     color: #253951;
     font-size: 14px;
     padding: .1em 1em;
-    position: absolute;
-    bottom: .8em;
+    margin: 0 0 .8em 0;
 
     background-color: #c6dcf5;
     text-decoration: none;
@@ -415,19 +422,24 @@ header > img {
     overflow-y: scroll;
 }
 
-.attachments-modal-close {
+.modal-close {
     position: absolute;
-    right: 1.5em;
+    left: 70%;
     top: .5em;
     width: 25px;
     height: 25px;
     cursor: pointer;
-    display: none;
+    z-index: 1002;
 }
 
-.attachments-modal-close:before, .attachments-modal-close:after {
+.modal-close:before, .modal-close:after {
     width: 3px;
     background: #ff6060;
+}
+
+.img-modal-close {
+    left: 78%;
+    top: 10%;
 }
 
 .attachment-modal > div {
@@ -521,13 +533,16 @@ header > img {
         font-size: 14px;
     }
 
+    .img-modal > img {
+        width: 70%;
+    }
+
+    .img-modal-close {
+        left: 88%;
+    }
 }
 
 @media (max-width: 1200px) {
-
-    .property {
-        height: 9em;
-    }
 
     .map-section {
         display: flex;
@@ -538,10 +553,6 @@ header > img {
         font-size: 13px;
     }
 
-    .property__attach {
-        bottom: .6em;
-    }
-
     .property__amount {
         margin-bottom: .4em;
     }
@@ -550,10 +561,6 @@ header > img {
         font-size: 10px;
     }
 
-    .img-modal > img {
-        width: 50%;
-        height: 90%;
-    }
 }
 
 @media (max-width: 1000px) {
@@ -629,7 +636,12 @@ header > img {
     }
 
     .attachments-modal-close {
-        display: block;
+        left: 80%;
+    }
+
+    .img-modal-close {
+        left: 95%;
+        top: 25%;
     }
 
 }
@@ -653,6 +665,7 @@ header > img {
         width: 100%;
         height: 40%;
         margin-top: .3em;
+        padding-right: 0;
         border: 0;
 
         overflow: auto;
@@ -665,6 +678,10 @@ header > img {
 
     .property__status {
         opacity: .8;
+    }
+
+    .img-modal-close {
+        left: 92%;
     }
 
 }
@@ -727,6 +744,10 @@ header > img {
 
     .attachment-modal > .card {
         width: 80%;
+    }
+
+    .attachments-modal-close, .img-modal-close {
+        left: 90%;
     }
 
 }
@@ -848,10 +869,6 @@ header > img {
 
     .attachment-modal, .img-modal {
         width: 101vw;
-    }
-
-    .attachments-modal-close {
-        right: 1em;
     }
 
     .drop-filters-btn {
