@@ -5,7 +5,7 @@ import com.pnudev.communalpropertyregistry.dto.AttachmentAdminDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.AttachmentAdminFormDto;
 import com.pnudev.communalpropertyregistry.service.AttachmentAdminService;
-import com.pnudev.communalpropertyregistry.service.AttachmentCategoryAdminService;
+import com.pnudev.communalpropertyregistry.service.AttachmentCategoryService;
 import com.pnudev.communalpropertyregistry.service.PropertyAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,22 +28,22 @@ public class AttachmentAdminController {
 
     private final PropertyAdminService propertyAdminService;
 
-    private final AttachmentCategoryAdminService attachmentCategoryAdminService;
+    private final AttachmentCategoryService attachmentCategoryService;
 
     @Autowired
     public AttachmentAdminController(AttachmentAdminService attachmentAdminService,
                                      PropertyAdminService propertyAdminService,
-                                     AttachmentCategoryAdminService attachmentCategoryAdminService) {
+                                     AttachmentCategoryService attachmentCategoryService) {
 
         this.attachmentAdminService = attachmentAdminService;
         this.propertyAdminService = propertyAdminService;
-        this.attachmentCategoryAdminService = attachmentCategoryAdminService;
+        this.attachmentCategoryService = attachmentCategoryService;
     }
 
     @GetMapping("/new")
     public String create(Model model) {
 
-        List<AttachmentCategory> attachmentCategories = attachmentCategoryAdminService.findAll();
+        List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
         model.addAttribute("attachmentCategories", attachmentCategories);
 
         return "admin/attachment/form";
@@ -67,7 +67,7 @@ public class AttachmentAdminController {
                          Model model) {
 
         AttachmentAdminDto attachment = attachmentAdminService.findById(attachmentId, propertyId);
-        List<AttachmentCategory> attachmentCategories = attachmentCategoryAdminService.findAll();
+        List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
 
         model.addAttribute("attachmentCategories", attachmentCategories);
         model.addAttribute("attachment", attachment);
