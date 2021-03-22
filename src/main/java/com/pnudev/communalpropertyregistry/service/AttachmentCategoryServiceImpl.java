@@ -34,7 +34,6 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
         return attachmentCategoryRepository.findAll();
     }
 
-
     @Override
     public Page<AttachmentCategory> findAll(Pageable pageable) {
         return attachmentCategoryRepository.findAll(pageable);
@@ -56,8 +55,11 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
         AttachmentCategory attachmentCategoryFromDb = findById(id);
         String oldName = attachmentCategoryFromDb.getName();
 
-        attachmentCategoryFromDb.setName(attachmentCategoryDto.getName());
-        attachmentCategoryFromDb.setPubliclyViewable(attachmentCategoryDto.isPubliclyViewable());
+        attachmentCategoryFromDb = AttachmentCategory.builder()
+                .name(attachmentCategoryDto.getName())
+                .isPubliclyViewable(attachmentCategoryDto.isPubliclyViewable())
+                .build();
+
         attachmentCategoryRepository.save(attachmentCategoryFromDb);
 
         log.info("Attachment category was updated ({} -> {})", oldName, attachmentCategoryFromDb.getName());

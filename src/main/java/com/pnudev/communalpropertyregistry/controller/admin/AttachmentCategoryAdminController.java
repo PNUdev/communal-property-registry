@@ -43,8 +43,8 @@ public class AttachmentCategoryAdminController {
     }
 
     @GetMapping("/new")
-    public String create(){
-        return "admin/attachmentCategory/new";
+    public String createForm(){
+        return "admin/attachmentCategory/form";
     }
 
     @PostMapping("/new")
@@ -57,15 +57,15 @@ public class AttachmentCategoryAdminController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editById(@PathVariable Long id, Model model){
+    public String editForm(@PathVariable Long id, Model model){
 
         model.addAttribute("attachmentCategory", attachmentCategoryService.findById(id));
 
         return "admin/attachmentCategory/edit";
     }
 
-    @PostMapping("/edit/{id}")
-    public String editById(@PathVariable Long id, AttachmentCategoryDto attachmentCategoryDto,
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable Long id, AttachmentCategoryDto attachmentCategoryDto,
                            RedirectAttributes redirectAttributes){
 
         attachmentCategoryService.updateById(id, attachmentCategoryDto);
@@ -84,7 +84,7 @@ public class AttachmentCategoryAdminController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteById(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 
         attachmentCategoryService.deleteById(id);
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Категорію успішно видалено!");

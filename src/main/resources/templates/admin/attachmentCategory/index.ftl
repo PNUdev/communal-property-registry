@@ -68,13 +68,12 @@
 
         </ul>
     </div>
-<#else> <h2 class="text-center">Немає жодної категорії</h2>
+<#else>
+    <h2 class="text-center">Немає жодної категорії</h2>
 
 </#if>
 <script>
-    setTimeout(function () {
-        document.getElementById("popup").hidden = true;
-    }, 5000);
+    setTimeout(() => document.getElementById("popup").hidden = true, 5000);
 </script>
 <#include '../../include/footer.ftl'>
 

@@ -1,11 +1,13 @@
 <#include '../include/header.ftl'>
-
+<script>
+    const publiclyViewableBefore = <#if attachmentCategory.publiclyViewable> true <#else> false </#if>;
+</script>
 <div class="m-2">
     <a class="btn btn-outline-primary" href="/admin/attachment-categories/${attachmentCategory.id}">&#8592;</a>
 </div>
 
 <div>
-    <form action="/admin/attachment-categories/edit/${attachmentCategory.id}" method="post" id="form">
+    <form action="/admin/attachment-categories/update/${attachmentCategory.id}" method="post" id="form">
         <h2 class="text-center">Оновити категорію</h2>
         <div class="d-flex justify-content-center">
             <label class="form-label" for="name">Назва категорії&#x00A0;&#x00A0;</label>
@@ -30,21 +32,19 @@
     document.getElementById("form").addEventListener("submit", function(event){
         event.preventDefault();
 
-        let newName = document.getElementById("name").value;
-        let oldName = document.getElementById("oldName").value;
+        const newName = document.getElementById("name").value;
+        const oldName = document.getElementById("oldName").value;
 
-        let publiclyViewableAfter = document.getElementById("checkbox").checked;
-        let publiclyViewableBefore = <#if attachmentCategory.publiclyViewable> true <#else> false </#if>;
+        const publiclyViewableAfter = document.getElementById("checkbox").checked;
 
         if(oldName !== newName || publiclyViewableBefore !== publiclyViewableAfter){
             document.getElementById("form").submit();
         }else{
             if(!document.getElementById("popup")) {
-                let msg = "<div class='alert alert-danger' id='popup'> <p class=text-center>Немає змін</p> </div>";
+                let msg = "<div class='alert alert-danger m-5' id='popup'> <p class=text-center>Немає змін</p> </div>";
                 document.getElementById("form").insertAdjacentHTML("beforebegin", msg);
-                setTimeout(function () {
-                    document.getElementById("popup").remove();
-                }, 5000);
+
+                setTimeout(() => document.getElementById("popup").remove(), 5000);
             }
         }
     });
