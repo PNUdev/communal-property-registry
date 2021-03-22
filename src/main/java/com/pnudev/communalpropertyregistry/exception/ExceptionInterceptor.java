@@ -35,13 +35,13 @@ public class ExceptionInterceptor {
     }
 
     @ExceptionHandler(AttachmentCategoryException.class)
-    public String attachmentCategoryException(AttachmentCategoryException serviceException,
+    public String attachmentCategoryException(AttachmentCategoryException attachmentCategoryException,
                                               RedirectAttributes redirectAttributes,
                                               HttpServletRequest request) {
 
-        log.error("ServiceException was thrown, httpServletRequest: {}", request, serviceException);
+        log.error("AttachmentCategoryException was thrown, httpServletRequest: {}", request, attachmentCategoryException);
 
-        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), serviceException.getMessage());
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), attachmentCategoryException.getMessage());
 
         return "redirect:/admin/attachment-categories";
     }
