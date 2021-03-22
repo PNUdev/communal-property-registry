@@ -4,11 +4,15 @@
     box-sizing: border-box;
 }
 
+html, body{
+    height: 100%;
+    overflow: hidden
+}
+
 body {
     background: #FAFAFA;
     color: #253951;
     font-family: Arial, sans-serif;
-    overflow: hidden;
 }
 
 #wrapper {
@@ -727,6 +731,10 @@ header > img {
 }
 
 @media (max-width: 426px) {
+
+    #wrapper {
+        height: 87vh;
+    }
 
     .header__title {
         font-size: 15px;
