@@ -54,10 +54,10 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <#if attachment??>
                     <button type="submit" class="btn btn-outline-primary"
-                            formaction="/admin/attachments/update/#{attachment.id}/property/#{propertyId}">
+                            formaction="/admin/properties/#{propertyId}/attachments/update/#{attachment.id}">
                         Оновити
                     </button>
-                    <a href="/admin/attachments/delete/#{attachment.id}" class="btn btn-outline-danger">Видалити</a>
+                    <a href="/admin/properties/#{propertyId}/attachments/delete/#{attachment.id}" class="btn btn-outline-danger">Видалити</a>
                 <#else >
                     <button type="submit" class="btn btn-outline-primary">Зберегти</button>
                 </#if>

@@ -24,7 +24,7 @@
         </div>
 
         <div class="col">
-            <a class="btn btn-outline-primary" href="/admin/attachments/new/property/#{property.id}">
+            <a class="btn btn-outline-primary" href="/admin/properties/#{property.id}/attachments/new">
                 Створити нове прикріплення
             </a>
         </div>
@@ -70,12 +70,12 @@
                     </td>
                     <td>
                         <a class="btn btn-outline-primary"
-                           href="/admin/attachments/update/#{attachment.id}/property/#{property.id}">
+                           href="/admin/properties/#{property.id}/attachments/update/#{attachment.id}">
                             Редагувати
                         </a>
                     </td>
                     <td>
-                        <a class="btn btn-outline-danger" href="/admin/attachments/delete/#{attachment.id}">
+                        <a class="btn btn-outline-danger" href="/admin/properties/#{property.id}/attachments/delete/#{attachment.id}">
                             Видалити
                         </a>
                     </td>

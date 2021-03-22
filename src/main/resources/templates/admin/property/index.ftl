@@ -155,7 +155,7 @@
                             Категорія за призначенням: ${property.categoryByPurposeName}
                         </div>
 
-                        <a href="/admin/attachments/property/${property.id}" class="pt-3">
+                        <a href="/admin/properties/${property.id}/attachments" class="pt-3">
                             Показати прикріплення
                         </a>
 

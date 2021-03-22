@@ -13,6 +13,17 @@ import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.ERR
 @ControllerAdvice
 public class ExceptionInterceptor {
 
+    @ExceptionHandler(AttachmentAdminException.class)
+    public String attachmentAdminException(AttachmentAdminException attachmentAdminException, RedirectAttributes redirectAttributes) {
+
+        log.error("AttachmentAdminException was thrown with propertyId[{}]",
+                attachmentAdminException.getPropertyId(),  attachmentAdminException);
+
+        redirectAttributes.addFlashAttribute(ERROR_FLASH_MESSAGE.name(), attachmentAdminException.getMessage());
+
+        return "redirect:/admin/properties/" + attachmentAdminException.getPropertyId() + "/attachments";
+    }
+
     @ExceptionHandler(PropertyAdminException.class)
     public String propertyAdminException(PropertyAdminException propertyAdminException, RedirectAttributes redirectAttributes) {
 

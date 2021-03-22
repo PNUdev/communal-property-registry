@@ -9,7 +9,7 @@ public interface AttachmentAdminService {
 
     void create(Long propertyId, AttachmentAdminFormDto attachmentAdminFormDto);
 
-    AttachmentAdminDto findById(Long id);
+    AttachmentAdminDto findById(Long attachmentId, Long propertyId);
 
     List<AttachmentAdminDto> findAllByPropertyId(Long id);
 

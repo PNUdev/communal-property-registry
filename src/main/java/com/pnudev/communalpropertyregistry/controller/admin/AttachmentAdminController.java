@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,7 +21,7 @@ import java.util.List;
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 
 @Controller
-@RequestMapping("/admin/attachments")
+@RequestMapping("/admin/properties/{property_id}/attachments")
 public class AttachmentAdminController {
 
     private final AttachmentAdminService attachmentAdminService;
@@ -41,7 +40,7 @@ public class AttachmentAdminController {
         this.attachmentCategoryAdminService = attachmentCategoryAdminService;
     }
 
-    @GetMapping("/new/property/{id}")
+    @GetMapping("/new")
     public String create(Model model) {
 
         List<AttachmentCategory> attachmentCategories = attachmentCategoryAdminService.findAll();
@@ -50,11 +49,11 @@ public class AttachmentAdminController {
         return "admin/attachment/form";
     }
 
-    @GetMapping("/property/{id}")
-    public String find(@PathVariable(name = "id") Long id, Model model) {
+    @GetMapping
+    public String find(@PathVariable(name = "property_id") Long propertyId, Model model) {
 
-        PropertyAdminDto property = propertyAdminService.findById(id);
-        List<AttachmentAdminDto> attachments = attachmentAdminService.findAllByPropertyId(id);
+        PropertyAdminDto property = propertyAdminService.findById(propertyId);
+        List<AttachmentAdminDto> attachments = attachmentAdminService.findAllByPropertyId(propertyId);
 
         model.addAttribute("property", property);
         model.addAttribute("attachments", attachments);
@@ -62,12 +61,12 @@ public class AttachmentAdminController {
         return "admin/attachment/index";
     }
 
-    @GetMapping("/update/{attachment_id}/property/{property_id}")
+    @GetMapping("/update/{attachment_id}")
     public String update(@PathVariable(name = "attachment_id") Long attachmentId,
                          @PathVariable(name = "property_id") Long propertyId,
                          Model model) {
 
-        AttachmentAdminDto attachment = attachmentAdminService.findById(attachmentId);
+        AttachmentAdminDto attachment = attachmentAdminService.findById(attachmentId, propertyId);
         List<AttachmentCategory> attachmentCategories = attachmentCategoryAdminService.findAll();
 
         model.addAttribute("attachmentCategories", attachmentCategories);
@@ -77,18 +76,18 @@ public class AttachmentAdminController {
         return "admin/attachment/form";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteConfirmation(@RequestHeader(value = "referer", defaultValue = "/admin/properties") String returnBackUrl,
+    @GetMapping("/delete/{attachment_id}")
+    public String deleteConfirmation(@PathVariable(name = "property_id") Long propertyId,
                                      Model model) {
 
         model.addAttribute("message", "Ви впевнені, що хочете видалити прикріплення?");
-        model.addAttribute("returnBackUrl", returnBackUrl);
+        model.addAttribute("returnBackUrl", "/admin/properties/" + propertyId + "/attachments");
 
         return "admin/common/deleteConfirmation";
     }
 
-    @PostMapping("/new/property/{id}")
-    public String create(@PathVariable(name = "id") Long propertyId,
+    @PostMapping("/new")
+    public String create(@PathVariable(name = "property_id") Long propertyId,
                          AttachmentAdminFormDto attachmentAdminFormDto,
                          RedirectAttributes redirectAttributes) {
 
@@ -96,10 +95,10 @@ public class AttachmentAdminController {
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно створено!");
 
-        return "redirect:/admin/attachments/property/" + propertyId;
+        return "redirect:/admin/properties/" + propertyId + "/attachments";
     }
 
-    @PostMapping("/update/{attachment_id}/property/{property_id}")
+    @PostMapping("/update/{attachment_id}")
     public String update(@PathVariable(name = "attachment_id") Long attachmentId,
                          @PathVariable(name = "property_id") Long propertyId,
                          AttachmentAdminFormDto attachmentAdminFormDto,
@@ -109,18 +108,19 @@ public class AttachmentAdminController {
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно оновлено!");
 
-        return "redirect:/admin/attachments/property/" + propertyId;
+        return "redirect:/admin/properties/" + propertyId + "/attachments";
     }
 
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable(name = "id") Long id,
+    @PostMapping("/delete/{attachment_id}")
+    public String delete(@PathVariable(name = "property_id") Long propertyId,
+                         @PathVariable(name = "attachment_id") Long attachmentId,
                          RedirectAttributes redirectAttributes) {
 
-        attachmentAdminService.deleteById(id);
+        attachmentAdminService.deleteById(attachmentId);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно видалено!");
 
-        return "redirect:/admin/properties";
+        return "redirect:/admin/properties/" + propertyId + "/attachments";
     }
 
 }

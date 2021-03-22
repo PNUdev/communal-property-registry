@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AttachmentRepository extends CrudRepository<Attachment, Long> {
 
@@ -15,6 +16,8 @@ public interface AttachmentRepository extends CrudRepository<Attachment, Long> {
     List<Attachment> findAttachmentsByPropertyIdIn(List<Long> propertyIds);
 
     List<Attachment> findAllByPropertyId(Long id);
+
+    Optional<Attachment> findByIdAndPropertyId(Long attachmentId, Long propertyId);
 
     @Modifying
     @Query("DELETE FROM attachment WHERE attachment.property_id = :propertyId")

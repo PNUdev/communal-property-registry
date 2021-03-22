@@ -3,7 +3,7 @@ package com.pnudev.communalpropertyregistry.service;
 import com.pnudev.communalpropertyregistry.domain.Attachment;
 import com.pnudev.communalpropertyregistry.dto.AttachmentAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.AttachmentAdminFormDto;
-import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
+import com.pnudev.communalpropertyregistry.exception.AttachmentAdminException;
 import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.AttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
 
         if (attachmentRepository.existsByAttachmentCategoryIdAndPropertyId(
                 attachmentAdminFormDto.getAttachmentCategoryId(), propertyId)) {
-            throw new PropertyAdminException("Майно має прикріплення даної категорії!");
+            throw new AttachmentAdminException("Майно має прикріплення даної категорії!", propertyId);
         }
 
         Attachment attachment = Attachment.builder()
@@ -46,9 +46,9 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
     }
 
     @Override
-    public AttachmentAdminDto findById(Long id) {
-        Attachment attachment = attachmentRepository.findById(id)
-                .orElseThrow(() -> new PropertyAdminException("Прикріплення не існує!"));
+    public AttachmentAdminDto findById(Long attachmentId, Long propertyId) {
+        Attachment attachment = attachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new AttachmentAdminException("Прикріплення не існує!", propertyId));
 
         return attachmentMapper.mapToAttachmentAdminDto(attachment);
     }
@@ -65,12 +65,13 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
 
         if (attachmentRepository.existsByAttachmentCategoryIdAndPropertyIdAndIdNot(
                 attachmentAdminFormDto.getAttachmentCategoryId(), propertyId, attachmentId)) {
-            throw new PropertyAdminException("Майно має прикріплення даної категорії!");
+            throw new AttachmentAdminException("Майно має прикріплення даної категорії!", propertyId);
         }
 
-        Attachment attachment = Attachment.builder()
-                .id(attachmentId)
-                .propertyId(propertyId)
+        Attachment attachmentFromDb = attachmentRepository.findByIdAndPropertyId(attachmentId, propertyId)
+                .orElseThrow(() -> new AttachmentAdminException("Прикріплення не існує!", propertyId));
+
+        Attachment attachment = attachmentFromDb.toBuilder()
                 .note(attachmentAdminFormDto.getNote())
                 .link(attachmentAdminFormDto.getLink())
                 .attachmentCategoryId(attachmentAdminFormDto.getAttachmentCategoryId())
