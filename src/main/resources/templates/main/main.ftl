@@ -90,8 +90,8 @@
 
                     <p class="property__address">{{prop.address}}</p>
 
-                    <p :style="{background:getStatusLabelColor(prop.status)}" class="property__status">
-                        {{parsePropertyStatus(prop.status)}}
+                    <p :style="{background:getStatusLabelColor(prop.propertyStatus)}" class="property__status">
+                        {{parsePropertyStatus(prop.propertyStatus)}}
                     </p>
 
                     <ul class="property-description">
