@@ -24,6 +24,8 @@ import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUC
 @RequestMapping("/admin/properties/{property_id}/attachments")
 public class AttachmentAdminController {
 
+    private static final String REDIRECT_URL = "redirect:/admin/properties/%d/attachments";
+
     private final AttachmentAdminService attachmentAdminService;
 
     private final PropertyAdminService propertyAdminService;
@@ -95,7 +97,7 @@ public class AttachmentAdminController {
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно створено!");
 
-        return "redirect:/admin/properties/" + propertyId + "/attachments";
+        return String.format(REDIRECT_URL, propertyId);
     }
 
     @PostMapping("/update/{attachment_id}")
@@ -108,7 +110,7 @@ public class AttachmentAdminController {
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно оновлено!");
 
-        return "redirect:/admin/properties/" + propertyId + "/attachments";
+        return String.format(REDIRECT_URL, propertyId);
     }
 
     @PostMapping("/delete/{attachment_id}")
@@ -120,7 +122,7 @@ public class AttachmentAdminController {
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно видалено!");
 
-        return "redirect:/admin/properties/" + propertyId + "/attachments";
+        return String.format(REDIRECT_URL, propertyId);
     }
 
 }
