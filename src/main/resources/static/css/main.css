@@ -304,7 +304,7 @@ header > img {
 }
 
 .property__attach_disabled {
-    background-color: lightgrey;
+    display: none;
 }
 
 .property__status {
@@ -552,6 +552,11 @@ header > img {
         font-size: 13px;
     }
 
+    .property__attach{
+        font-size: 13px;
+        padding:.1em .5em;
+    }
+
     .table td, .table th {
         font-size: 10px;
     }
@@ -579,6 +584,10 @@ header > img {
 
     .property__status {
         font-size: 13px;
+    }
+
+    .property__attach{
+        font-size: 14px;
     }
 
     .property-area-main {
