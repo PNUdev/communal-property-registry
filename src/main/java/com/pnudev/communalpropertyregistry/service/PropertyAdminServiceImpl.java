@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +151,7 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         propertyRepository.save(property);
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
 
