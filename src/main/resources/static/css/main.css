@@ -126,7 +126,7 @@ header > img{
     width: 9%;
     position: absolute;
     right: 3%;
-    top:50%;
+    top: 50%;
     transform: translateY(-50%);
     display: flex;
     justify-content: space-between;
@@ -434,14 +434,13 @@ header > img{
     margin: auto;
 }
 
-.categories__pages {
-    margin-left: 33vw;
-    margin-top: 20px;
-    max-width: 100%;
-}
-
 .categories__list td, th {
     text-align: center;
+}
+
+.vertical-scroll {
+    overflow-y: scroll;
+    height: 80vh;
 }
 
 .return-back-button {

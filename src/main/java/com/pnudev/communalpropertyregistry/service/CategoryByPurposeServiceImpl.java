@@ -9,8 +9,6 @@ import com.pnudev.communalpropertyregistry.repository.CategoryByPurposeRepositor
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,8 +28,8 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public Page<CategoryByPurpose> findAll(Pageable pageable) {
-        return categoryByPurposeRepository.findAll(pageable);
+    public CategoryByPurposeResponseDto findAll() {
+        return new CategoryByPurposeResponseDto(categoryByPurposeRepository.findAll());
     }
 
     @Override

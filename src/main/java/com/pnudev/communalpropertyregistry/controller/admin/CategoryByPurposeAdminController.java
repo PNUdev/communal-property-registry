@@ -4,9 +4,6 @@ import com.pnudev.communalpropertyregistry.domain.CategoryByPurpose;
 import com.pnudev.communalpropertyregistry.dto.form.CategoryByPurposeFormDto;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.SUCCESS_FLASH_MESSAGE;
 
@@ -31,12 +30,12 @@ public class CategoryByPurposeAdminController {
     }
 
     @GetMapping
-    public String findAll(@PageableDefault Pageable pageable, Model model) {
+    public String findAll(Model model) {
 
-        Page<CategoryByPurpose> categoriesPage = categoryByPurposeService
-                .findAll(pageable);
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService
+                .findAll().getCategoriesByPurpose();
 
-        model.addAttribute("categoriesPage", categoriesPage);
+        model.addAttribute("categoriesByPurpose", categoriesByPurpose);
 
         return "admin/category/index";
     }
