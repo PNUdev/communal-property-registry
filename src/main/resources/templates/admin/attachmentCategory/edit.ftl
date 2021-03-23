@@ -37,9 +37,9 @@
 
         const publiclyViewableAfter = document.getElementById("checkbox").checked;
 
-        if(oldName !== newName || publiclyViewableBefore !== publiclyViewableAfter){
+        if(oldName !== newName || publiclyViewableBefore !== publiclyViewableAfter) {
             document.getElementById("form").submit();
-        }else{
+        }else {
             if(!document.getElementById("popup")) {
                 let msg = "<div class='alert alert-danger m-5' id='popup'> <p class=text-center>Немає змін</p> </div>";
                 document.getElementById("form").insertAdjacentHTML("beforebegin", msg);

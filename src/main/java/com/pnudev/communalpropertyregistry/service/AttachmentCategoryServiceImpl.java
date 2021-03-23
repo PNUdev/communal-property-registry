@@ -55,7 +55,7 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
         AttachmentCategory attachmentCategoryFromDb = findById(id);
         String oldName = attachmentCategoryFromDb.getName();
 
-        attachmentCategoryFromDb = AttachmentCategory.builder()
+        attachmentCategoryFromDb.toBuilder()
                 .name(attachmentCategoryDto.getName())
                 .isPubliclyViewable(attachmentCategoryDto.isPubliclyViewable())
                 .build();
