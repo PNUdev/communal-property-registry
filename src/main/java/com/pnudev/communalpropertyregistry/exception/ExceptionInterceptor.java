@@ -14,7 +14,7 @@ import static com.pnudev.communalpropertyregistry.util.FlashMessageConstants.ERR
 public class ExceptionInterceptor {
 
     @ExceptionHandler(AttachmentAdminException.class)
-    public String attachmentAdminException(AttachmentAdminException attachmentAdminException, RedirectAttributes redirectAttributes) {
+    public String handleAttachmentAdminException(AttachmentAdminException attachmentAdminException, RedirectAttributes redirectAttributes) {
 
         log.error("AttachmentAdminException was thrown with propertyId[{}]",
                 attachmentAdminException.getPropertyId(),  attachmentAdminException);
