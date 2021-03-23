@@ -411,6 +411,8 @@ header > img {
     position: absolute;
     left: 70%;
     top: .5em;
+    border:0;
+    background-color: transparent;
     width: 25px;
     height: 25px;
     cursor: pointer;
@@ -421,6 +423,7 @@ header > img {
 .modal-close:after {
     content: ' ';
     position: absolute;
+    top: 0;
     left: 14px;
     height: 28px;
     width: 3px;

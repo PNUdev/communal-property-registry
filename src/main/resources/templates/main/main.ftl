@@ -6,14 +6,14 @@
 
         <transition v-cloak name="fade">
             <div v-if="showModal" @click="showModal=false" class="img-modal">
-                <p class="modal-close img-modal-close"></p>
+                <button @click="showModal=false" class="modal-close img-modal-close"></button>
                 <img :src="imgUrl" alt="NOT FOUND">
             </div>
         </transition>
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
-                <p class="modal-close attachments-modal-close"></p>
+                <button @click="showAttachModal=false" class="modal-close attachments-modal-close"></button>
 
                 <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                      v-for="attach in attachments" v-if="attach != null">
