@@ -6,7 +6,7 @@
 
 html, body {
     height: 100%;
-    overflow: hidden
+    overflow: hidden;
 }
 
 body {
@@ -377,20 +377,29 @@ header > img {
 /* === Modal ===*/
 .img-modal, .attachment-modal {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
 
     position: absolute;
-    left: -.01vw;
-    top: -.5vh;
-    backdrop-filter: blur(.3em);
-    -webkit-backdrop-filter: blur(.3em);
+    left: 0;
+    top: 0;
     z-index: 1001;
+    overflow: hidden;
+}
+
+.attachment-modal-items {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 2em 0;
+    overflow-y: scroll;
 }
 
 .img-modal > img {
     width: 50%;
     height: 70%;
-    border: 5px solid #253951;
+    border: 5px solid #FAFAFA;
 
     position: absolute;
     left: 50%;
@@ -400,18 +409,23 @@ header > img {
     cursor: pointer;
 }
 
-.attachment-modal {
-    padding: 2em 0;
-    backdrop-filter: blur(.7em);
-    -webkit-backdrop-filter: blur(.7em);
-    overflow-y: scroll;
+.img-modal:before, .attachment-modal:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: #253951;
+    position: fixed;
+    left: 0;
+    top: 0;
+    opacity: .9;
+    z-index: -1;
 }
 
 .modal-close {
     position: absolute;
     left: 70%;
     top: .5em;
-    border:0;
+    border: 0;
     background-color: transparent;
     width: 25px;
     height: 25px;
@@ -555,9 +569,9 @@ header > img {
         font-size: 13px;
     }
 
-    .property__attach{
+    .property__attach {
         font-size: 13px;
-        padding:.1em .5em;
+        padding: .1em .5em;
     }
 
     .table td, .table th {
@@ -589,7 +603,7 @@ header > img {
         font-size: 13px;
     }
 
-    .property__attach{
+    .property__attach {
         font-size: 14px;
     }
 
@@ -630,7 +644,7 @@ header > img {
         height: 40%;
     }
 
-    .attachment-modal > .card {
+    .attachment-modal-items > .card {
         width: 50%;
     }
 
@@ -722,11 +736,11 @@ header > img {
         margin-bottom: -1px;
     }
 
-    .attachment-modal {
+    .attachment-modal-items {
         padding-top: 3em;
     }
 
-    .attachment-modal > .card {
+    .attachment-modal-items > .card {
         width: 80%;
     }
 
@@ -867,10 +881,6 @@ header > img {
     .property-description {
         padding-left: .5em;
         list-style-type: none;
-    }
-
-    .attachment-modal, .img-modal {
-        width: 101vw;
     }
 
 }

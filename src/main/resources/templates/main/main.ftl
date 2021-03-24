@@ -13,19 +13,23 @@
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
-                <button @click="showAttachModal=false" class="modal-close attachments-modal-close"></button>
 
-                <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
-                     v-for="attach in attachments" v-if="attach != null">
+                <div class="attachment-modal-items">
+                    <button @click="showAttachModal=false" class="modal-close attachments-modal-close"></button>
 
-                    <h5 class="card-header">{{attach.categoryName}}</h5>
-                    <div class="card-body">
-                        <p class="card-text">{{attach.note}}</p>
-                        <a :href="attach.link" class="btn btn-outline-secondary">
-                            Переглянути повну інформацію
-                        </a>
+                    <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
+                         v-for="attach in attachments" v-if="attach != null">
+
+                        <h5 class="card-header">{{attach.categoryName}}</h5>
+                        <div class="card-body">
+                            <p class="card-text">{{attach.note}}</p>
+                            <a :href="attach.link" class="btn btn-outline-secondary">
+                                Переглянути повну інформацію
+                            </a>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </transition>
 
