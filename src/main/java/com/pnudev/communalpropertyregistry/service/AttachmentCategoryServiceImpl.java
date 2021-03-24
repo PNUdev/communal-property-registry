@@ -55,12 +55,12 @@ public class AttachmentCategoryServiceImpl implements AttachmentCategoryService 
         AttachmentCategory attachmentCategoryFromDb = findById(id);
         String oldName = attachmentCategoryFromDb.getName();
 
-        attachmentCategoryFromDb.toBuilder()
+        AttachmentCategory updatedAttachmentCategory = attachmentCategoryFromDb.toBuilder()
                 .name(attachmentCategoryDto.getName())
                 .isPubliclyViewable(attachmentCategoryDto.isPubliclyViewable())
                 .build();
 
-        attachmentCategoryRepository.save(attachmentCategoryFromDb);
+        attachmentCategoryRepository.save(updatedAttachmentCategory);
 
         log.info("Attachment category was updated ({} -> {})", oldName, attachmentCategoryFromDb.getName());
     }

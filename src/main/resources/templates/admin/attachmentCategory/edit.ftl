@@ -1,6 +1,8 @@
 <#include '../include/header.ftl'>
 <script>
-    const publiclyViewableBefore = <#if attachmentCategory.publiclyViewable> true <#else> false </#if>;
+    const publiclyViewableBefore = <#if attachmentCategory.publiclyViewable> true
+    <#else>
+    false </#if>;
 </script>
 <div class="m-2">
     <a class="btn btn-outline-primary" href="/admin/attachment-categories/${attachmentCategory.id}">&#8592;</a>
@@ -18,7 +20,7 @@
         <div class="d-flex justify-content-center">
             <label class="form-check-label" for="checkbox">Публічні дані?&#x00A0;&#x00A0;</label>
             <input type="checkbox" id="checkbox" class="form-check-input" name="PubliclyViewable"
-                   <#if attachmentCategory.publiclyViewable> checked </#if> />
+                    <#if attachmentCategory.publiclyViewable> checked </#if> />
         </div>
 
         <div class="d-flex flex-row justify-content-center">
@@ -29,7 +31,7 @@
     </form>
 </div>
 <script>
-    document.getElementById("form").addEventListener("submit", function(event){
+    document.getElementById("form").addEventListener("submit", function (event) {
         event.preventDefault();
 
         const newName = document.getElementById("name").value;
@@ -37,10 +39,10 @@
 
         const publiclyViewableAfter = document.getElementById("checkbox").checked;
 
-        if(oldName !== newName || publiclyViewableBefore !== publiclyViewableAfter) {
+        if (oldName !== newName || publiclyViewableBefore !== publiclyViewableAfter) {
             document.getElementById("form").submit();
-        }else {
-            if(!document.getElementById("popup")) {
+        } else {
+            if (!document.getElementById("popup")) {
                 let msg = "<div class='alert alert-danger m-5' id='popup'> <p class=text-center>Немає змін</p> </div>";
                 document.getElementById("form").insertAdjacentHTML("beforebegin", msg);
 
