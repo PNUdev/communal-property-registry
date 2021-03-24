@@ -1,6 +1,7 @@
 package com.pnudev.communalpropertyregistry.controller.api;
 
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
+import com.pnudev.communalpropertyregistry.service.ExcelReportBuilderService;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api/properties")
 public class PropertyController {
 
     private final PropertyService propertyService;
 
+    private final ExcelReportBuilderService excelReportBuilderService;
+
     @Autowired
-    public PropertyController(PropertyService locationService) {
+    public PropertyController(PropertyService locationService, ExcelReportBuilderService excelReportBuilderService) {
         this.propertyService = locationService;
+        this.excelReportBuilderService = excelReportBuilderService;
     }
 
     @GetMapping
@@ -47,6 +53,15 @@ public class PropertyController {
                                                           @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
 
         return propertyService.getMapLocations(searchQuery, propertyStatus, categoryByPurposeId);
+    }
+
+    @GetMapping("/report")
+    public void getPropertiesExcelReport(HttpServletResponse response ,
+                                         @Nullable @RequestParam(name = "q") String searchQuery,
+                                         @Nullable @RequestParam(name = "status") String propertyStatus,
+                                         @Nullable @RequestParam(name = "category") Long categoryByPurposeId){
+
+        excelReportBuilderService.exportReport(searchQuery, propertyStatus, categoryByPurposeId, response);
     }
 
 }
