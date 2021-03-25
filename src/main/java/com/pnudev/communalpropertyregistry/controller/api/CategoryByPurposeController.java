@@ -20,7 +20,7 @@ public class CategoryByPurposeController {
 
     @GetMapping
     public CategoryByPurposeResponseDto getCategories() {
-        return new CategoryByPurposeResponseDto(categoryByPurposeService.findAll());
+        return categoryByPurposeService.findAll();
     }
 
 }

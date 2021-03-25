@@ -127,7 +127,8 @@ public class PropertyMapper {
 
         List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
 
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll()
+                .getCategoriesByPurpose();
 
         return properties.stream()
                 .map(property -> mapToPropertyResponseDto(property, filteredAttachments,

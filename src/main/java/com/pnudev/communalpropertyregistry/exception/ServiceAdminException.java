@@ -1,4 +1,3 @@
-
 package com.pnudev.communalpropertyregistry.exception;
 
 public class ServiceAdminException extends RuntimeException {
