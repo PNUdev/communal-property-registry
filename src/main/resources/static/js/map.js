@@ -4,7 +4,7 @@ const KOLOMYIA_MAP_LOCATION = {
     lon: 25.05,
 };
 
-let map = L.map('map').setView([KOLOMYIA_MAP_LOCATION.lat, KOLOMYIA_MAP_LOCATION.lon], 12)
+let map = L.map('map').setView([KOLOMYIA_MAP_LOCATION.lat, KOLOMYIA_MAP_LOCATION.lon], 13)
 
 L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FLZjrggiEUkOsMhDShR0', {
     attribution: `<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>
