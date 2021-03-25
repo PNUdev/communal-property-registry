@@ -15,6 +15,6 @@ public interface AttachmentAdminService {
 
     void updateById(Long attachmentId, Long propertyId, AttachmentAdminFormDto attachmentAdminFormDto);
 
-    void deleteById(Long id);
+    void deleteById(Long propertyId, Long attachmentId);
 
 }

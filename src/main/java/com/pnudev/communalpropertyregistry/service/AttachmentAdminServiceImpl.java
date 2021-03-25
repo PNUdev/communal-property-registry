@@ -93,8 +93,13 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        attachmentRepository.deleteById(id);
+    public void deleteById(Long propertyId, Long attachmentId) {
+
+        if (!attachmentRepository.existsById(attachmentId)) {
+            throw new AttachmentAdminException("Прикріплення не існує!", propertyId);
+        }
+
+        attachmentRepository.deleteById(attachmentId);
     }
 
 }

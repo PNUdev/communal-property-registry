@@ -118,7 +118,7 @@ public class AttachmentAdminController {
                          @PathVariable(name = "attachment_id") Long attachmentId,
                          RedirectAttributes redirectAttributes) {
 
-        attachmentAdminService.deleteById(attachmentId);
+        attachmentAdminService.deleteById(propertyId, attachmentId);
 
         redirectAttributes.addFlashAttribute(SUCCESS_FLASH_MESSAGE.name(), "Прикріплення успішно видалено!");
 
