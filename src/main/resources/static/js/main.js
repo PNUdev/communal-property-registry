@@ -7,6 +7,7 @@ const APP_PROPERTIES = new Vue({
         category: 'all',
 
         totalPages: 1,
+        showFilters: true,
         showModal: false,
         showAttachModal: false,
         hasNext: false,
@@ -45,6 +46,8 @@ const APP_PROPERTIES = new Vue({
                 .then(resp => {
                     this.properties = resp.data["content"];
                     this.totalPages = resp.data["totalPages"];
+
+                    this.showFilters = true;
                     this.updatePaginationBtnVisibility();
                 })
                 .catch(error => {
@@ -64,6 +67,7 @@ const APP_PROPERTIES = new Vue({
             axios.get(`/api/properties/${id}`)
                 .then(resp =>{
                     this.properties = [resp.data];
+                    this.showFilters = false;
                 })
                 .catch(error => {
                     console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`);
