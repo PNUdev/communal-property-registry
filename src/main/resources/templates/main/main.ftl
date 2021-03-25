@@ -6,25 +6,30 @@
 
         <transition v-cloak name="fade">
             <div v-if="showModal" @click="showModal=false" class="img-modal">
+                <button @click="showModal=false" class="modal-close img-modal-close"></button>
                 <img :src="imgUrl" alt="NOT FOUND">
             </div>
         </transition>
 
         <transition v-cloak name="fade">
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
-                <p class="attachments-modal-close"></p>
 
-                <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
-                     v-for="attach in attachments" v-if="attach != null">
+                <div class="attachment-modal-items">
+                    <button @click="showAttachModal=false" class="modal-close attachments-modal-close"></button>
 
-                    <h5 class="card-header">{{attach.categoryName}}</h5>
-                    <div class="card-body">
-                        <p class="card-text">{{attach.note}}</p>
-                        <a :href="attach.link" class="btn btn-outline-secondary">
-                            Переглянути повну інформацію
-                        </a>
+                    <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
+                         v-for="attach in attachments" v-if="attach != null">
+
+                        <h5 class="card-header">{{attach.categoryName}}</h5>
+                        <div class="card-body">
+                            <p class="card-text">{{attach.note}}</p>
+                            <a :href="attach.link" class="btn btn-outline-secondary">
+                                Переглянути повну інформацію
+                            </a>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </transition>
 
@@ -60,11 +65,11 @@
 
                 </select>
 
-                <p class="drop-filters-btn" @click="dropFilters"></p>
+                <p class="drop-filters-btn" @click="dropFilters">Скасувати</p>
 
                 <div class="properties-pagination">
-                    <button id="prev-btn" :disabled="!hasPrev" @click="changePage" ></button>
-                    <button id="next-btn" :disabled="!hasNext" @click="changePage" ></button>
+                    <button id="prev-btn" :disabled="!hasPrev" @click="changePage" >&lsaquo;</button>
+                    <button id="next-btn" :disabled="!hasNext" @click="changePage" >&rsaquo;</button>
                 </div>
             </div>
 
@@ -72,26 +77,29 @@
 
         <div class="property-items" v-cloak>
             <div class="property" v-model="properties" v-for="prop in properties"
-                        @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
+                 @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
-                <img title="Open in fullscreen" @click="showImageInModal(prop.imageUrl)"
-                     :src= "prop.imageUrl ? prop.imageUrl : '/images/default_img.png'">
+                <img title="Open in fullscreen" @click="showImageInModal"
+                     :src="prop.imageUrl ? prop.imageUrl : defaultImgUrl"
+                     @error="$event.target.src = defaultImgUrl">
 
                 <div class="property-data">
-                    <h3 class="property__title">{{prop.name}}</h3>
+                    <div>
+                        <h3 class="property__title">{{prop.name}}</h3>
 
-                    <div class="property-area-main">
-                        <p class="property__area_transferred" v-if="prop.areaTransferred">
-                            {{prop.areaTransferred}}м<sup>2</sup>
-                        </p>
+                        <div class="property-area-main">
+                            <p class="property__area_transferred" v-if="prop.areaTransferred">
+                                {{prop.areaTransferred}}м<sup>2</sup>
+                            </p>
 
-                        <p class="property__area">{{prop.area}}м<sup>2</sup></p>
+                            <p class="property__area">{{prop.area}}м<sup>2</sup></p>
+                        </div>
                     </div>
 
                     <p class="property__address">{{prop.address}}</p>
 
-                    <p :style="{background:getStatusLabelColor(prop.status)}" class="property__status">
-                        {{parsePropertyStatus(prop.status)}}
+                    <p :style="{background:getStatusLabelColor(prop.propertyStatus)}" class="property__status">
+                        {{parsePropertyStatus(prop.propertyStatus)}}
                     </p>
 
                     <ul class="property-description">
@@ -111,7 +119,7 @@
                                             '': 'property__attach_disabled', 'property__attach']"
                                 @click="showAttachmentsModal(prop.attachments)">
 
-                            Переглянути прикріплення &#129034;
+                            Переглянути прикріплення &#8594;
                         </button>
 
                         <p v-if="prop.amountOfRent" class="property__amount">{{prop.amountOfRent}}₴</p>

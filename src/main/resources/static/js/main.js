@@ -6,12 +6,13 @@ const APP_PROPERTIES = new Vue({
         status: 'all',
         category: 'all',
 
-        totalPages: 0,
+        totalPages: 1,
         showModal: false,
         showAttachModal: false,
         hasNext: false,
         hasPrev: false,
         imgUrl: null,
+        defaultImgUrl: "/images/default_img.png",
         url: "",
 
         attachments: [],
@@ -26,7 +27,6 @@ const APP_PROPERTIES = new Vue({
         this.setParamIfExists("category")
 
         this.setUrl();
-        this.updatePaginationBtnVisibility();
         this.getCategories();
     },
 
@@ -45,6 +45,7 @@ const APP_PROPERTIES = new Vue({
                 .then(resp => {
                     this.properties = resp.data["content"];
                     this.totalPages = resp.data["totalPages"];
+                    this.updatePaginationBtnVisibility();
                 })
                 .catch(error => {
                     console.error("PROPERTIES FAILED TO LOAD\n" + error);
@@ -52,8 +53,8 @@ const APP_PROPERTIES = new Vue({
         },
 
         async getPropertyOnMarkerClick(id){
-            this.page = 0;
-            this.totalPages = 0;
+            this.page = 1;
+            this.totalPages = 1;
             this.updatePaginationBtnVisibility();
 
             if(window.innerWidth <= 1000){
@@ -87,7 +88,7 @@ const APP_PROPERTIES = new Vue({
         },
 
         dropFilters(){
-            this.page = 0;
+            this.page = 1;
             this.category = "all";
             this.status = "all";
             this.q = '';
@@ -122,7 +123,7 @@ const APP_PROPERTIES = new Vue({
         setUrl(){
             let url = "";
 
-            url += this.page !== 0 ? `?page=${this.page}` : "";
+            url += this.page !== 1 ? `?page=${this.page}` : "";
             url += this.q ? `&q=${this.q}` : "";
             url += this.status !== "all" ? `&status=${this.status}` : "";
             url += this.category !== "all" ? `&category=${this.category}` : "";
@@ -153,16 +154,19 @@ const APP_PROPERTIES = new Vue({
             }
         },
 
-        showImageInModal(imgUrl){
-            if(imgUrl) {
-                this.imgUrl = imgUrl;
+        showImageInModal(event){
+            let isLoaded = event.target.complete;
+            let isDefault = event.target.src.endsWith(this.defaultImgUrl);
+
+            if(isLoaded && !isDefault) {
+                this.imgUrl = event.target.src;
                 this.showModal = true;
             }
         },
 
         updatePaginationBtnVisibility(){
             this.hasPrev = this.page > 1;
-            this.hasNext = this.page < this.totalPages - 1;
+            this.hasNext = this.page < this.totalPages;
         },
 
     }

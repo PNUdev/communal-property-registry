@@ -46,8 +46,8 @@ let markerLayers = [];
 getMarkers();
 
 //update markers, remove old, add new
-function updateMarkers(){
-    while(markerLayers.length > 0) {
+function updateMarkers() {
+    while (markerLayers.length > 0) {
         map.removeLayer(markerLayers.pop());
     }
 
@@ -55,7 +55,7 @@ function updateMarkers(){
 }
 
 //get all markers
-async function getMarkers(){
+async function getMarkers() {
     axios.get(`/api/properties/map-locations` + location.search)
         .then(resp => {
             resp.data["mapLocations"].forEach(propertyLocationData => {
@@ -72,7 +72,7 @@ async function getMarkers(){
             })
         })
         .catch(error => {
-           console.error( "MARKER LOCATIONS FAILED TO LOAD\n" + error);
+            console.error("MARKER LOCATIONS FAILED TO LOAD\n" + error);
         })
 }
 
@@ -80,33 +80,33 @@ async function getMarkers(){
 function addMarker(marker) {
     let icon = new Icon(STATUS_COLORS[marker.status]);
 
-    let newMarker = Object.defineProperty(L.marker(marker.coords, { icon: icon }),
-        'id', {value:marker.id})
+    let newMarker = Object.defineProperty(L.marker(marker.coords, {icon: icon}),
+        'id', {value: marker.id})
         .addTo(map)
 
-    newMarker.addEventListener("click", handleMarkerClick, {once:true});
+    newMarker.addEventListener("click", handleMarkerClick, {once: true});
     markerLayers.push(newMarker);
 }
 
 //display property when clicking marker
 function handleMarkerClick(e) {
-    if(e.originalEvent.isTrusted){
+    if (e.originalEvent.isTrusted) {
         APP_PROPERTIES.getPropertyOnMarkerClick(e.target.id)
-        map.setView(e.target.getLatLng(), 12.5)
     }
 }
 
 //Highlight marker on property hover
 let oldPosition;
+
 function handlePropertyHoverIn(propertyId) {
     let markerStyles;
 
     try {
         markerStyles = markerLayers
-            .find(marker => marker.id === propertyId + '')
+            .find(marker => marker.id === propertyId)
             ._icon.style;
 
-    } catch(error){
+    } catch (error) {
         console.error("APPROPRIATE MARKER WAS NOT FOUND\n" + error);
         return;
     }
@@ -119,7 +119,8 @@ function handlePropertyHoverIn(propertyId) {
         .split(",")
         .map(point => parseInt(point));
 
-    newPosition[0] -= 3; newPosition[1] -= 6;
+    newPosition[0] -= 3;
+    newPosition[1] -= 6;
     newPosition = newPosition.map(point => point + "px").join(", ")
 
     markerStyles.transition = ".2s linear";
@@ -130,12 +131,12 @@ function handlePropertyHoverIn(propertyId) {
 function handlePropertyHoverOut(propertyId) {
     let markerStyles;
 
-    try{
+    try {
         markerStyles = markerLayers
-            .find(marker => marker.id === propertyId + '')
+            .find(marker => marker.id === propertyId)
             ._icon.style;
 
-    } catch(error){
+    } catch (error) {
         console.error("APPROPRIATE MARKER WAS NOT FOUND\n" + error);
         return;
     }
