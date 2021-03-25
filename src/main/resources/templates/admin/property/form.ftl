@@ -95,7 +95,7 @@
             </div>
 
             <div>
-                <label for="balanceHolder" class="form-label">Балансо утримувач</label>
+                <label for="balanceHolder" class="form-label">Балансоутримувач</label>
                 <div class="input-group" id="balanceHolder">
                     <input name="balanceHolder" type="text" class="form-control"
                            value="${(propertyAdminDto.balanceHolder)!}" required>
