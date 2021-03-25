@@ -1,8 +1,6 @@
 <#include '../include/header.ftl'>
 <script>
-    const publiclyViewableBefore = <#if attachmentCategory.publiclyViewable> true
-    <#else>
-    false </#if>;
+    const publiclyViewableBefore = ${attachmentCategory.publiclyViewable?then('true', 'false')}
 </script>
 <div class="m-2">
     <a class="btn btn-outline-primary" href="/admin/attachment-categories/${attachmentCategory.id}">&#8592;</a>
@@ -41,13 +39,11 @@
 
         if (oldName !== newName || publiclyViewableBefore !== publiclyViewableAfter) {
             document.getElementById("form").submit();
-        } else {
-            if (!document.getElementById("popup")) {
-                let msg = "<div class='alert alert-danger m-5' id='popup'> <p class=text-center>Немає змін</p> </div>";
-                document.getElementById("form").insertAdjacentHTML("beforebegin", msg);
+        } else if (!document.getElementById("popup")) {
+            let msg = "<div class='alert alert-danger m-5' id='popup'> <p class=text-center>Немає змін</p> </div>";
+            document.getElementById("form").insertAdjacentHTML("beforebegin", msg);
 
-                setTimeout(() => document.getElementById("popup").remove(), 5000);
-            }
+            setTimeout(() => document.getElementById("popup").remove(), 5000);
         }
     });
 </script>
