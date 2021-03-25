@@ -89,6 +89,8 @@ header > img {
 }
 
 .properties-report-btn {
+    white-space: nowrap;
+    width: max-content;
     text-decoration: none;
     color: #E8F2FC;
     background-color: #253951;
