@@ -70,7 +70,7 @@
                     </td>
                     <td>
                         <a class="btn btn-outline-primary"
-                           href="/admin/properties/#{property.id}/attachments/update/#{attachment.id}">
+                           href="/admin/properties/#{property.id}/attachments/edit/#{attachment.id}">
                             Редагувати
                         </a>
                     </td>

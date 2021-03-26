@@ -42,17 +42,8 @@ public class AttachmentAdminController {
         this.attachmentCategoryService = attachmentCategoryService;
     }
 
-    @GetMapping("/new")
-    public String create(Model model) {
-
-        List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
-        model.addAttribute("attachmentCategories", attachmentCategories);
-
-        return "admin/attachment/form";
-    }
-
     @GetMapping
-    public String find(@PathVariable(name = "property_id") Long propertyId, Model model) {
+    public String findAllByPropertyId(@PathVariable(name = "property_id") Long propertyId, Model model) {
 
         PropertyAdminDto property = propertyAdminService.findById(propertyId);
         List<AttachmentAdminDto> attachments = attachmentAdminService.findAllByPropertyId(propertyId);
@@ -63,8 +54,17 @@ public class AttachmentAdminController {
         return "admin/attachment/index";
     }
 
-    @GetMapping("/update/{attachment_id}")
-    public String update(@PathVariable(name = "attachment_id") Long attachmentId,
+    @GetMapping("/new")
+    public String createForm(Model model) {
+
+        List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();
+        model.addAttribute("attachmentCategories", attachmentCategories);
+
+        return "admin/attachment/form";
+    }
+
+    @GetMapping("/edit/{attachment_id}")
+    public String editForm(@PathVariable(name = "attachment_id") Long attachmentId,
                          @PathVariable(name = "property_id") Long propertyId,
                          Model model) {
 

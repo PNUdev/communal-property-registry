@@ -159,7 +159,7 @@
                             Показати прикріплення
                         </a>
 
-                        <a href="/admin/properties/update/${property.id}" class="pt-3">
+                        <a href="/admin/properties/edit/${property.id}" class="pt-3">
                             <div class="btn btn-primary">Редагувати</div>
                         </a>
                     </div>
