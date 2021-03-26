@@ -10,7 +10,7 @@
 <nav class="navbar navbar-dark bg-primary">
     <div class="container-fluid">
         <div>
-            <a class="navbar-brand" href="#">#</a>
+            <a class="navbar-brand" href="/admin/user-actions">Аналітика</a>
         </div>
         <div>
             <form method="POST" action="/logout" class="m-0 p-0">

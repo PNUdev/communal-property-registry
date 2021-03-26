@@ -1,11 +1,12 @@
+<#assign currentPage = partialUserActionsByIpAddress.getNumber() + 1>
 <div>
     <div class="row">
         <ul class="list-group">
             <#list partialUserActionsByIpAddress.getContent() as userAction>
                 <li class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">${userAction.url}</h5>
-                        <small>
+                    <div class="d-flex justify-content-between row">
+                        <p class="mb-1 col-9 text-break"><b>${userAction.url}</b></p>
+                        <small class="col-3">
                             <i class="fa fa-clock-o fa-lg p-2"></i>
                             <b>${userAction.time.format(formatter)}</b>
                         </small>
@@ -16,18 +17,17 @@
             </#list>
         </ul>
     </div>
-    <div class="justify-content-center mt-2 row justify-content-md-center">
-        <ul class="pagination user-action-list">
+    <div class="mt-2" id="pagination">
+        <ul class="pagination user-action-list pagination justify-content-center">
             <li class="page-item  <#if !partialUserActionsByIpAddress.hasPrevious()> disabled</#if>">
-                <button class="page-link" data-page="${partialUserActionsByIpAddress.getNumber() - 2}">&laquo;</button>
+                <button class="page-link" data-page="${currentPage - 1}">&laquo;
+                </button>
             </li>
-            <#list 1..partialUserActionsByIpAddress.getTotalPages() as pageNumber>
-                <li class="page-item <#if partialUserActionsByIpAddress.getNumber() + 1 == pageNumber>active</#if>">
-                    <button class="page-link" data-page="${pageNumber}">${pageNumber}</button>
-                </li>
-            </#list>
+            <li class="page-item active">
+                <span class="page-link">${currentPage}</span>
+            </li>
             <li class="page-item <#if !partialUserActionsByIpAddress.hasNext()> disabled</#if>">
-                <button class="page-link" data-page="${partialUserActionsByIpAddress.getNumber() + 2}">&raquo;</button>
+                <button class="page-link" data-page="${currentPage + 1}">&raquo;</button>
             </li>
         </ul>
     </div>

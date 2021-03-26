@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 @Slf4j
 @Controller
 @RequestMapping("admin/user-actions")
 public class UserActionController {
 
-    private final static DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-            .append(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss")).toFormatter();
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
 
     private UserActionService userActionService;
 
@@ -52,11 +51,19 @@ public class UserActionController {
 
         Page<UserAction> partialUserActionsByIpAddress = userActionService.findAllByIpAddress(ipAddress, pageable);
 
-        log.info("Analytics about user actions successfully gathered!");
+        log.info("Analytics about user actions by a specified ipAddress successfully gathered!");
 
         model.addAttribute("partialUserActionsByIpAddress", partialUserActionsByIpAddress);
         model.addAttribute("formatter", DATE_TIME_FORMATTER);
 
         return "admin/analytics/partial-user-actions";
+    }
+
+    @GetMapping("/download/txt")
+    public void downloadReportTxt(HttpServletResponse response) {
+
+        userActionService.downloadReport(response);
+
+        log.info("Txt report successfully downloaded");
     }
 }

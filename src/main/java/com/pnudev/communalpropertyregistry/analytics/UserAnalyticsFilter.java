@@ -3,6 +3,8 @@ package com.pnudev.communalpropertyregistry.analytics;
 
 import com.pnudev.communalpropertyregistry.service.UserActionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class UserAnalyticsFilter implements Filter {
 
     private final UserActionService userActionService;
