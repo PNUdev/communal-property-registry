@@ -53,8 +53,8 @@
             <div class="d-flex justify-content-evenly mt-3">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <#if attachment??>
-                    <button type="submit" class="btn btn-outline-primary"
-                            formaction="/admin/properties/#{propertyId}/attachments/update/#{attachment.id}">
+                    <button class="btn btn-outline-primary"
+                            onclick="this.form.action='/admin/properties/#{propertyId}/attachments/update/#{attachment.id}'; submitForm()">
                         Оновити
                     </button>
                     <a href="/admin/properties/#{propertyId}/attachments/delete/#{attachment.id}" class="btn btn-outline-danger">Видалити</a>
@@ -95,7 +95,9 @@
         return elem.value !== elem.dataset.oldvalue;
     }
 
-    attachmentForm.addEventListener("submit", function(event) {
+    attachmentForm.addEventListener("submit", submitForm);
+
+    function submitForm(event) {
         event.preventDefault();
 
         let note = document.getElementById("note");
@@ -116,7 +118,7 @@
                 setTimeout(() => document.getElementById("popup").remove(), 5000);
             }
         }
-    });
+    }
 </script>
 
 <#include "../../include/footer.ftl">
