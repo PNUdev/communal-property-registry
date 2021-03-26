@@ -1,27 +1,25 @@
-package com.pnudev.communalpropertyregistry.domain;
+package com.pnudev.communalpropertyregistry.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Attachment {
+public class AttachmentAdminDto {
 
-    @Id
     private Long id;
 
     private String note;
 
     private String link;
 
-    private Long attachmentCategoryId;
+    private String attachmentCategoryName;
 
-    private Long propertyId;
+    private boolean isAttachmentCategoryPubliclyViewable;
 
     private boolean isPubliclyViewable;
 

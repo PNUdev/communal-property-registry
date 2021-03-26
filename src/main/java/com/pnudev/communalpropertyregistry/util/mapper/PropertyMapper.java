@@ -83,7 +83,9 @@ public class PropertyMapper {
                 .areaTransferred(tuple.get(property.areaTransferred))
                 .balanceHolder(tuple.get(property.balanceHolder))
                 .owner(tuple.get(property.owner))
-                .leaseAgreementEndDate(tuple.get(property.leaseAgreementEndDate).toLocalDate())
+                .leaseAgreementEndDate(
+                        Objects.nonNull(tuple.get(property.leaseAgreementEndDate)) ?
+                        tuple.get(property.leaseAgreementEndDate).toLocalDate() : null)
                 .amountOfRent(tuple.get(property.amountOfRent))
                 .isAreaTransferredPubliclyViewable(tuple.get(property.isAreaTransferredPubliclyViewable))
                 .isBalanceHolderPubliclyViewable(tuple.get(property.isBalanceHolderPubliclyViewable))

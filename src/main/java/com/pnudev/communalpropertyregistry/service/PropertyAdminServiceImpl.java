@@ -5,6 +5,7 @@ import com.pnudev.communalpropertyregistry.dto.AddressDto;
 import com.pnudev.communalpropertyregistry.dto.PropertyAdminDto;
 import com.pnudev.communalpropertyregistry.dto.form.PropertyAdminFormDto;
 import com.pnudev.communalpropertyregistry.exception.PropertyAdminException;
+import com.pnudev.communalpropertyregistry.repository.AttachmentRepository;
 import com.pnudev.communalpropertyregistry.repository.PropertyRepository;
 import com.pnudev.communalpropertyregistry.repository.dsl.PropertyDslRepository;
 import com.pnudev.communalpropertyregistry.util.mapper.PropertyMapper;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +35,18 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
 
     private final PropertyMapper propertyMapper;
 
+    private final AttachmentRepository attachmentRepository;
+
     @Autowired
     public PropertyAdminServiceImpl(PropertyDslRepository propertyDslRepository,
                                     PropertyRepository propertyRepository,
-                                    PropertyMapper propertyMapper) {
+                                    PropertyMapper propertyMapper,
+                                    AttachmentRepository attachmentRepository) {
 
         this.propertyDslRepository = propertyDslRepository;
         this.propertyRepository = propertyRepository;
         this.propertyMapper = propertyMapper;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @Override
@@ -145,8 +151,12 @@ public class PropertyAdminServiceImpl implements PropertyAdminService {
         propertyRepository.save(property);
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
+
+        attachmentRepository.deleteAllByPropertyId(id);
+
         propertyRepository.deleteById(id);
     }
 
