@@ -65,8 +65,8 @@ public class AttachmentAdminController {
 
     @GetMapping("/edit/{attachment_id}")
     public String editForm(@PathVariable(name = "attachment_id") Long attachmentId,
-                         @PathVariable(name = "property_id") Long propertyId,
-                         Model model) {
+                           @PathVariable(name = "property_id") Long propertyId,
+                           Model model) {
 
         AttachmentAdminDto attachment = attachmentAdminService.findById(attachmentId, propertyId);
         List<AttachmentCategory> attachmentCategories = attachmentCategoryService.findAll();

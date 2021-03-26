@@ -16,7 +16,7 @@
         </div>
 
         <div class="h4 col">
-            Назва майна: ${property.name}
+            Назва майна: ${(property.name)!"-"}
         </div>
 
         <div class="h4 col">
@@ -56,9 +56,9 @@
                     <td>${attachment.id}</td>
                     <td>${attachment.attachmentCategoryName}</td>
                     <td>${attachment.attachmentCategoryPubliclyViewable?string("Так","Ні")}</td>
-                    <td>${attachment.note}</td>
+                    <td>${(attachment.note)!"-"}</td>
                     <td>
-                        <#if attachment.link?has_content>
+                        <#if attachment?? && attachment.link?has_content>
                             <a href="${attachment.link}">Перейти за посиланням</a>
                         <#else >
                             Посилання відсутнє
