@@ -2,6 +2,7 @@ package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.UserAction;
 import com.pnudev.communalpropertyregistry.dto.UserActionPairDto;
+import com.pnudev.communalpropertyregistry.exception.ServiceAdminException;
 import com.pnudev.communalpropertyregistry.repository.UserActionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -87,8 +88,7 @@ public class UserActionServiceImpl implements UserActionService {
 
         } catch (RuntimeException | IOException e) {
             log.error("Error occurred during report generation!", e.getLocalizedMessage());
-            //TODO throw custom exception from master
-            throw new RuntimeException(e.getMessage());
+            throw new ServiceAdminException("Error occurred during report generation!");
         }
     }
 

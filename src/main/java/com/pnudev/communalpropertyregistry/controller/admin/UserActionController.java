@@ -1,4 +1,4 @@
-package com.pnudev.communalpropertyregistry.controller;
+package com.pnudev.communalpropertyregistry.controller.admin;
 
 import com.pnudev.communalpropertyregistry.domain.UserAction;
 import com.pnudev.communalpropertyregistry.dto.UserActionPairDto;
