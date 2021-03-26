@@ -7,6 +7,7 @@ const APP_PROPERTIES = new Vue({
         category: 'all',
 
         totalPages: 1,
+        showFilters: true,
         showModal: false,
         showAttachModal: false,
         hasNext: false,
@@ -16,7 +17,7 @@ const APP_PROPERTIES = new Vue({
         url: "",
 
         attachments: [],
-        properties: [],
+        properties: [""],
         categories: []
     },
 
@@ -45,6 +46,8 @@ const APP_PROPERTIES = new Vue({
                 .then(resp => {
                     this.properties = resp.data["content"];
                     this.totalPages = resp.data["totalPages"];
+
+                    this.showFilters = true;
                     this.updatePaginationBtnVisibility();
                 })
                 .catch(error => {
@@ -64,6 +67,7 @@ const APP_PROPERTIES = new Vue({
             axios.get(`/api/properties/${id}`)
                 .then(resp =>{
                     this.properties = [resp.data];
+                    this.showFilters = false;
                 })
                 .catch(error => {
                     console.error(`PROPERTY WITH ID=${id} FAILED TO LOAD\n ${error}`);
@@ -71,6 +75,7 @@ const APP_PROPERTIES = new Vue({
         },
 
         changeFilters(){
+            this.page = 1;
             this.setUrl();
             updateMarkers();
         },
@@ -78,25 +83,15 @@ const APP_PROPERTIES = new Vue({
         changePage(e){
             if(e.target.id === "prev-btn" && this.hasPrev){
                 this.page--;
+                this.$el.lastChild.scrollTop = 0;
             }
             else if(e.target.id === "next-btn" && this.hasNext){
                 this.page++;
+                this.$el.lastChild.scrollTop = 0;
             }
 
             this.setUrl();
             this.updatePaginationBtnVisibility();
-        },
-
-        dropFilters(){
-            this.page = 1;
-            this.category = "all";
-            this.status = "all";
-            this.q = '';
-            this.hasPrev = false;
-            this.hasNext = true;
-
-            this.setUrl();
-            updateMarkers();
         },
 
         getStatusLabelColor(status){
@@ -144,6 +139,19 @@ const APP_PROPERTIES = new Vue({
                 .searchParams.get(param);
 
             if(paramValue) this[param] = paramValue;
+        },
+
+        showAll(){
+            this.page = 1;
+            this.category = "all";
+            this.status = "all";
+            this.q = '';
+            this.hasPrev = false;
+            this.hasNext = true;
+
+            this.setUrl();
+            this.$el.lastChild.scrollTop = 0
+            updateMarkers();
         },
 
         showAttachmentsModal(attachments){
