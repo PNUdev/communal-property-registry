@@ -22,24 +22,15 @@ const STATUS_COLORS = {
 
 //marker icon
 class Icon {
-    constructor(color) {
-        this.color = color;
-        return this.getInstance();
-    }
 
-    getInstance() {
-        return L.icon({
-            iconUrl: `data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'
-                aria-labelledby='title' aria-describedby='desc' role='img'
-                xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3EPin%3C/title%3E%3Cdesc%3EA
-                solid styled icon from Orion Icon Library.%3C/desc%3E%3Cpath data-name='layer1'
-                d='M32 2a20 20 0 0 0-20 20c0 18 20 40 20 40s20-22 20-40A20 20 0 0 0 32
-                2zm0 28a8 8 0 1 1 8-8 8 8 0 0 1-8 8z' fill='${this.color}' %3E%3C/path%3E%3C/svg%3E`,
-            iconSize: [40, 45],
+    constructor(color) {
+        return L.divIcon({
+            html: `<i class="fas fa-map-marker-alt" style="color:${color}"></i>`,
             iconAnchor: [20, 43],
-            popupAnchor: [0, -36]
+            className: "marker__icon"
         });
     }
+
 }
 
 let markerLayers = [];

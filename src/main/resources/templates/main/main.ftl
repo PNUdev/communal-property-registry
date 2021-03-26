@@ -6,7 +6,7 @@
 
         <transition v-cloak name="fade">
             <div v-if="showModal" @click="showModal=false" class="img-modal">
-                <button @click="showModal=false" class="modal-close img-modal-close"></button>
+                <button @click="showModal=false" class="fas fa-times modal-close img-modal-close"></button>
                 <img :src="imgUrl" alt="NOT FOUND">
             </div>
         </transition>
@@ -15,7 +15,7 @@
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
 
                 <div class="attachment-modal-items">
-                    <button @click="showAttachModal=false" class="modal-close attachments-modal-close"></button>
+                    <button @click="showAttachModal=false" class="fas fa-times modal-close attachments-modal-close"></button>
 
                     <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                          v-for="attach in attachments" v-if="attach != null">
@@ -38,7 +38,7 @@
             <div class="properties__search">
                 <form class="search-form" @submit.prevent="searchProperties">
                     <input class="search-field" v-model.trim="q" type="text" placeholder="Пошук...">
-                    <button  class="search-btn fas fa-search" type="submit"></button>
+                    <button  class="search-btn fab fa-sistrix" type="submit"></button>
                 </form>
 
                 <a class="properties-report-btn" :href="'/api/properties/report' + url" download>
@@ -47,7 +47,8 @@
             </div>
 
             <div class="properties__management">
-                <select v-if="showFilters" id="status__filter" v-model="status" @change="changeFilters">
+
+                <select :disabled="!showFilters" id="status__filter" v-model="status" @change="changeFilters">
                     <option value="all">Будь-який статус</option>
                     <option value="NON_RENT">Неорендовані</option>
                     <option value="RENT">Орендовані</option>
@@ -56,7 +57,7 @@
                     <option value="USED_BY_CITY_COUNCIL">Вик. міськвладою</option>
                 </select>
 
-                <select v-if="showFilters" id="category__filter" v-model="category" @change="changeFilters">
+                <select :disabled="!showFilters" id="category__filter" v-model="category" @change="changeFilters">
                     <option value="all">Будь-яка категорія</option>
 
                     <option v-for="cat in categories" :value="cat.id" v-model="categories">
@@ -65,11 +66,11 @@
 
                 </select>
 
-                <p class="drop-filters-btn" @click="dropFilters">Показати всі</p>
+                <p class="show-all-btn" @click="showAll">Показати всі</p>
 
                 <div class="properties-pagination">
                     <button id="prev-btn" class="fas fa-chevron-left" :disabled="!hasPrev" @click="changePage"></button>
-                    <p v-cloak class="properties-pagination__info">{{page}} із {{totalPages > 0 ? totalPages : 1}}</p>
+                    <div v-cloak class="properties-pagination__info">{{page}} із {{totalPages > 0 ? totalPages : 1}}</div>
                     <button id="next-btn" class="fas fa-chevron-right" :disabled="!hasNext" @click="changePage"></button>
                 </div>
             </div>
@@ -129,8 +130,8 @@
 
             </div>
 
-            <p class="properties__notfound"v-if="properties.length == 0">
-                Приміщень не знайдено <i class="far fa-frown"></i>
+            <p class="properties__notfound" v-if="properties.length == 0">
+                Приміщень не знайдено <i class="fas fa-ellipsis-h"></i>
             </p>
         </div>
 
