@@ -6,7 +6,6 @@
 
 html, body {
     height: 100%;
-    overflow: hidden;
 }
 
 body {
@@ -526,6 +525,15 @@ header > img {
     box-shadow: inset 0 0 #fff, 0 2px #C1CDDA;
 }
 
+.vertical-scroll {
+    overflow-y: scroll;
+    height: 80vh;
+}
+
+.return-back-button {
+    margin-left: 1vw;
+    margin-top: 1vh;
+}
 
 /*====== RESPONSIVE =====*/
 

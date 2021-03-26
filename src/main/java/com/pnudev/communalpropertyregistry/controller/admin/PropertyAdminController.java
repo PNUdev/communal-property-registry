@@ -54,7 +54,8 @@ public class PropertyAdminController {
                           @PageableDefault Pageable pageable,
                           Model model) {
 
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll()
+                .getCategoriesByPurpose();
 
         Page<PropertyAdminDto> propertiesAdminPage = propertyAdminService.findAll(
                 searchQuery, categoryByPurposeId, propertyStatus, pageable);
