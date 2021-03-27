@@ -1,6 +1,5 @@
 package com.pnudev.communalpropertyregistry.domain;
 
-import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,6 @@ import org.springframework.data.relational.core.mapping.Embedded;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
-import static com.pnudev.communalpropertyregistry.domain.QProperty.property;
 
 @Data
 @Builder(toBuilder = true)

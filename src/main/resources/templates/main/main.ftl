@@ -170,4 +170,12 @@
 
 </main>
 
+<style>
+
+    body {
+        overflow: hidden;
+    }
+
+</style>
+
 <#include "../include/footer.ftl">

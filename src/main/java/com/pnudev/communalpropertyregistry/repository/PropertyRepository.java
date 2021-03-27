@@ -22,4 +22,6 @@ public interface PropertyRepository extends CrudRepository<Property, Long> {
             "GROUP BY cbp.name ")
     List<PropertyStatisticsDto> getListOfStatistics();
 
+    Boolean existsByCategoryByPurposeId(Long categoryByPurposeId);
+
 }
