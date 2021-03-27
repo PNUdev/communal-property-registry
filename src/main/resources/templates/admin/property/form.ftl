@@ -21,14 +21,12 @@
 
             <div>
                 <label for="image-url" class="form-label">Посилання на зображення</label>
-                <input name="imageUrl" id="image-url" class="form-control" value="${(propertyAdminDto.imageUrl)!}"
-                       required>
+                <input name="imageUrl" id="image-url" class="form-control" value="${(propertyAdminDto.imageUrl)!}">
             </div>
 
             <div>
                 <label for="name" class="form-label">Назва</label>
-                <input name="name" type="text" id="name" class="form-control" value="${(propertyAdminDto.name)!}"
-                       required>
+                <input name="name" type="text" id="name" class="form-control" value="${(propertyAdminDto.name)!}">
             </div>
 
             <div>
@@ -83,7 +81,7 @@
                 <label for="areaTransferred" class="form-label">Передана площа</label>
                 <div class="input-group">
                     <input name="areaTransferred" type="number" step="0.01" class="form-control" id="areaTransferred"
-                           value="${(propertyAdminDto.areaTransferred?string("0.00;; decimalSeparator='.'"))!}" required>
+                           value="${(propertyAdminDto.areaTransferred?string("0.00;; decimalSeparator='.'"))!}">
 
                     <div class="input-group-text">
                         <label class="form-check-label" for="checkbox1">Публічні дані?&#x00A0;&#x00A0;</label>
@@ -126,7 +124,7 @@
                 <label for="leaseAgreementEndDate" class="form-label">Дата закінчення договору оренди</label>
                 <div class="input-group" id="leaseAgreementEndDate">
                     <input name="leaseAgreementEndDate" type="date" max="3000-01-01" class="form-control"
-                           value="${(propertyAdminDto.leaseAgreementEndDate)!}" required>
+                           value="${(propertyAdminDto.leaseAgreementEndDate)!}">
 
                     <div class="input-group-text">
                         <label class="form-check-label" for="checkbox4">Публічні дані?&#x00A0;&#x00A0;</label>
@@ -140,7 +138,7 @@
             <div>
                 <label for="amountOfRent" class="form-label">Сума за оренду</label>
                 <div class="input-group">
-                    <input name="amountOfRent" type="number" step="0.01" class="form-control" id="amountOfRent" required
+                    <input name="amountOfRent" type="number" step="0.01" class="form-control" id="amountOfRent"
                            value="${(propertyAdminDto.amountOfRent?string("0.00;; decimalSeparator='.'"))!}">
 
                     <div class="input-group-text">

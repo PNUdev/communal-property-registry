@@ -92,12 +92,12 @@
                 <div class="row my-3 bg-light rounded p-3">
 
                     <div class="col-md-4">
-                        <img src="${property.imageUrl}" alt="Ілюстрація майна" class="mw-100 mh-100 w-100" onerror="this.src='/images/default_img.png'">
+                        <img src="${(property.imageUrl)!}" alt="Ілюстрація майна" class="mw-100 mh-100 w-100" onerror="this.src='/images/default_img.png'">
                     </div>
 
                     <div class="col-md-5 d-flex flex-column col-md-5 justify-content-between">
                         <div class="h3">
-                            Назва: ${property.name}
+                            Назва: ${(property.name)!"-"}
                         </div>
 
                         <div>
@@ -109,7 +109,7 @@
                         </div>
 
                         <div class="<#if property.areaTransferredPubliclyViewable>text-success<#else>text-danger</#if>">
-                            Передана площа: #{property.areaTransferred; m2} м<sup>2</sup>
+                            Передана площа: <#if property.areaTransferred??>#{property.areaTransferred; m2} м<sup>2</sup><#else>-</#if>
                         </div>
 
                         <div class="<#if property.balanceHolderPubliclyViewable>text-success<#else>text-danger</#if>">
@@ -121,11 +121,11 @@
                         </div>
 
                         <div class="<#if property.leaseAgreementEndDatePubliclyViewable>text-success<#else>text-danger</#if>">
-                            Оренда дійсна до: ${property.leaseAgreementEndDate}
+                            Оренда дійсна до: ${(property.leaseAgreementEndDate)!"-"}
                         </div>
 
                         <div class="<#if property.amountOfRentPubliclyViewable>text-success<#else>text-danger</#if>">
-                            Сума за оренду: #{property.amountOfRent; m2}
+                            Сума за оренду: <#if property.amountOfRent??>#{property.amountOfRent; m2}<#else>-</#if>
                         </div>
                     </div>
 
@@ -155,11 +155,11 @@
                             Категорія за призначенням: ${property.categoryByPurposeName}
                         </div>
 
-                        <a href="/admin/attachments/property/${property.id}" class="pt-3">
+                        <a href="/admin/properties/${property.id}/attachments" class="pt-3">
                             Показати прикріплення
                         </a>
 
-                        <a href="/admin/properties/update/${property.id}" class="pt-3">
+                        <a href="/admin/properties/edit/${property.id}" class="pt-3">
                             <div class="btn btn-primary">Редагувати</div>
                         </a>
                     </div>

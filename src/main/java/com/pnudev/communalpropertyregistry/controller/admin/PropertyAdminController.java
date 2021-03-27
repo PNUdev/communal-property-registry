@@ -85,8 +85,8 @@ public class PropertyAdminController {
         return "admin/property/form";
     }
 
-    @GetMapping("/update/{id}")
-    public String update(@PathVariable(name = "id") Long id, Model model) {
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable(name = "id") Long id, Model model) {
 
         PropertyAdminDto propertyAdminDto = propertyAdminService.findById(id);
         List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
