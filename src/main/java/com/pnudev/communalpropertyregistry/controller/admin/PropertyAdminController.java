@@ -54,8 +54,7 @@ public class PropertyAdminController {
                           @PageableDefault Pageable pageable,
                           Model model) {
 
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll()
-                .getCategoriesByPurpose();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
         Page<PropertyAdminDto> propertiesAdminPage = propertyAdminService.findAll(
                 searchQuery, categoryByPurposeId, propertyStatus, pageable);
@@ -80,8 +79,7 @@ public class PropertyAdminController {
 
     @GetMapping("/new")
     public String create(Model model) {
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll()
-                .getCategoriesByPurpose();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
         model.addAttribute("categoriesByPurpose", categoriesByPurpose);
         return "admin/property/form";
@@ -91,8 +89,7 @@ public class PropertyAdminController {
     public String update(@PathVariable(name = "id") Long id, Model model) {
 
         PropertyAdminDto propertyAdminDto = propertyAdminService.findById(id);
-        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll()
-                .getCategoriesByPurpose();
+        List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
         model.addAttribute("propertyAdminDto", propertyAdminDto);
         model.addAttribute("categoriesByPurpose", categoriesByPurpose);

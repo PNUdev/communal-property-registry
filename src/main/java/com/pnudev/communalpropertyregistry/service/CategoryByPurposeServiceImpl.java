@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
@@ -29,8 +31,8 @@ public class CategoryByPurposeServiceImpl implements CategoryByPurposeService {
     }
 
     @Override
-    public CategoryByPurposeResponseDto findAll() {
-        return new CategoryByPurposeResponseDto(categoryByPurposeRepository.findAll());
+    public List<CategoryByPurpose> findAll() {
+        return categoryByPurposeRepository.findAll();
     }
 
     @Override

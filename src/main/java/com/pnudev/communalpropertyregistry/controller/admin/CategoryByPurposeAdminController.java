@@ -33,7 +33,7 @@ public class CategoryByPurposeAdminController {
     public String findAll(Model model) {
 
         List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService
-                .findAll().getCategoriesByPurpose();
+                .findAll();
 
         model.addAttribute("categoriesByPurpose", categoriesByPurpose);
 
