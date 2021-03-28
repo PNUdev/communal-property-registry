@@ -9,6 +9,7 @@ html, body {
 }
 
 body {
+    overflow: hidden;
     background: #FAFAFA;
     color: #253951;
     font-family: Arial, sans-serif;
@@ -543,6 +544,49 @@ header > img {
     margin-top: 1vh;
 }
 
+
+/*====== ANIMATIONS =====*/
+
+.property__img_loading{
+    width: 40%;
+}
+
+.property-data_loading {
+    padding-right: 0;
+    border-radius: 0;
+    width: 70%;
+}
+.property-data_loading > p{
+    width: 90%;
+    height: 1em;
+    margin-top: 1em;
+}
+
+.property-data_loading > p:nth-child(2){
+    width: 60%;
+}
+
+.property__img_loading, .property-data_loading > p{
+    background: linear-gradient(90deg, #f1f1f1 0%, #e1eaff 50%, #f1f1f1 100%) 100%;
+    background-size: 1000% 100%;
+
+    -webkit-animation: beforePropertyLoad 1s ease-in-out infinite;
+    -moz-animation:    beforePropertyLoad 1s ease-in-out infinite;
+    -o-animation:      beforePropertyLoad 1s ease-in-out infinite;
+    animation:         beforePropertyLoad 1s ease-in-out infinite;
+}
+
+@keyframes beforePropertyLoad{
+    0%{
+        background-position: 0 50%;
+    }
+    100%{
+        background-position: 100% 50%;
+    }
+}
+
+
+
 /*====== RESPONSIVE =====*/
 
 @media (max-width: 1360px) {
@@ -678,7 +722,11 @@ header > img {
         justify-content: flex-start;
     }
 
-    .property > img {
+    .property__img_loading{
+        height: 60%;
+    }
+
+    .property > img, .property__img_loading{
         width: 100%;
         height: 15em;
         min-height: 5em;
@@ -693,6 +741,11 @@ header > img {
         border: 0;
 
         overflow: auto;
+    }
+
+    .property_loading > .property-data{
+        width: 100%;
+        height: 40%;
     }
 
     .property-description {
@@ -844,6 +897,10 @@ header > img {
         display: flex;
         flex-direction: row;
         margin-bottom: 1em;
+    }
+
+    .property_loading{
+        height: 420px;
     }
 
     .property__title {

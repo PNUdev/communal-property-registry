@@ -12,6 +12,7 @@ const APP_PROPERTIES = new Vue({
         showAttachModal: false,
         hasNext: false,
         hasPrev: false,
+        isLoaded: true,
         imgUrl: null,
         defaultImgUrl: "/images/default_img.png",
         url: "",
@@ -19,6 +20,10 @@ const APP_PROPERTIES = new Vue({
         attachments: [],
         properties: [""],
         categories: []
+    },
+
+    created(){
+        this.insertPropertyPlaceholder();
     },
 
     mounted() {
@@ -42,12 +47,14 @@ const APP_PROPERTIES = new Vue({
         },
 
         async getProperties() {
+            this.isLoaded = true;
             axios.get(`/api/properties${this.url}`)
                 .then(resp => {
                     this.properties = resp.data["content"];
                     this.totalPages = resp.data["totalPages"];
 
                     this.showFilters = true;
+                    this.isLoaded = false;
                     this.updatePaginationBtnVisibility();
                 })
                 .catch(error => {
@@ -92,6 +99,17 @@ const APP_PROPERTIES = new Vue({
 
             this.setUrl();
             this.updatePaginationBtnVisibility();
+        },
+
+        insertPropertyPlaceholder(){
+            let container = document.querySelector(".property-items_loading");
+            let template = `
+                 <div class="property property_loading">
+                    <div class="property__img_loading"></div>
+                    <div class="property-data property-data_loading"><p></p><p></p><p></p></div>
+                 </div>`
+
+            container.insertAdjacentHTML("afterbegin", template.repeat(3));
         },
 
         getStatusLabelColor(status){

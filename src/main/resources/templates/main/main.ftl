@@ -66,7 +66,7 @@
                     </option>
                 </select>
 
-                <p v-if="!(category == status && q=='' && properties.length != 1)" class="show-all-btn"
+                <p v-if="!(category == status && q == '' && properties.length != 1)" class="show-all-btn"
                    @click="showAll">Показати всі</p>
 
                 <div class="properties-pagination">
@@ -81,7 +81,9 @@
         </div>
 
         <div class="property-items" v-cloak>
-            <div class="property" v-model="properties" v-for="prop in properties"
+            <div v-if="isLoaded" class="property-items_loading"></div>
+
+            <div v-else class="property" v-model="properties" v-for="prop in properties"
                  @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
                 <img title="Open in fullscreen" @click="showImageInModal"
@@ -134,7 +136,7 @@
             </div>
 
             <p class="properties__notfound" v-if="properties.length == 0">
-                Приміщень не знайдено <i class="fas fa-ellipsis-h"></i>
+                Приміщень не знайдено . . .
             </p>
         </div>
 
@@ -172,13 +174,5 @@
     </section>
 
 </main>
-
-<style>
-
-    body {
-        overflow: hidden;
-    }
-
-</style>
 
 <#include "../include/footer.ftl">
