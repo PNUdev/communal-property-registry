@@ -108,8 +108,10 @@ const APP_PROPERTIES = new Vue({
             }
         },
 
-        searchProperties(){
+        searchProperties(event){
             this.page = 1;
+            this.q = event.target[0].value.trim();
+
             this.setUrl();
             this.updatePaginationBtnVisibility();
             updateMarkers();

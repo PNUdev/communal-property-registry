@@ -37,7 +37,7 @@
 
             <div class="properties__search">
                 <form class="search-form" @submit.prevent="searchProperties">
-                    <input class="search-field" v-model.trim="q" type="text" placeholder="Пошук...">
+                    <input class="search-field" :value="q" type="text" placeholder="Пошук...">
                     <button  class="search-btn fab fa-sistrix" type="submit"></button>
                 </form>
 
@@ -63,10 +63,9 @@
                     <option v-for="cat in categories" :value="cat.id" v-model="categories">
                         {{cat.name}}
                     </option>
-
                 </select>
 
-                <p class="show-all-btn" @click="showAll">Показати всі</p>
+                <p v-if="!(category == status && q=='')" class="show-all-btn" @click="showAll">Показати всі</p>
 
                 <div class="properties-pagination">
                     <button id="prev-btn" class="fas fa-chevron-left" :disabled="!hasPrev" @click="changePage"></button>
