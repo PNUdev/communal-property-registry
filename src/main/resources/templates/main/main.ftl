@@ -15,7 +15,8 @@
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
 
                 <div class="attachment-modal-items">
-                    <button @click="showAttachModal=false" class="fas fa-times modal-close attachments-modal-close"></button>
+                    <button @click="showAttachModal=false"
+                            class="fas fa-times modal-close attachments-modal-close"></button>
 
                     <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                          v-for="attach in attachments" v-if="attach != null">
@@ -37,8 +38,8 @@
 
             <div class="properties__search">
                 <form class="search-form" @submit.prevent="searchProperties">
-                    <input class="search-field" v-model.trim="q" type="text" placeholder="Пошук...">
-                    <button  class="search-btn fab fa-sistrix" type="submit"></button>
+                    <input class="search-field" :value="q" type="text" placeholder="Пошук...">
+                    <button class="search-btn fab fa-sistrix" type="submit"></button>
                 </form>
 
                 <a class="properties-report-btn" :href="'/api/properties/report' + url" download>
@@ -63,22 +64,26 @@
                     <option v-for="cat in categories" :value="cat.id" v-model="categories">
                         {{cat.name}}
                     </option>
-
                 </select>
 
-                <p class="show-all-btn" @click="showAll">Показати всі</p>
+                <p v-if="!(category == status && q == '' && properties.length != 1)" class="show-all-btn"
+                   @click="showAll">Показати всі</p>
 
                 <div class="properties-pagination">
                     <button id="prev-btn" class="fas fa-chevron-left" :disabled="!hasPrev" @click="changePage"></button>
-                    <div v-cloak class="properties-pagination__info">{{page}} із {{totalPages > 0 ? totalPages : 1}}</div>
-                    <button id="next-btn" class="fas fa-chevron-right" :disabled="!hasNext" @click="changePage"></button>
+                    <div v-cloak class="properties-pagination__info">{{page}} із {{totalPages > 0 ? totalPages : 1}}
+                    </div>
+                    <button id="next-btn" class="fas fa-chevron-right" :disabled="!hasNext"
+                            @click="changePage"></button>
                 </div>
             </div>
 
         </div>
 
         <div class="property-items" v-cloak>
-            <div class="property" v-model="properties" v-for="prop in properties"
+            <div v-if="!isLoaded" class="property-items_loading"></div>
+
+            <div v-else class="property" v-model="properties" v-for="prop in properties"
                  @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
 
                 <img title="Open in fullscreen" @click="showImageInModal"
@@ -131,7 +136,7 @@
             </div>
 
             <p class="properties__notfound" v-if="properties.length == 0">
-                Приміщень не знайдено <i class="fas fa-ellipsis-h"></i>
+                Приміщень не знайдено . . .
             </p>
         </div>
 
@@ -154,28 +159,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr class="stats__item" v-for="stat in stats" v-model="stats" v-cloak>
-                        <th scope="row">{{stat.category}}</th>
-                        <td>{{stat.totalNumber}}</td>
-                        <td>{{stat.numberOfRented}}</td>
-                        <td>{{stat.numberOfNonRented}}</td>
-                        <td>{{stat.numberOfFirstOrSecondType}}</td>
-                        <td>{{stat.numberOfPrivatized}}</td>
-                        <td>{{stat.numberOfUsedByCityCouncil}}</td>
-                    </tr>
+                <tr class="stats__item" v-for="stat in stats" v-model="stats" v-cloak>
+                    <th scope="row">{{stat.category}}</th>
+                    <td>{{stat.totalNumber}}</td>
+                    <td>{{stat.numberOfRented}}</td>
+                    <td>{{stat.numberOfNonRented}}</td>
+                    <td>{{stat.numberOfFirstOrSecondType}}</td>
+                    <td>{{stat.numberOfPrivatized}}</td>
+                    <td>{{stat.numberOfUsedByCityCouncil}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
 </main>
-
-<style>
-
-    body {
-        overflow: hidden;
-    }
-
-</style>
 
 <#include "../include/footer.ftl">
