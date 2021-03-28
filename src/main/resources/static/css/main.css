@@ -255,11 +255,9 @@ header > img {
 .property-data {
     width: 70%;
     height: auto;
-    border: 2px solid #C1CDDA;
     display: flex;
     flex-direction: column;
 
-    border-left: 0;
     border-radius: 0 .8em .8em 0;
     padding: 0 8.5em 0 .5em;
     overflow: hidden;

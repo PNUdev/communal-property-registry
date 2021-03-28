@@ -15,7 +15,8 @@
             <div v-if="showAttachModal" @click="showAttachModal=false" class="attachment-modal" v-model="attachments">
 
                 <div class="attachment-modal-items">
-                    <button @click="showAttachModal=false" class="fas fa-times modal-close attachments-modal-close"></button>
+                    <button @click="showAttachModal=false"
+                            class="fas fa-times modal-close attachments-modal-close"></button>
 
                     <div @click.stop class="card mb-3 bg-light border-secondary col-sm-4 mx-auto"
                          v-for="attach in attachments" v-if="attach != null">
@@ -38,7 +39,7 @@
             <div class="properties__search">
                 <form class="search-form" @submit.prevent="searchProperties">
                     <input class="search-field" :value="q" type="text" placeholder="Пошук...">
-                    <button  class="search-btn fab fa-sistrix" type="submit"></button>
+                    <button class="search-btn fab fa-sistrix" type="submit"></button>
                 </form>
 
                 <a class="properties-report-btn" :href="'/api/properties/report' + url" download>
@@ -65,12 +66,15 @@
                     </option>
                 </select>
 
-                <p v-if="!(category == status && q=='')" class="show-all-btn" @click="showAll">Показати всі</p>
+                <p v-if="!(category == status && q=='' && properties.length != 1)" class="show-all-btn"
+                   @click="showAll">Показати всі</p>
 
                 <div class="properties-pagination">
                     <button id="prev-btn" class="fas fa-chevron-left" :disabled="!hasPrev" @click="changePage"></button>
-                    <div v-cloak class="properties-pagination__info">{{page}} із {{totalPages > 0 ? totalPages : 1}}</div>
-                    <button id="next-btn" class="fas fa-chevron-right" :disabled="!hasNext" @click="changePage"></button>
+                    <div v-cloak class="properties-pagination__info">{{page}} із {{totalPages > 0 ? totalPages : 1}}
+                    </div>
+                    <button id="next-btn" class="fas fa-chevron-right" :disabled="!hasNext"
+                            @click="changePage"></button>
                 </div>
             </div>
 
@@ -153,15 +157,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr class="stats__item" v-for="stat in stats" v-model="stats" v-cloak>
-                        <th scope="row">{{stat.category}}</th>
-                        <td>{{stat.totalNumber}}</td>
-                        <td>{{stat.numberOfRented}}</td>
-                        <td>{{stat.numberOfNonRented}}</td>
-                        <td>{{stat.numberOfFirstOrSecondType}}</td>
-                        <td>{{stat.numberOfPrivatized}}</td>
-                        <td>{{stat.numberOfUsedByCityCouncil}}</td>
-                    </tr>
+                <tr class="stats__item" v-for="stat in stats" v-model="stats" v-cloak>
+                    <th scope="row">{{stat.category}}</th>
+                    <td>{{stat.totalNumber}}</td>
+                    <td>{{stat.numberOfRented}}</td>
+                    <td>{{stat.numberOfNonRented}}</td>
+                    <td>{{stat.numberOfFirstOrSecondType}}</td>
+                    <td>{{stat.numberOfPrivatized}}</td>
+                    <td>{{stat.numberOfUsedByCityCouncil}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
