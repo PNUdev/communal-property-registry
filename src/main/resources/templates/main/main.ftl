@@ -81,7 +81,7 @@
         </div>
 
         <div class="property-items" v-cloak>
-            <div v-if="isLoaded" class="property-items_loading"></div>
+            <div v-if="!isLoaded" class="property-items_loading"></div>
 
             <div v-else class="property" v-model="properties" v-for="prop in properties"
                  @mouseenter="handlePropertyHoverIn(prop.id)" @mouseleave="handlePropertyHoverOut(prop.id)">
