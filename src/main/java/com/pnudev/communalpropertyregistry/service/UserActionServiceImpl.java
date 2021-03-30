@@ -50,7 +50,6 @@ public class UserActionServiceImpl implements UserActionService {
         log.info("User action: [{}] sent to queue!", userAction);
     }
 
-    //TODO make cacheable
     @Override
     public Page<UserActionPairDto> findAllUserActionPair(Pageable pageable) {
 
@@ -60,7 +59,6 @@ public class UserActionServiceImpl implements UserActionService {
         );
     }
 
-    //TODO make cacheable
     @Override
     public Page<UserAction> findAllByIpAddress(String ipAddress, Pageable pageable) {
 
