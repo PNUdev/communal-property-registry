@@ -114,7 +114,8 @@ header > img {
 
 #category__filter, #status__filter {
     height: 2em;
-    width: 10em;
+    max-width: 31%;
+    width: min-content;
     margin-right: .5em;
     background-color: #C1CDDA;
     color: #000;
@@ -782,7 +783,6 @@ header > img {
         font-size: 22px;
     }
 
-
     .properties-report-btn {
         font-size: 13px;
     }
@@ -878,13 +878,14 @@ header > img {
     }
 
     #status__filter {
-        width: 48%;
+        max-width: 48%;
+        width: 100%;
     }
 
     #category__filter {
         position: absolute;
         right: 0;
-        width: 48%;
+        max-width: 48%;
         margin-right: 0;
     }
 
