@@ -8,7 +8,7 @@
         <div class="row justify-content-end">
             <div class="col-2 mb-2">
                 <form action="/admin/user-actions/download/txt">
-                    <button class="btn btn-primary">Завантажити статистику</button>
+                    <button class="btn btn-primary">Завантажити аналітику</button>
                 </form>
             </div>
         </div>
