@@ -11,8 +11,8 @@
                             <b>${userAction.time.format(formatter)}</b>
                         </small>
                     </div>
-                    <p class="mb-1">REFERER-URL: ${userAction.referrerUrl}</p>
-                    <small>METHOD: ${userAction.httpMethod}</small>
+                    <p class="mb-1">Зі сторінки: ${userAction.referrerUrl}</p>
+                    <small>Тип запиту: ${userAction.httpMethod}</small>
                 </li>
             </#list>
         </ul>
