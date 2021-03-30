@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class UserActionProcessor {
+
     public static final String USER_ACTION_QUEUE_DESTINATION = "userActions";
 
     private final UserActionRepository userActionRepository;

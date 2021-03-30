@@ -87,7 +87,7 @@ public class UserActionServiceImpl implements UserActionService {
             response.getOutputStream().flush();
 
         } catch (RuntimeException | IOException e) {
-            log.error("Error occurred during report generation!", e.getLocalizedMessage());
+            log.error("Error occurred during report generation! {}", e.getLocalizedMessage());
             throw new ServiceAdminException("Error occurred during report generation!");
         }
     }
@@ -123,7 +123,7 @@ public class UserActionServiceImpl implements UserActionService {
 
         final String ipAddress = servletRequest.getHeader(FORWARD_FOR_HEADER);
 
-        return ipAddress != null ? ipAddress : servletRequest.getRemoteAddr();
+        return !isNull(ipAddress) ? ipAddress : servletRequest.getRemoteAddr();
     }
 
     private String getUrl(HttpServletRequest request) {

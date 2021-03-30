@@ -11,7 +11,7 @@
                             <b>${userAction.time.format(formatter)}</b>
                         </small>
                     </div>
-                    <p class="mb-1">REFERER_URL: ${userAction.referrerUrl}</p>
+                    <p class="mb-1">REFERER-URL: ${userAction.referrerUrl}</p>
                     <small>METHOD: ${userAction.httpMethod}</small>
                 </li>
             </#list>
@@ -20,24 +20,14 @@
     <div class="mt-2" id="pagination">
         <ul class="pagination user-action-list pagination justify-content-center">
             <li class="page-item  <#if !partialUserActionsByIpAddress.hasPrevious()> disabled</#if>">
-                <button class="page-link" data-page="${currentPage - 1}">&laquo;
-                </button>
+                <button onclick="handlePageChange(event)" class="page-link" data-page="${currentPage - 1}">&laquo;</button>
             </li>
             <li class="page-item active">
                 <span class="page-link">${currentPage}</span>
             </li>
             <li class="page-item <#if !partialUserActionsByIpAddress.hasNext()> disabled</#if>">
-                <button class="page-link" data-page="${currentPage + 1}">&raquo;</button>
+                <button onclick="handlePageChange(event)" class="page-link" data-page="${currentPage + 1}">&raquo;</button>
             </li>
         </ul>
     </div>
 </div>
-
-<script>
-    $('.user-action-list button').click(function (event) {
-        const page = $(event.target).attr('data-page').trim();
-        const ipAddress = $('li.list-group-item.active').attr("data-id").trim();
-
-        get_all_user_action_by_ip_address(ipAddress, page)
-    })
-</script>

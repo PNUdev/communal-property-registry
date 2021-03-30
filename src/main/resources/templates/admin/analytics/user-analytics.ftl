@@ -7,12 +7,14 @@
     <#else>
         <div class="row justify-content-end">
             <div class="col-2 mb-2">
-                <a class="btn btn-primary" href="/admin/user-actions/download/txt">Завантажити статистику</a>
+                <form action="/admin/user-actions/download/txt">
+                    <button class="btn btn-primary">Завантажити статистику</button>
+                </form>
             </div>
         </div>
         <div class="row">
             <div class="col-4">
-                <div class="list-group">
+                <div class="list-group action-pairs">
                     <#list ipAddressAndCountDtoList.getContent() as pair>
                         <li class="list-group-item list-group-item-action
                             ${(pair?counter == 1)?then('active', '')}" data-bs-toggle="list" data-id="${pair.ipAddress}">
@@ -47,22 +49,40 @@
 
 
 <script>
-    $(window).load(function () {
-        const ipAddress = $('li.list-group-item.active').attr('data-id').trim();
-        get_all_user_action_by_ip_address(ipAddress, 1)
+    document.addEventListener('DOMContentLoaded', function () {
+        const listItems = document.querySelectorAll('.action-pairs li');
+        for (let i = 0; i < listItems.length; i++) {
+            const item = listItems[i];
+            item.addEventListener("click", function (e) {
+                handleSelectIpAddress(e.currentTarget);
+            });
+        }
+        const activeElement = document.querySelector('.action-pairs li.active');
+        handleSelectIpAddress(activeElement);
     });
 
-    $('.list-group').on('click', '.list-group-item', function (event) {
-        event.preventDefault();
-        const ipAddress = $(this).attr('data-id').trim();
-        get_all_user_action_by_ip_address(ipAddress, 1)
-    });
+    function handleSelectIpAddress(node) {
+        const ipAddress = node.getAttribute('data-id').trim();
+        getAllUserActionsByIpAddress(ipAddress, 1);
+    }
 
-    function get_all_user_action_by_ip_address(ipp_address, page) {
-        $.get(
-            '/admin/user-actions/partial?ipAddress=' + ipp_address + "&page=" + page,
-            function (response) {
-                $('#partialUserActionsByIpAddress').html(response);
-            })
+    function handlePageChange(e) {
+        const ipAddress = document
+            .querySelector('li.list-group-item.active')
+            .getAttribute('data-id').trim();
+        const page = e.currentTarget.getAttribute('data-page').trim();
+        getAllUserActionsByIpAddress(ipAddress, page);
+        //🧐
+    }
+
+    function getAllUserActionsByIpAddress(ipAddress, page) {
+        const url = '/admin/user-actions/partial?ipAddress=' + ipAddress + "&page=" + page;
+        fetch(url, {
+            method: 'GET',
+        }).then(function (response) {
+            return response.text();
+        }).then(function (responseText) {
+            document.getElementById('partialUserActionsByIpAddress').innerHTML = responseText;
+        })
     }
 </script>

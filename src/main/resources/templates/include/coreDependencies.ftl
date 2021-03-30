@@ -26,5 +26,5 @@
 <!-- vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<#--icons-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
