@@ -5,8 +5,8 @@
             <#list partialUserActionsByIpAddress.getContent() as userAction>
                 <li class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex justify-content-between row">
-                        <p class="mb-1 col-9 text-break"><b>${userAction.url}</b></p>
-                        <small class="col-3">
+                        <p class="mb-1 col-8 text-break"><b>${userAction.url}</b></p>
+                        <small class="col-4">
                             <i class="fa fa-clock-o fa-lg p-2"></i>
                             <b>${userAction.time.format(formatter)}</b>
                         </small>
