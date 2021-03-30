@@ -11,6 +11,8 @@ spring:
     password: ${ADMIN_PASSWORD:admin}
   data:
     web.pageable.one-indexed-parameters: true
+  activemq:
+    in-memory: true
 
 application:
   tomtom:
