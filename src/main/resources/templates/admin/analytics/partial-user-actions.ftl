@@ -5,13 +5,13 @@
             <#list partialUserActionsByIpAddress.getContent() as userAction>
                 <li class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="row">
-                        <p class="mb-1 col-8 text-break text-decoration-underline">${userAction.url}</p>
+                        <p class="mb-1 col-8 text-break text-decoration-underline fw-bold">${userAction.url}</p>
                         <small class="col-4 d-flex justify-content-center">
                             <i class="fa fa-clock-o fa-lg p-2"></i>
                             <b>${userAction.time.format(formatter)}</b>
                         </small>
                     </div>
-                    <p class="mb-1"><span>ЗІ СТОРІНКИ: ${userAction.referrerUrl}</span></p>
+                    <p class="mb-1">ЗІ СТОРІНКИ: ${userAction.referrerUrl}</p>
                     <small>ТИП ЗАПИТУ: <span class="fw-bold">${userAction.httpMethod}</span></small>
                 </li>
             </#list>
