@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ public class UserActionServiceImpl implements UserActionService {
     private final static String REPORT_FILE = "user-analytics.txt";
     private final static String REFERER_HEADER = "referer";
     private final static String FORWARD_FOR_HEADER = "X-Forward-For";
+    private final static ZoneId ZONE_ID = ZoneId.of("Europe/Kiev");
 
     private JmsTemplate jmsTemplate;
     private UserActionRepository userActionRepository;
@@ -104,7 +106,7 @@ public class UserActionServiceImpl implements UserActionService {
         final String ipAddress = getIpAddress(servletRequest);
         final String url = getUrl(servletRequest);
         final String refererUrl = servletRequest.getHeader(REFERER_HEADER);
-        final LocalDateTime dateTime = LocalDateTime.now();
+        final LocalDateTime dateTime = LocalDateTime.now(ZONE_ID);
 
 
         return UserAction.builder()
@@ -137,7 +139,7 @@ public class UserActionServiceImpl implements UserActionService {
                         )
                 )
                 .append(request.getRequestURI())
-                .append((!isNull(request.getQueryString()) ? "?" + request.getQueryString() : StringUtils.EMPTY));
+                .append(!isNull(request.getQueryString()) ? "?" + request.getQueryString() : StringUtils.EMPTY);
 
         return uri.toString();
     }
