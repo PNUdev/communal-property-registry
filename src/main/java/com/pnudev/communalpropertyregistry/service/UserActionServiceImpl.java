@@ -139,7 +139,7 @@ public class UserActionServiceImpl implements UserActionService {
                         )
                 )
                 .append(request.getRequestURI())
-                .append((!isNull(request.getQueryString()) ? "?" + request.getQueryString() : StringUtils.EMPTY));
+                .append(!isNull(request.getQueryString()) ? "?" + request.getQueryString() : StringUtils.EMPTY);
 
         return uri.toString();
     }
