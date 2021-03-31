@@ -4,15 +4,15 @@
         <ul class="list-group">
             <#list partialUserActionsByIpAddress.getContent() as userAction>
                 <li class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex justify-content-between row">
-                        <p class="mb-1 col-8 text-break"><b>${userAction.url}</b></p>
+                    <div class="row">
+                        <p class="mb-1 col-8 text-break text-decoration-underline">${userAction.url}</p>
                         <small class="col-4 d-flex justify-content-center">
                             <i class="fa fa-clock-o fa-lg p-2"></i>
                             <b>${userAction.time.format(formatter)}</b>
                         </small>
                     </div>
-                    <p class="mb-1">Зі сторінки: ${userAction.referrerUrl}</p>
-                    <small>Тип запиту: ${userAction.httpMethod}</small>
+                    <p class="mb-1"><span>ЗІ СТОРІНКИ: ${userAction.referrerUrl}</span></p>
+                    <small>ТИП ЗАПИТУ: <span class="fw-bold">${userAction.httpMethod}</span></small>
                 </li>
             </#list>
         </ul>
