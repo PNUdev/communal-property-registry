@@ -331,4 +331,6 @@ else
     bubbleShape = 'circle';
 }
 
+$("nav").hide();
+
 bounceBubbles();
