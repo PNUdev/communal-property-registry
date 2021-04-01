@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 public class DetailStatisticsAdminServiceImpl implements DetailStatisticsAdminService {
 
     @Override
-    public String getDetailStatistics() {
-        return "";
+    public String getDetailedStatistics() {
+        return "😃🌸🤩🎂🧁";
     }
 
 }

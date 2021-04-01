@@ -14,7 +14,7 @@
             <a class="navbar-brand" href="/admin/categories">Категорії приміщень </a>
             <a class="navbar-brand" href="/admin/attachment-categories">Категорії прикріплень</a>
             <a class="navbar-brand" href="/admin/user-actions">Аналітика</a>
-            <a class="navbar-brand" href="/admin/detail-statistics">Детальна статистика</a>
+            <a class="navbar-brand" href="/admin/detailed-statistics">Детальна статистика</a>
         </div>
         <div>
             <form method="POST" action="/logout" class="m-0 p-0">

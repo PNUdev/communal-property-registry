@@ -2,6 +2,6 @@ package com.pnudev.communalpropertyregistry.service;
 
 public interface DetailStatisticsAdminService {
 
-    String getDetailStatistics();
+    String getDetailedStatistics();
 
 }

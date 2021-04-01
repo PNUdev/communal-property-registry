@@ -17,14 +17,14 @@ public class DetailStatisticsAdminController {
         this.detailStatisticsAdminService = detailStatisticsAdminService;
     }
 
-    @RequestMapping("/detail-statistics")
+    @RequestMapping("/detailed-statistics")
     public String detailStatistics(Model model) {
 
-        String detailStatistics = detailStatisticsAdminService.getDetailStatistics();
+        String detailStatistics = detailStatisticsAdminService.getDetailedStatistics();
 
         model.addAttribute("detailStatistics", detailStatistics);
 
-        return "admin/detail-statistics/show";
+        return "admin/detailed-statistics/show";
     }
 
 }

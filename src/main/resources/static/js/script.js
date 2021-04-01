@@ -293,7 +293,7 @@ $(window).mouseenter(function () {
     window.reset = false;
 });
 
-var canvas = $("#show-detail-statistics");
+var canvas = $("#show-detailed-statistics");
 var canvasHeight;
 var canvasWidth;
 var ctx;
