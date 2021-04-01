@@ -1,9 +1,5 @@
 <#include '../include/header.ftl'>
 
-<#--<canvas id="show-detail-statistics"></canvas>-->
-
-
-
 <center>
 <canvas id="show-detail-statistics"></canvas>
 </center>
