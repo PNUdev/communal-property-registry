@@ -1,10 +1,11 @@
 package com.pnudev.communalpropertyregistry.controller.api;
 
 import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
-import com.pnudev.communalpropertyregistry.service.ExcelReportBuilderService;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
+import com.pnudev.communalpropertyregistry.service.ExcelReportBuilderService;
 import com.pnudev.communalpropertyregistry.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,12 +24,18 @@ public class PropertyController {
 
     private final PropertyService propertyService;
 
-    private final ExcelReportBuilderService excelReportBuilderService;
+    private final ExcelReportBuilderService publicExcelReportBuilderService;
+
+    private final ExcelReportBuilderService fullExcelReportBuilderService;
 
     @Autowired
-    public PropertyController(PropertyService locationService, ExcelReportBuilderService excelReportBuilderService) {
+    public PropertyController(PropertyService locationService,
+                              @Qualifier("excelReportBuilderServiceImpl") ExcelReportBuilderService publicExcelReportBuilderService,
+                              @Qualifier("fullExcelReportBuilderServiceImpl") ExcelReportBuilderService fullExcelReportBuilderService) {
+
         this.propertyService = locationService;
-        this.excelReportBuilderService = excelReportBuilderService;
+        this.publicExcelReportBuilderService = publicExcelReportBuilderService;
+        this.fullExcelReportBuilderService = fullExcelReportBuilderService;
     }
 
     @GetMapping
@@ -56,13 +63,22 @@ public class PropertyController {
     }
 
     @GetMapping("/report")
-    public void getPropertiesExcelReport(HttpServletResponse response ,
+    public void getPropertiesExcelReport(HttpServletResponse response,
                                          @Nullable @RequestParam(name = "q") String searchQuery,
                                          @Nullable @RequestParam(name = "status") String propertyStatus,
-                                         @Nullable @RequestParam(name = "category") Long categoryByPurposeId){
+                                         @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
 
-        excelReportBuilderService.exportReport(searchQuery, propertyStatus, categoryByPurposeId, response);
+        publicExcelReportBuilderService.exportReport(searchQuery, propertyStatus, categoryByPurposeId, response);
     }
 
+
+    @GetMapping("/admin/report")
+    public void getFullPropertiesExcelReport(HttpServletResponse response,
+                                             @Nullable @RequestParam(name = "q") String searchQuery,
+                                             @Nullable @RequestParam(name = "status") String propertyStatus,
+                                             @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
+
+        fullExcelReportBuilderService.exportReport(searchQuery, propertyStatus, categoryByPurposeId, response);
+    }
 }
 

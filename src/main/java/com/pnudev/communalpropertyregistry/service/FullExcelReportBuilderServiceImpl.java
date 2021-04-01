@@ -9,19 +9,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@Service("excelReportBuilderServiceImpl")
-public class ExcelReportBuilderServiceImpl extends AbstractExcelReportBuilderService
+@Service("fullExcelReportBuilderServiceImpl")
+public class FullExcelReportBuilderServiceImpl extends AbstractExcelReportBuilderService
         implements ExcelReportBuilderService {
 
-    public ExcelReportBuilderServiceImpl(PropertyService propertyService,
-                                         AttachmentCategoryService attachmentCategoryService) {
+    public FullExcelReportBuilderServiceImpl(PropertyService propertyService,
+                                             AttachmentCategoryService attachmentCategoryService) {
         super(propertyService, attachmentCategoryService);
     }
 
     @Override
     protected List<PropertyResponseDto> getProperties(String searchQuery, String propertyStatus,
                                                       Long categoryByPurposeId, Pageable pageable) {
-        return propertyService.findPropertiesBySearchQuery(searchQuery, propertyStatus,
+        return propertyService.findPropertiesWithAllFieldsBySearchQuery(searchQuery, propertyStatus,
                 categoryByPurposeId, pageable).toList();
     }
 
@@ -30,7 +30,7 @@ public class ExcelReportBuilderServiceImpl extends AbstractExcelReportBuilderSer
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
 
-        return "properties_" + currentDateTime;
+        return "properties_" + currentDateTime + "_full";
     }
 
 }

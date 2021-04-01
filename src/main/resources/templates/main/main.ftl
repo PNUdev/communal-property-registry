@@ -43,9 +43,10 @@
                 </form>
 
                 <a class="properties-report-btn" :href="'/api/properties/report' + url" download>
-                    Завантажити звіт
+                        Завантажити звіт
                 </a>
             </div>
+            
 
             <div class="properties__management">
 
