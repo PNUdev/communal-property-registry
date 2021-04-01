@@ -312,7 +312,8 @@ var purple = [280, 50, 60];
 
 setTimeout(updateCanvasDimensions, 30);
 
-var birthday = "Happy Birthday Ihor!";
+var encoded = encodeURIComponent("\u0048\u0061\u0070\u0070\u0079\u0020\u0042\u0069\u0072\u0074\u0068\u0064\u0061\u0079\u0020\u0049\u0068\u006F\u0072\u0021")
+var result = encoded.replaceAll("%20"," ");
 
 var red = [0, 100, 63];
 var orange = [40, 100, 60];
@@ -321,7 +322,7 @@ var blue = [196, 77, 55];
 var purple = [280, 50, 60];
 var letterColors = [red, orange, green, blue, purple];
 
-drawName(birthday, letterColors);
+drawName(result, letterColors);
 if(10 < 3)
 {
     bubbleShape = 'square';
