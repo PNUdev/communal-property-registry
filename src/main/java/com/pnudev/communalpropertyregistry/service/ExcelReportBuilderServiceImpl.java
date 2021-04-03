@@ -1,6 +1,7 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 @Service("excelReportBuilderServiceImpl")
-public class ExcelReportBuilderServiceImpl extends AbstractExcelReportBuilderService
-        implements ExcelReportBuilderService {
+public class ExcelReportBuilderServiceImpl extends AbstractExcelReportBuilderService {
 
-    public ExcelReportBuilderServiceImpl(PropertyService propertyService,
-                                         AttachmentCategoryService attachmentCategoryService) {
-        super(propertyService, attachmentCategoryService);
+    private final PropertyService propertyService;
+
+    @Autowired
+    public ExcelReportBuilderServiceImpl(AttachmentCategoryService attachmentCategoryService,
+                                         PropertyService propertyService) {
+        super(attachmentCategoryService);
+        this.propertyService = propertyService;
     }
 
     @Override

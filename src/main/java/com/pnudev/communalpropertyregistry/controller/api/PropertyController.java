@@ -4,6 +4,7 @@ import com.pnudev.communalpropertyregistry.dto.PropertiesLocationsResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.service.ExcelReportBuilderService;
 import com.pnudev.communalpropertyregistry.service.PropertyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/properties")
 public class PropertyController {
@@ -68,7 +70,9 @@ public class PropertyController {
                                          @Nullable @RequestParam(name = "status") String propertyStatus,
                                          @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
 
+        log.info("Public report request");
         publicExcelReportBuilderService.exportReport(searchQuery, propertyStatus, categoryByPurposeId, response);
+        log.info("Public report successfully generated");
     }
 
 
@@ -78,7 +82,9 @@ public class PropertyController {
                                              @Nullable @RequestParam(name = "status") String propertyStatus,
                                              @Nullable @RequestParam(name = "category") Long categoryByPurposeId) {
 
+        log.info("Full report request");
         fullExcelReportBuilderService.exportReport(searchQuery, propertyStatus, categoryByPurposeId, response);
+        log.info("Full report successfully generated");
     }
 }
 

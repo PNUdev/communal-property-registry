@@ -4,7 +4,6 @@ import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
 import com.pnudev.communalpropertyregistry.dto.response.AttachmentResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -25,29 +24,20 @@ import java.util.stream.IntStream;
 import static java.util.Objects.nonNull;
 
 @Slf4j
-public abstract class AbstractExcelReportBuilderService {
-
-    public static final String DEFAULT_CELL_VALUE = "-";
-
-    protected final PropertyService propertyService;
-
-    private final AttachmentCategoryService attachmentCategoryService;
-
-    private HSSFWorkbook workbook;
-
-    private HSSFSheet sheet;
+public abstract class AbstractExcelReportBuilderService implements ExcelReportBuilderService {
 
     private static final List<String> BASE_HEADERS = Arrays.asList("ID", "Посилання на зображення", "Адреса",
             "Довгота", "Широта", "Назва", "Назва категорії", "Статус", "Площа", "Площа для продажу",
             "Балансоутримувач", "Власник", "Дата завершення договору", "Сума(грн)");
 
-    public AbstractExcelReportBuilderService(PropertyService propertyService,
-                                             AttachmentCategoryService attachmentCategoryService) {
+    public static final String DEFAULT_CELL_VALUE = "-";
+
+    private final AttachmentCategoryService attachmentCategoryService;
+
+    public AbstractExcelReportBuilderService(AttachmentCategoryService attachmentCategoryService) {
         this.attachmentCategoryService = attachmentCategoryService;
-        this.propertyService = propertyService;
     }
 
-    @SneakyThrows
     public void exportReport(String searchQuery, String propertyStatus, Long categoryByPurposeId,
                              HttpServletResponse response) {
 
@@ -60,15 +50,16 @@ public abstract class AbstractExcelReportBuilderService {
             List<PropertyResponseDto> properties = getProperties(searchQuery, propertyStatus,
                     categoryByPurposeId);
 
-            workbook = new HSSFWorkbook();
-            this.sheet = workbook.createSheet("Properties");
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet sheet = workbook.createSheet("Properties");
 
-            writeHeaderRow();
-            writeDataRows(properties);
+            writeHeaderRow(workbook, sheet);
+            writeDataRows(properties, sheet);
 
             workbook.write(outputStream);
             outputStream.close();
             workbook.close();
+
         } catch (Exception e) {
             log.error("Error while generating Excel report", e);
             throw new ServiceApiException("Помилка при генерації Excel звіту");
@@ -80,13 +71,13 @@ public abstract class AbstractExcelReportBuilderService {
 
     abstract protected String getFileName();
 
-    private void writeHeaderRow() {
+    private void writeHeaderRow(HSSFWorkbook workbook, HSSFSheet sheet) {
 
         ArrayList<String> headers = new ArrayList<>(BASE_HEADERS);
         headers.addAll(getAttachmentHeaders());
 
         Row row = sheet.createRow(0);
-        CellStyle cellBoldStyle = getCellBoldStyle();
+        CellStyle cellBoldStyle = getCellBoldStyle(workbook);
 
         IntStream.range(0, headers.size()).forEach(
                 idx -> {
@@ -99,7 +90,7 @@ public abstract class AbstractExcelReportBuilderService {
         );
     }
 
-    private void writeDataRows(List<PropertyResponseDto> properties) {
+    private void writeDataRows(List<PropertyResponseDto> properties, HSSFSheet sheet) {
 
         IntStream.range(0, properties.size()).forEach(
                 idx -> {
@@ -135,7 +126,7 @@ public abstract class AbstractExcelReportBuilderService {
         );
     }
 
-    private CellStyle getCellBoldStyle() {
+    private CellStyle getCellBoldStyle(HSSFWorkbook workbook) {
         CellStyle cellBoldStyle = workbook.createCellStyle();
 
         HSSFFont font = workbook.createFont();
