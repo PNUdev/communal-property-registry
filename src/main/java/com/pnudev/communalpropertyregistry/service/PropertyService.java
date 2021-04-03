@@ -10,7 +10,10 @@ public interface PropertyService {
     PropertiesLocationsResponseDto getMapLocations(String searchQuery, String propertyStatus, Long categoryByPurposeId);
 
     Page<PropertyResponseDto> findPropertiesBySearchQuery(String searchQuery, String propertyStatus,
-                                               Long categoryByPurposeId, Pageable pageable);
+                                                          Long categoryByPurposeId, Pageable pageable);
+
+    Page<PropertyResponseDto> findPropertiesWithAllFieldsBySearchQuery(String searchQuery, String propertyStatus,
+                                                                       Long categoryByPurposeId, Pageable pageable);
 
     PropertyResponseDto findById(Long id);
 

@@ -12,7 +12,6 @@ import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -52,20 +51,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         log.info("Get property location request");
 
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (nonNull(searchQuery)) {
-            predicates.add(property.name.contains(searchQuery).or(property.address.contains(searchQuery)));
-        }
-
-        if (nonNull(categoryByPurposeId)) {
-            predicates.add(property.categoryByPurposeId.eq(categoryByPurposeId));
-        }
-
-        if (nonNull(propertyStatus)) {
-            predicates.add(property.propertyStatus
-                    .eq(String.valueOf(Property.PropertyStatus.valueOf(propertyStatus.toUpperCase()))));
-        }
+        List<Predicate> predicates = createPredicateList(searchQuery, propertyStatus, categoryByPurposeId);
 
         return propertyDslRepository
                 .findAllMapLocations(predicates.toArray(Predicate[]::new));
@@ -74,6 +60,37 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public Page<PropertyResponseDto> findPropertiesBySearchQuery(String searchQuery, String propertyStatus,
                                                          Long categoryByPurposeId, Pageable pageable) {
+
+        List<Predicate> predicates = createPredicateList(searchQuery, propertyStatus, categoryByPurposeId);
+
+        Page<Property> propertyPages = propertyDslRepository
+                .findAll(pageable, predicates.toArray(Predicate[]::new));
+
+        return propertyMapper.mapToPropertyResponseDto(propertyPages, true);
+    }
+
+    @Override
+    public Page<PropertyResponseDto> findPropertiesWithAllFieldsBySearchQuery(String searchQuery, String propertyStatus,
+                                                                              Long categoryByPurposeId, Pageable pageable) {
+
+        List<Predicate> predicates = createPredicateList(searchQuery, propertyStatus, categoryByPurposeId);
+
+        Page<Property> propertyPages = propertyDslRepository
+                .findAll(pageable, predicates.toArray(Predicate[]::new));
+
+        return propertyMapper.mapToPropertyResponseDto(propertyPages, false);
+    }
+
+    @Override
+    public PropertyResponseDto findById(Long id) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ServiceApiException("Приміщення не знайдено!"));
+
+        return propertyMapper.mapToPropertyResponseDto(property);
+    }
+
+    private List<Predicate> createPredicateList(String searchQuery, String propertyStatus,
+                                        Long categoryByPurposeId) {
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -99,21 +116,6 @@ public class PropertyServiceImpl implements PropertyService {
             predicates.add(property.categoryByPurposeId.eq(category.getId()));
         }
 
-        Page<Property> propertyPages = propertyDslRepository
-                .findAll(pageable, predicates.toArray(Predicate[]::new));
-
-        List<PropertyResponseDto> content = propertyMapper
-                .mapToPropertyResponseDto(propertyPages.getContent());
-
-        return new PageImpl<>(content, pageable, propertyPages.getTotalElements());
+        return predicates;
     }
-
-    @Override
-    public PropertyResponseDto findById(Long id) {
-        Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new ServiceApiException("Приміщення не знайдено!"));
-
-        return propertyMapper.mapToPropertyResponseDto(property);
-    }
-
 }

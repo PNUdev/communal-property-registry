@@ -1,11 +1,11 @@
 <#include '../include/header.ftl'>
 
-<div class="d-flex justify-content-start">
+<div class="m-2">
+    <a class="btn btn-outline-primary"
+       href="/admin/categories<#if category??>/${category.id}</#if>">&#8592;</a>
+</div>
 
-    <div class="return-back-button">
-        <a class="display-2 btn btn-outline-primary"
-           href="/admin/categories<#if category??>/${category.id}</#if>">&#8592;</a>
-    </div>
+<div class="d-flex justify-content-start">
 
     <div class="d-block mt-5 mx-auto flex-column align-items-center">
 

@@ -33,7 +33,7 @@
 
                     &#x00A0;&#x00A0;
                     <div class="col-auto">
-                        <a href="/api/property/admin/report<#if searchUrl?length gt 1>?${searchUrl?substring(1)}</#if>"
+                        <a href="/api/properties/admin/report<#if searchUrl?length gt 1>?${searchUrl?substring(1)}</#if>"
                            class="btn-outline-primary mb-3" download>Завантажити звіт</a>
                     </div>
                 </div>
