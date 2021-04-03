@@ -37,7 +37,9 @@ public abstract class AbstractExcelReportBuilderService {
 
     private HSSFSheet sheet;
 
-    private List<String> headers;
+    private static final List<String> BASE_HEADERS = Arrays.asList("ID", "Посилання на зображення", "Адреса",
+            "Довгота", "Широта", "Назва", "Назва категорії", "Статус", "Площа", "Площа для продажу",
+            "Балансоутримувач", "Власник", "Дата завершення договору", "Сума(грн)");
 
     public AbstractExcelReportBuilderService(PropertyService propertyService,
                                              AttachmentCategoryService attachmentCategoryService) {
@@ -80,10 +82,7 @@ public abstract class AbstractExcelReportBuilderService {
 
     private void writeHeaderRow() {
 
-        headers = new ArrayList<>(Arrays.asList("ID", "Посилання на зображення", "Адреса",
-                "Довгота", "Широта", "Назва", "Назва категорії", "Статус", "Площа", "Площа для продажу",
-                "Балансоутримувач", "Власник", "Дата завершення договору", "Сума(грн)"));
-
+        ArrayList<String> headers = new ArrayList<>(BASE_HEADERS);
         headers.addAll(getAttachmentHeaders());
 
         Row row = sheet.createRow(0);
@@ -156,13 +155,7 @@ public abstract class AbstractExcelReportBuilderService {
     }
 
     private String processObjectField(Object object) {
-
-        if (nonNull(object)) {
-            return object.toString();
-
-        } else {
-            return DEFAULT_CELL_VALUE;
-        }
+        return nonNull(object) ? object.toString() : DEFAULT_CELL_VALUE;
     }
 
     private Map<String, String> mapToAttachmentCategoryLinkPair(List<AttachmentResponseDto> attachments) {
