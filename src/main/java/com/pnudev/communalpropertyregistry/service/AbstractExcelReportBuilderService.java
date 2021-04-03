@@ -33,6 +33,8 @@ public abstract class AbstractExcelReportBuilderService {
 
     private final AttachmentCategoryService attachmentCategoryService;
 
+    private HSSFWorkbook workbook;
+
     private HSSFSheet sheet;
 
     private List<String> headers;
@@ -56,10 +58,10 @@ public abstract class AbstractExcelReportBuilderService {
             List<PropertyResponseDto> properties = getProperties(searchQuery, propertyStatus,
                     categoryByPurposeId);
 
-            HSSFWorkbook workbook = new HSSFWorkbook();
+            workbook = new HSSFWorkbook();
             this.sheet = workbook.createSheet("Properties");
 
-            writeHeaderRow(workbook);
+            writeHeaderRow();
             writeDataRows(properties);
 
             workbook.write(outputStream);
@@ -76,7 +78,7 @@ public abstract class AbstractExcelReportBuilderService {
 
     abstract protected String getFileName();
 
-    private void writeHeaderRow(HSSFWorkbook workbook) {
+    private void writeHeaderRow() {
 
         headers = new ArrayList<>(Arrays.asList("ID", "Посилання на зображення", "Адреса",
                 "Довгота", "Широта", "Назва", "Назва категорії", "Статус", "Площа", "Площа для продажу",
@@ -85,7 +87,7 @@ public abstract class AbstractExcelReportBuilderService {
         headers.addAll(getAttachmentHeaders());
 
         Row row = sheet.createRow(0);
-        CellStyle cellBoldStyle = getCellBoldStyle(workbook);
+        CellStyle cellBoldStyle = getCellBoldStyle();
 
         IntStream.range(0, headers.size()).forEach(
                 idx -> {
@@ -134,7 +136,7 @@ public abstract class AbstractExcelReportBuilderService {
         );
     }
 
-    private CellStyle getCellBoldStyle(HSSFWorkbook workbook) {
+    private CellStyle getCellBoldStyle() {
         CellStyle cellBoldStyle = workbook.createCellStyle();
 
         HSSFFont font = workbook.createFont();
