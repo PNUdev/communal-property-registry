@@ -16,6 +16,7 @@ import com.pnudev.communalpropertyregistry.service.AttachmentService;
 import com.pnudev.communalpropertyregistry.service.CategoryByPurposeService;
 import com.querydsl.core.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -121,9 +122,9 @@ public class PropertyMapper {
         return buildPropertyResponseDto(property, categoryByPurpose, attachments, attachmentCategories);
     }
 
-    public List<PropertyResponseDto> mapToPropertyResponseDto(List<Property> properties, Boolean onlyPublicFields) {
+    public Page<PropertyResponseDto> mapToPropertyResponseDto(Page<Property> properties, Boolean onlyPublicFields) {
 
-        List<Attachment> filteredAttachments = attachmentService.findByPropertyIdIn(properties.stream()
+        List<Attachment> filteredAttachments = attachmentService.findByPropertyIdIn(properties.getContent().stream()
                 .map(Property::getId)
                 .collect(Collectors.toList()));
 
@@ -131,10 +132,8 @@ public class PropertyMapper {
 
         List<CategoryByPurpose> categoriesByPurpose = categoryByPurposeService.findAll();
 
-        return properties.stream()
-                .map(property -> mapToPropertyResponseDto(property, filteredAttachments,
-                        attachmentCategories, categoriesByPurpose, onlyPublicFields))
-                .collect(Collectors.toList());
+        return properties.map(property -> mapToPropertyResponseDto(property, filteredAttachments,
+                attachmentCategories, categoriesByPurpose, onlyPublicFields));
     }
 
     private PropertyResponseDto mapToPropertyResponseDto(Property property,

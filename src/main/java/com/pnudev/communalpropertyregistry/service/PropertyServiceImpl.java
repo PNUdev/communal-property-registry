@@ -12,7 +12,6 @@ import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -67,10 +66,7 @@ public class PropertyServiceImpl implements PropertyService {
         Page<Property> propertyPages = propertyDslRepository
                 .findAll(pageable, predicates.toArray(Predicate[]::new));
 
-        List<PropertyResponseDto> content = propertyMapper
-                .mapToPropertyResponseDto(propertyPages.getContent(), true);
-
-        return new PageImpl<>(content, pageable, propertyPages.getTotalElements());
+        return propertyMapper.mapToPropertyResponseDto(propertyPages, true);
     }
 
     @Override
@@ -82,10 +78,7 @@ public class PropertyServiceImpl implements PropertyService {
         Page<Property> propertyPages = propertyDslRepository
                 .findAll(pageable, predicates.toArray(Predicate[]::new));
 
-        List<PropertyResponseDto> content = propertyMapper
-                .mapToPropertyResponseDto(propertyPages.getContent(), false);
-
-        return new PageImpl<>(content, pageable, propertyPages.getTotalElements());
+        return propertyMapper.mapToPropertyResponseDto(propertyPages, false);
     }
 
     @Override
