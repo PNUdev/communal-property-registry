@@ -1,7 +1,7 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
@@ -20,9 +20,9 @@ public class FullExcelReportBuilderServiceImpl extends AbstractExcelReportBuilde
 
     @Override
     protected List<PropertyResponseDto> getProperties(String searchQuery, String propertyStatus,
-                                                      Long categoryByPurposeId, Pageable pageable) {
+                                                      Long categoryByPurposeId) {
         return propertyService.findPropertiesWithAllFieldsBySearchQuery(searchQuery, propertyStatus,
-                categoryByPurposeId, pageable).toList();
+                categoryByPurposeId, PageRequest.of(0, Integer.MAX_VALUE)).toList();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
-import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.response.AttachmentResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
@@ -13,12 +12,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.requireNonNullElse;
+import static java.util.Objects.nonNull;
 
 @Slf4j
 public abstract class AbstractExcelReportBuilderService {
@@ -38,16 +33,14 @@ public abstract class AbstractExcelReportBuilderService {
 
     private final AttachmentCategoryService attachmentCategoryService;
 
-    private final HSSFWorkbook workbook;
+    private HSSFSheet sheet;
 
-    private final HSSFSheet sheet;
+    private List<String> headers;
 
     public AbstractExcelReportBuilderService(PropertyService propertyService,
                                              AttachmentCategoryService attachmentCategoryService) {
-        this.workbook = new HSSFWorkbook();
         this.attachmentCategoryService = attachmentCategoryService;
         this.propertyService = propertyService;
-        this.sheet = workbook.createSheet("Properties");
     }
 
     @SneakyThrows
@@ -60,11 +53,13 @@ public abstract class AbstractExcelReportBuilderService {
 
         try (OutputStream outputStream = response.getOutputStream()) {
 
-            Pageable wholePage = PageRequest.of(0, Integer.MAX_VALUE);
             List<PropertyResponseDto> properties = getProperties(searchQuery, propertyStatus,
-                    categoryByPurposeId, wholePage);
+                    categoryByPurposeId);
 
-            writeHeaderRow();
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            this.sheet = workbook.createSheet("Properties");
+
+            writeHeaderRow(workbook);
             writeDataRows(properties);
 
             workbook.write(outputStream);
@@ -77,20 +72,20 @@ public abstract class AbstractExcelReportBuilderService {
     }
 
     abstract protected List<PropertyResponseDto> getProperties(String searchQuery, String propertyStatus,
-                                                               Long categoryByPurposeId, Pageable pageable);
+                                                               Long categoryByPurposeId);
 
     abstract protected String getFileName();
 
-    private void writeHeaderRow() {
+    private void writeHeaderRow(HSSFWorkbook workbook) {
 
-        List<String> headers = new ArrayList<>(Arrays.asList("ID", "Посилання на зображення", "Адреса",
+        headers = new ArrayList<>(Arrays.asList("ID", "Посилання на зображення", "Адреса",
                 "Довгота", "Широта", "Назва", "Назва категорії", "Статус", "Площа", "Площа для продажу",
                 "Балансоутримувач", "Власник", "Дата завершення договору", "Сума(грн)"));
 
         headers.addAll(getAttachmentHeaders());
 
         Row row = sheet.createRow(0);
-        CellStyle cellBoldStyle = getCellBoldStyle();
+        CellStyle cellBoldStyle = getCellBoldStyle(workbook);
 
         IntStream.range(0, headers.size()).forEach(
                 idx -> {
@@ -110,54 +105,36 @@ public abstract class AbstractExcelReportBuilderService {
                     Row row = sheet.createRow(idx + 1);
                     PropertyResponseDto property = properties.get(idx);
 
-                    Field[] allFields = property.getClass().getDeclaredFields();
-
                     List<String> attachmentHeaders = getAttachmentHeaders();
 
                     int cellNumber = -1;
 
-                    for (Field field : allFields) {
-                        field.setAccessible(true);
-                        Object object;
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getId()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getImageUrl()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getAddress()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyLocation().getLon()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyLocation().getLat()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getName()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getCategoryByPurposeName()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyStatus()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getArea()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getAreaTransferred()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getBalanceHolder()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getOwner()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getLeaseAgreementEndDate()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getAmountOfRent()));
 
-                        try {
-                            object = field.get(property);
-                        } catch (Exception e) {
-                            log.error("Error while generating Excel report", e);
-                            throw new ServiceApiException("Помилка при генерації Excel звіту");
-                        }
+                    Map<String, String> attachmentPairs = mapToAttachmentCategoryLinkPair(property.getAttachments());
 
-                        if (isNull(object)) {
-                            row.createCell(++cellNumber).setCellValue(DEFAULT_CELL_VALUE);
-
-                        } else if (object instanceof Property.PropertyLocation) {
-                            Property.PropertyLocation location = (Property.PropertyLocation) object;
-
-                            row.createCell(++cellNumber).setCellValue(location.getLon());
-                            row.createCell(++cellNumber).setCellValue(location.getLat());
-
-                        } else if (object instanceof List<?>) {
-
-                            Map<String, String> attachments = ((List<AttachmentResponseDto>) object).stream()
-                                    .collect(Collectors.toMap(
-                                            AttachmentResponseDto::getCategoryName,
-                                            AttachmentResponseDto::getLink));
-
-                            for (String header : attachmentHeaders) {
-                                row.createCell(++cellNumber)
-                                        .setCellValue(requireNonNullElse(attachments.get(header), DEFAULT_CELL_VALUE));
-                            }
-
-                        } else {
-                            row.createCell(++cellNumber).setCellValue(object.toString());
-                        }
-
+                    for (String header : attachmentHeaders) {
+                        row.createCell(++cellNumber)
+                                .setCellValue(processObjectField(attachmentPairs.get(header)));
                     }
                 }
         );
     }
 
-    private CellStyle getCellBoldStyle() {
+    private CellStyle getCellBoldStyle(HSSFWorkbook workbook) {
         CellStyle cellBoldStyle = workbook.createCellStyle();
 
         HSSFFont font = workbook.createFont();
@@ -174,6 +151,24 @@ public abstract class AbstractExcelReportBuilderService {
                 .sorted()
                 .collect(Collectors.toList());
 
+    }
+
+    private String processObjectField(Object object) {
+
+        if (nonNull(object)) {
+            return object.toString();
+
+        } else {
+            return DEFAULT_CELL_VALUE;
+        }
+    }
+
+    private Map<String, String> mapToAttachmentCategoryLinkPair(List<AttachmentResponseDto> attachments) {
+
+        return attachments.stream()
+                .collect(Collectors.toMap(
+                        AttachmentResponseDto::getCategoryName,
+                        AttachmentResponseDto::getLink));
     }
 
 }
