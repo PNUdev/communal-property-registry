@@ -97,7 +97,7 @@
 
                     <div class="col-md-5 d-flex flex-column col-md-5 justify-content-between">
                         <div class="h3">
-                            Назва: ${(property.name)!"-"}
+                            ${(property.name)!"-"}
                         </div>
 
                         <div>
