@@ -108,7 +108,7 @@ public abstract class AbstractExcelReportBuilderService implements ExcelReportBu
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyLocation().getLat()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getName()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getCategoryByPurposeName()));
-                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyStatus()));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyStatus().getUkrainianRepresentation()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getArea()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getAreaTransferred()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getBalanceHolder()));

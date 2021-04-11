@@ -3,6 +3,7 @@ package com.pnudev.communalpropertyregistry.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Embedded;
@@ -66,9 +67,17 @@ public class Property {
 
     }
 
+    @AllArgsConstructor
+    @Getter
     public enum PropertyStatus {
 
-        NON_RENT, RENT, FIRST_OR_SECOND_TYPE_LIST, PRIVATIZED, USED_BY_CITY_COUNCIL;
+        NON_RENT("Нерендовано"),
+        RENT("Орендовано"),
+        FIRST_OR_SECOND_TYPE_LIST("I-II типу"),
+        PRIVATIZED("Приватизовано"),
+        USED_BY_CITY_COUNCIL("Вик. міськвладою");
+
+        private final String ukrainianRepresentation;
 
         public static Optional<PropertyStatus> fromName(String name) {
             try {
