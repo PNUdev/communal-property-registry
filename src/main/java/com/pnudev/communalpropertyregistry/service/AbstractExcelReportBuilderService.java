@@ -1,7 +1,6 @@
 package com.pnudev.communalpropertyregistry.service;
 
 import com.pnudev.communalpropertyregistry.domain.AttachmentCategory;
-import com.pnudev.communalpropertyregistry.domain.Property;
 import com.pnudev.communalpropertyregistry.dto.response.AttachmentResponseDto;
 import com.pnudev.communalpropertyregistry.dto.response.PropertyResponseDto;
 import com.pnudev.communalpropertyregistry.exception.ServiceApiException;
@@ -30,14 +29,6 @@ public abstract class AbstractExcelReportBuilderService implements ExcelReportBu
     private static final List<String> BASE_HEADERS = Arrays.asList("ID", "Посилання на зображення", "Адреса",
             "Довгота", "Широта", "Назва", "Назва категорії", "Статус", "Площа", "Площа для продажу",
             "Балансоутримувач", "Власник", "Дата завершення договору", "Сума(грн)");
-
-    private static final Map<Property.PropertyStatus, String> PROPERTY_STATUSES_MAP = Map.of(
-            Property.PropertyStatus.NON_RENT, "Орендовано",
-            Property.PropertyStatus.RENT, "Неорендовано",
-            Property.PropertyStatus.FIRST_OR_SECOND_TYPE_LIST, "I-II типу",
-            Property.PropertyStatus.PRIVATIZED, "Приватизовано",
-            Property.PropertyStatus.USED_BY_CITY_COUNCIL, "Вик. міськвладою"
-    );
 
     public static final String DEFAULT_CELL_VALUE = "-";
 
@@ -117,7 +108,7 @@ public abstract class AbstractExcelReportBuilderService implements ExcelReportBu
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyLocation().getLat()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getName()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getCategoryByPurposeName()));
-                    row.createCell(++cellNumber).setCellValue(processObjectField(PROPERTY_STATUSES_MAP.get(property.getPropertyStatus())));
+                    row.createCell(++cellNumber).setCellValue(processObjectField(property.getPropertyStatus().getUkrainianRepresentation()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getArea()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getAreaTransferred()));
                     row.createCell(++cellNumber).setCellValue(processObjectField(property.getBalanceHolder()));
